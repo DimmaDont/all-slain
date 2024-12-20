@@ -30,3 +30,9 @@ jobs:
           name: exe
           path: build/allslain.exe
           include-hidden-files: true
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/allslain.exe
