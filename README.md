@@ -1,7 +1,7 @@
 # all-slain
 Star Citizen Game Log Reader
 
-This script monitors the Star Citizen game log in real-time, reporting player kills, vehicle kills, and respawn events.
+This program monitors the Star Citizen game log in real-time, reporting player kills, vehicle kills, and respawn events.
 
 ## Usage
 1. Start the game, and wait until the main game window pops up.
