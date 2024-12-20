@@ -32,6 +32,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_PYTHON_BLACK: true
           FIX_PYTHON_BLACK: true
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
+          SAVE_SUPER_LINTER_SUMMARY: false
 
       - name: Commit and push linting fixes
         if: >
