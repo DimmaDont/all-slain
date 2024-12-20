@@ -1,6 +1,7 @@
 import re
 import sys
 import time
+import colorize as C
 
 
 LOG_KILL = re.compile(r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([A-Za-z0-9_-]+)' \[\d+\] in zone '([A-Za-z0-9_-]+)' killed by '([A-Za-z0-9_-]+)' \[\d+\] using '[A-Za-z0-9_-]+' \[Class ([A-Za-z0-9_-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]")
@@ -82,7 +83,7 @@ def main(filepath, show_npc_victims):
 			o = LOG_RESPAWN.match(line)
 			if o:
 				# datetime, player, location
-				print( f'{o[1]} RESPAWN: {o[2]} {o[3]}' )
+				print( f'{C.FG("RED")}{o[1]} RESPAWN{C.reset()}: {o[2]} {o[3]}' )
 				continue
 	except KeyboardInterrupt:
 		f.close()
