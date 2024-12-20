@@ -29,7 +29,7 @@ def BG( color, bold = False ):
    return f'{ESC}[4{COLORS[color]}m'
 
 def reset():
-   return f'{BGC("BLACK")}{FGC("WHITE")}'
+   return f'{BG("BLACK")}{FG("WHITE")}'
 
 
 
