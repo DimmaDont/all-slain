@@ -79,7 +79,7 @@ def main(filepath, show_npc_victims):
                 if "NPC" in killed and not show_npc_victims:
                     continue
                 else:
-                    if cause != "Suicide":
+                    if 'Suicide' not in cause:
                         print( f'{when}{KILL}: {killer} killed {killed} with a {cause} at {location}' )
                     else:
                         print( f'{when}{KILL}: {killer} committed {cause} at {location}' )
