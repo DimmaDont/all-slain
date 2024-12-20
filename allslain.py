@@ -23,6 +23,8 @@ def clean_location(name):
     if name[0] == "RastarInteriorGridHost":
         return name[0]
     short_name = []
+    if 'ugf' in name.lower():
+        return "Bunker" # UGF is CIG-ese for what most folks call "Bunkers"
     for i in name_split:
         try:
             int(i)
@@ -65,29 +67,40 @@ def main(filepath, show_npc_victims):
 
     try:
         f = open(filepath, "r")
+        print( C.reset() )
         for line in follow(f):
-            m = LOG_KILL.match(line)
-            if m:
+            if m := LOG_KILL.match(line):
                 # datetime, killed, location, killer, killed_using
-                killed = clean_name(m[2])
-                if "NPC" in killed:
-                    if show_npc_victims:
-                        print( f'{m[1]}{KILL}: {clean_name(m[4])} {clean_tool(m[5])} {killed} at {clean_location(m[3])}' )
-                        continue
-                    else:
-                        continue
-                else:
-                    print( f'{m[1]}{KILL}: {clean_name(m[4])} {clean_tool(m[5])} {killed} at {clean_location(m[3])}' )
+                when = m[1]
+                killed = C.color( clean_name(m[2]), 'GREEN' )
+                location = C.color( clean_location(m[3]), 'YELLOW', True )
+                killer = C.color( clean_name(m[4]), 'GREEN' )
+                cause = C.color( clean_tool(m[5]).capitalize(), 'CYAN' )
+                if "NPC" in killed and not show_npc_victims:
                     continue
-            n = LOG_VEHICLE_KILL.match(line)
-            if n:
+                else:
+                    if cause != "Suicide":
+                        print( f'{when}{KILL}: {killer} killed {killed} with a {cause} at {location}' )
+                    else:
+                        print( f'{when}{KILL}: {killer} committed {cause} at {location}' )
+                    continue
+            if n := LOG_VEHICLE_KILL.match(line):
                 # datetime, vehicle, location, driver, caused_by, damage_type
-                print( f'{n[1]}{VKILL}: {clean_location(n[3])} {n[4]} {clean_location(n[2])} {n[5]} {n[6]}' )
+                when = n[1]
+                vehicle = C.color( clean_location(n[2]), 'GREEN' )
+                location = C.color( clean_location(n[3]), 'YELLOW', True )
+                driver = C.color( clean_name(n[4]), 'GREEN' ) # the killer
+                cause = clean_tool(n[5]).capitalize()
+                dmgtype = C.color( n[6], 'CYAN' )
+                print( f'{when}{VKILL}: {driver} in a {vehicle} killed by {dmgtype} at {location}' )
                 continue
             o = LOG_RESPAWN.match(line)
             if o:
                 # datetime, player, location
-                print( f'{o[1]}{RESPAWN}{C.reset()}: {o[2]} {o[3]}' )
+                when = o[1]
+                whom = C.color( o[2], 'GREEN' )
+                where = C.color( o[3], 'YELLOW', True )
+                print( f'{o[1]}{RESPAWN}: {whom} at {where}' )
                 continue
     except KeyboardInterrupt:
         f.close()

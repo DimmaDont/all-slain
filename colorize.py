@@ -31,5 +31,13 @@ def BG( color, bold = False ):
 def reset():
     return f'{BG("BLACK")}{FG("WHITE")}'
 
+def color( s: str, c: str, bf = False ) -> str:
+    if not c in COLORS:
+        raise ValueError( f'Specified color {c} not in COLORS definition.' )
+    return f'{FG(c, bold = bf)}{s}{reset()}'
+
+def bold( s: str ) -> str:
+    return f'{FG("WHITE", bold = True)}{s}{reset()}'
+
 
 # vim: set expandtab ts=4 sw=4
