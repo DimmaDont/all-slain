@@ -96,7 +96,7 @@ def main(filepath, show_npc_victims):
 
 
 if __name__ == '__main__':
-    filename = r"C:\Program Files\Roberts Space Industries\StarCitizen\EPTU\Game.log"
+    filename = r"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log"
     if len(sys.argv) >= 2:
         filename = sys.argv[1]
     if not os.path.isfile(filename):
