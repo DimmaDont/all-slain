@@ -88,7 +88,7 @@ def main(filepath, show_npc_victims):
 	except KeyboardInterrupt:
 		f.close()
 	except FileNotFoundError:
-		print("Run this again from within the game folder after starting the game, or specify a game log to read.")
+		print(f'{C.FG("RED", bold = True)}Log file {filename} not found.{C.reset()}\nRun this again from within the game folder after starting the game, or specify a game log to read.')
 
 
 if __name__ == '__main__':
