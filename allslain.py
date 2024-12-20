@@ -59,6 +59,10 @@ def clean_tool(name):
 
 
 def main(filepath, show_npc_victims):
+	KILL=f'{C.FG("RED", bold = True )}{"KILL":>10}{C.reset()}'
+	VKILL=f'{C.FG("RED", bold = True )}{"VKILL":>10}{C.reset()}'
+	RESPAWN=f'{C.FG("CYAN", bold = True )}{"RESPAWN":>10}{C.reset()}'
+
 	try:
 		f = open(filepath, "r")
 		for line in follow(f):
@@ -68,22 +72,22 @@ def main(filepath, show_npc_victims):
 				killed = clean_name(m[2])
 				if "NPC" in killed:
 					if show_npc_victims:
-						print( f'{m[1]}    KILL: {clean_name(m[4])} {clean_tool(m[5])} {killed} at {clean_location(m[3])}' )
+						print( f'{m[1]}{KILL}: {clean_name(m[4])} {clean_tool(m[5])} {killed} at {clean_location(m[3])}' )
 						continue
 					else:
 						continue
 				else:
-					print( f'{m[1]}   KILL: {clean_name(m[4])} {clean_tool(m[5])} {killed} at {clean_location(m[3])}' )
+					print( f'{m[1]}{KILL}: {clean_name(m[4])} {clean_tool(m[5])} {killed} at {clean_location(m[3])}' )
 					continue
 			n = LOG_VEHICLE_KILL.match(line)
 			if n:
 				# datetime, vehicle, location, driver, caused_by, damage_type
-				print( f'{n[1]}  VKILL: {clean_location(n[3])} {n[4]} {clean_location(n[2])} {n[5]} {n[6]}' )
+				print( f'{n[1]}{VKILL}: {clean_location(n[3])} {n[4]} {clean_location(n[2])} {n[5]} {n[6]}' )
 				continue
 			o = LOG_RESPAWN.match(line)
 			if o:
 				# datetime, player, location
-				print( f'{C.FG("RED")}{o[1]} RESPAWN{C.reset()}: {o[2]} {o[3]}' )
+				print( f'{o[1]}{RESPAWN}{C.reset()}: {o[2]} {o[3]}' )
 				continue
 	except KeyboardInterrupt:
 		f.close()
