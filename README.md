@@ -8,7 +8,8 @@ This script monitors the Star Citizen game log in real-time, reporting player ki
 ### If Star Citizen is installed in the default directory
 2. Run the program.
 ### If Star Citizen is installed elsewhere
-2. In a terminal, run the program with the game log file as the first parameter e.g. `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
+2. In a terminal, run the program with the game log file as the first parameter.  
+   For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 
 ## Game Version Compatibility
 Developed for 4.0 EPTU. Mostly compatible with 3.24.3.
