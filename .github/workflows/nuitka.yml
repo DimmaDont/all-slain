@@ -1,8 +1,8 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Build
 on: [push]
 jobs:
   build:
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: windows-latest
 
     steps:
@@ -33,6 +33,5 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: build/allslain.exe
