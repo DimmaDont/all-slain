@@ -1,30 +1,30 @@
 from enum import IntEnum
 
 
-
-def fg(color: 'Color') -> str:
-    return f'\x1b[3{color.value}m'
-
-def bg(color: 'Color') -> str:
-    return f'\x1b[4{color.value}m'
-
-def color(text: str, color: 'Color') -> str:
-    return f'{fg(color)}{text}{Color.RESET}'
-
-
 class Color(IntEnum):
-    BLACK   = 0
-    RED     = 1
-    GREEN   = 2
-    YELLOW  = 3
-    BLUE    = 4
-    MAGENTA = 5
-    CYAN    = 6
-    WHITE   = 7
+    BLACK = 30
+    RED = 31
+    GREEN = 32
+    YELLOW = 33
+    BLUE = 34
+    MAGENTA = 35
+    CYAN = 36
+    WHITE = 37
+
+    BRIGHT_BLACK = 90
+    BRIGHT_RED = 91
+    BRIGHT_GREEN = 92
+    BRIGHT_YELLOW = 93
+    BRIGHT_BLUE = 94
+    BRIGHT_MAGENTA = 95
+    BRIGHT_CYAN = 96
+    BRIGHT_WHITE = 97
 
     def __call__(self, text):
-        return color(text, self)
+        return f"\x1b[{self}m{text}{Color.RESET}"
 
-Color.RESET = f'{bg(Color.BLACK)}{fg(Color.WHITE)}'
+
+Color.RESET = f"\x1b[0m"
+
 
 # vim: set expandtab ts=4 sw=4
