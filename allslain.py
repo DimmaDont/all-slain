@@ -4,6 +4,7 @@ import sys
 import time
 
 import colorize as C
+from data import SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 
 
 LOG_KILL = re.compile(r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([A-Za-z0-9_-]+)' \[\d+\] in zone '([A-Za-z0-9_-]+)' killed by '([A-Za-z0-9_-]+)' \[\d+\] using '[A-Za-z0-9_-]+' \[Class ([A-Za-z0-9_-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]")
@@ -56,9 +57,34 @@ def clean_tool(name):
     if name == "unknown":
         return name
     try:
-        name_split = name.split("_")
-        return "_".join(name_split[0:1])
-    except IndexError:
+        return WEAPONS_FPS[name]
+    except KeyError:
+        pass
+
+    try:
+        return WEAPONS_SHIP[name]
+    except KeyError:
+        pass
+
+    return name
+
+
+def get_vehicle(name) -> str:
+    # Remove vehicle id
+    try:
+        i = name.rindex("_")
+        vehicle_id = name[i + 1:]
+        int(vehicle_id)
+        # has vehicle id
+        name = name[:i]
+        name = name.replace("_PU_AI_CRIM", "")
+    except ValueError:
+        # No vehicle ID
+        pass
+
+    try:
+        return SHIPS[name]
+    except KeyError:
         return name
 
 
@@ -89,7 +115,7 @@ def main(filepath, show_npc_victims):
             if n := LOG_VEHICLE_KILL.match(line):
                 # datetime, vehicle, location, driver, caused_by, damage_type
                 when = n[1]
-                vehicle = C.color( clean_location(n[2]), 'GREEN' )
+                vehicle = C.color(get_vehicle(n[2]), 'GREEN')
                 location = C.color( clean_location(n[3]), 'YELLOW', True )
                 driver = C.color( clean_name(n[4]), 'GREEN' ) # the killer
                 cause = clean_tool(n[5]).capitalize()

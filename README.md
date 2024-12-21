@@ -13,3 +13,9 @@ For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 
 ## Game Version Compatibility
 Developed for 4.0_PREVIEW. Mostly compatible with 3.24.3.
+
+## Disclaimer
+
+"This is an unofficial Fansite."
+
+Star Citizen intellectual property, content, and trademarks are owned by Cloud Imperium Rights LLC, Cloud Imperium Rights Ltd., and their subsidiaries.
