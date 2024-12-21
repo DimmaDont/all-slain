@@ -33,6 +33,7 @@ def clean_location(name):
             int(i)
         except:
             short_name.append(i)
+
     return "_".join(short_name)
 
 
@@ -51,10 +52,14 @@ def clean_name(name):
     return name
 
 
-def clean_tool(name):
+def clean_tool(name: str, killer: str, killed: str) -> str:
     if name == 'Player':
         return 'suicide'
+
     if name == "unknown":
+        # Ship collision
+        if killer == killed:
+            return "suicide"
         return name
 
     try:
@@ -105,10 +110,10 @@ def main(filepath, show_npc_victims):
                 killed = clean_name(m[2])
                 location = clean_location(m[3])
                 killer = clean_name(m[4])
-                cause = clean_tool(m[5])
+                cause = clean_tool(m[5], killer, killed)
                 if "NPC" in killed and not show_npc_victims:
                     continue
-                elif 'suicide' in cause:
+                elif cause == 'suicide':
                     print( f'{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} at {Color.YELLOW(location)}' )
                 else:
                     print( f'{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}' )
