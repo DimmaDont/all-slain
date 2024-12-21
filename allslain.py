@@ -27,6 +27,20 @@ def follow(f):
             continue
 
 
+def remove_id(name: str):
+    try:
+        i = name.rindex("_")
+        entity_id = name[i + 1 :]
+        int(entity_id)
+        # Has id
+        return name[:i]
+    except ValueError:
+        # No id
+        pass
+
+    return name
+
+
 def clean_location(name):
     name_split = name.split("_")
     if name[0] == "RastarInteriorGridHost":
@@ -87,22 +101,20 @@ def clean_tool(name: str, killer: str, killed: str) -> str:
 
 
 def get_vehicle(name) -> str:
-    # Remove vehicle id
-    try:
-        i = name.rindex("_")
-        vehicle_id = name[i + 1 :]
-        int(vehicle_id)
-        # has vehicle id
-        name = name[:i]
-        name = name.replace("_PU_AI_CRIM", "")
-    except ValueError:
-        # No vehicle ID
-        pass
+    vehicle_name = remove_id(name)
+    vehicle_name = vehicle_name.replace("_PU_AI_CRIM", "")
+
+    salvage = False
+    if vehicle_name.endswith("_Unmanned_Salvage"):
+        vehicle_name = vehicle_name.replace("_Unmanned_Salvage", "")
+        salvage = True
 
     try:
-        return SHIPS[name]
+        return SHIPS[vehicle_name] + (" (Salvage)" if salvage else "")
     except KeyError:
-        return name
+        pass
+
+    return name
 
 
 KILL = Color.RED("KILL".rjust(10))
