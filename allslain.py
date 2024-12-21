@@ -34,6 +34,11 @@ def clean_location(name):
         except:
             short_name.append(i)
 
+    # Location can also be a ship id
+    vehicle = get_vehicle(name)
+    if vehicle != name:
+        return vehicle
+
     return "_".join(short_name)
 
 
