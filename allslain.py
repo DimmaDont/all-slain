@@ -3,7 +3,7 @@ import re
 import sys
 import time
 
-import colorize as C
+from colorize import Color
 from data import SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 
 
@@ -56,6 +56,7 @@ def clean_tool(name):
         return 'suicide'
     if name == "unknown":
         return name
+
     try:
         return WEAPONS_FPS[name]
     except KeyError:
@@ -88,52 +89,57 @@ def get_vehicle(name) -> str:
         return name
 
 
-def main(filepath, show_npc_victims):
-    KILL=f'{C.FG("RED", bold = True )}{"KILL":>10}{C.reset()}'
-    VKILL=f'{C.FG("RED", bold = True )}{"VKILL":>10}{C.reset()}'
-    RESPAWN=f'{C.FG("CYAN", bold = True )}{"RESPAWN":>10}{C.reset()}'
+KILL = Color.RED("KILL".rjust(10))
+VKILL = Color.RED("VKILL".rjust(10))
+RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 
+
+def main(filepath, show_npc_victims):
     try:
         f = open(filepath, "r")
-        print( C.reset() )
+        print(Color.RESET, end='')
         for line in follow(f):
             if m := LOG_KILL.match(line):
                 # datetime, killed, location, killer, killed_using
                 when = m[1]
-                killed = C.color( clean_name(m[2]), 'GREEN' )
-                location = C.color( clean_location(m[3]), 'YELLOW', True )
-                killer = C.color( clean_name(m[4]), 'GREEN' )
-                cause = C.color( clean_tool(m[5]).capitalize(), 'CYAN' )
+                killed = clean_name(m[2])
+                location = clean_location(m[3])
+                killer = clean_name(m[4])
+                cause = clean_tool(m[5])
                 if "NPC" in killed and not show_npc_victims:
                     continue
+                elif 'suicide' in cause:
+                    print( f'{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} at {Color.YELLOW(location)}' )
                 else:
-                    if 'Suicide' not in cause:
-                        print( f'{when}{KILL}: {killer} killed {killed} with a {cause} at {location}' )
-                    else:
-                        print( f'{when}{KILL}: {killer} committed {cause} at {location}' )
-                    continue
+                    print( f'{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}' )
+                continue
             if n := LOG_VEHICLE_KILL.match(line):
                 # datetime, vehicle, location, driver, caused_by, damage_type
                 when = n[1]
-                vehicle = C.color(get_vehicle(n[2]), 'GREEN')
-                location = C.color( clean_location(n[3]), 'YELLOW', True )
-                driver = C.color( clean_name(n[4]), 'GREEN' ) # the killer
-                cause = clean_tool(n[5]).capitalize()
-                dmgtype = C.color( n[6], 'CYAN' )
-                print( f'{when}{VKILL}: {driver} in a {vehicle} killed by {dmgtype} at {location}' )
+                vehicle = Color.GREEN(get_vehicle(n[2]))
+                location = Color.YELLOW(clean_location(n[3]))
+                driver = clean_name(n[4])
+                if driver == 'unknown':
+                    driver = ''
+                else:
+                    driver = Color.GREEN(driver) + " in a "
+                cause = Color.GREEN(get_vehicle(n[5]))
+                dmgtype = Color.CYAN(n[6])
+                print( f'{when}{VKILL}: {cause} killed {driver}{vehicle} with {dmgtype} at {location}' )
                 continue
             o = LOG_RESPAWN.match(line)
             if o:
                 # datetime, player, location
                 when = o[1]
-                whom = C.color( o[2], 'GREEN' )
-                where = C.color( o[3], 'YELLOW', True )
-                print( f'{o[1]}{RESPAWN}: {whom} at {where}' )
+                whom = Color.GREEN(o[2])
+                where = Color.YELLOW(o[3])
+                print(f'{o[1]}{RESPAWN}: {whom} at? {where}')
                 continue
     except KeyboardInterrupt:
         f.close()
     except FileNotFoundError:
-        print(f'{C.FG("RED", bold = True)}Log file {filename} not found.{C.reset()}\nRun this again from within the game folder after starting the game, or specify a game log to read.')
+        print(Color.RED(f"Log file {filepath} not found."))
+        print("Run this again from within the game folder after starting the game, or specify a game log to read.")
 
 
 if __name__ == '__main__':
