@@ -4,7 +4,7 @@ import sys
 import time
 
 from colorize import Color
-from data import SHIPS, WEAPONS_FPS, WEAPONS_SHIP
+from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 
 
 LOG_KILL = re.compile(
@@ -42,24 +42,30 @@ def remove_id(name: str):
 
 
 def clean_location(name):
-    name_split = name.split("_")
-    if name[0] == "RastarInteriorGridHost":
-        return name[0]
-    short_name = []
-    if "ugf" in name.lower():
-        return "Bunker"  # UGF is CIG-ese for what most folks call "Bunkers"
-    for i in name_split:
-        try:
-            int(i)
-        except:
-            short_name.append(i)
+    try:
+        return LOCATIONS[name]
+    except KeyError:
+        pass
+
+    # UGF is CIG-ese for what most folks call "Bunkers"
+    if "-ugf_" in name.lower():
+        return "Bunker"
+
+    if name.startswith("Hangar_"):
+        return "Hangar"
+
+    if name.startswith("RastarInteriorGridHost_"):
+        return "RastarInteriorGridHost"
 
     # Location can also be a ship id
     vehicle = get_vehicle(name)
     if vehicle != name:
         return vehicle
 
-    return "_".join(short_name)
+    if name.startswith("SolarSystem_"):
+        return "Space"
+
+    return name
 
 
 def clean_name(name):
