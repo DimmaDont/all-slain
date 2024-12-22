@@ -68,19 +68,29 @@ def clean_location(name):
     return name
 
 
-def clean_name(name):
-    if name.startswith("PU_Human_Enemy"):
+def clean_name(name) -> tuple[str, int]:
+    if name == "unknown":
+        return [name, 1]
+    if name.startswith("PU_Human_Enemy_"):
         name_split = name.split("_")
-        return "_".join(["NPC", *name_split[5:6]])
+        return ["_".join(name_split[5:7]), 1]
     if name.startswith("PU_Human-"):
-        name_split = name.split("-")
-        return "_".join(["NPC", *name_split[1:3]])
+        name_split = re.split(r"[_-]+", name)
+        return ["_".join(name_split[2:6]), 1]
+    if name.startswith("NPC_Archetypes-Human-"):
+        name_split = re.split(r"[_-]+", name)
+        return ["_".join(name_split[3:7]), 1]
     if name.startswith("NPC_Archetypes-"):
-        name_split = name.split("-")
-        return "_".join(["NPC", *name_split[3].split("_")[0:1], name_split[1]])
+        return [name[: name.rindex("_")].split("-")[-1].replace("-", "_"), 1]
     if name.startswith("Kopion_"):
-        return "_".join(["NPC", "Kopion"])
-    return name
+        return ["Kopion", 1]
+    if name.startswith("PU_Pilots-"):
+        name_split = re.split(r"[_-]+", name)
+        return ["_".join(["Pilot", *name_split[3:6]]), 1]
+    if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
+        return ["NPC Security", 1]
+
+    return [name, 0]
 
 
 def clean_tool(name: str, killer: str, killed: str) -> str:
@@ -134,14 +144,18 @@ def main(filepath, show_npc_victims):
         print(Color.RESET, end="")
         for line in follow(f):
             if m := LOG_KILL.match(line):
-                # datetime, killed, location, killer, killed_using
                 when = m[1]
-                killed = clean_name(m[2])
+                killed, is_killed_npc = clean_name(m[2])
                 location = clean_location(m[3])
-                killer = clean_name(m[4])
+                killer, is_killer_npc = clean_name(m[4])
                 cause = clean_tool(m[5], killer, killed)
-                if "NPC" in killed and not show_npc_victims:
+
+                if is_killed_npc and not show_npc_victims:
                     continue
+                if is_killer_npc and is_killed_npc:
+                    print(
+                        f"{when}{KILL}: {Color.BRIGHT_WHITE(killer)} killed {Color.BRIGHT_WHITE(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}"
+                    )
                 elif cause == "suicide":
                     print(
                         f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} at {Color.YELLOW(location)}"
@@ -152,11 +166,10 @@ def main(filepath, show_npc_victims):
                     )
                 continue
             if n := LOG_VEHICLE_KILL.match(line):
-                # datetime, vehicle, location, driver, caused_by, damage_type
                 when = n[1]
                 vehicle = Color.GREEN(get_vehicle(n[2]))
                 location = Color.YELLOW(clean_location(n[3]))
-                driver = clean_name(n[4])
+                driver, _ = clean_name(n[4])
                 if driver == "unknown":
                     driver = ""
                 else:
