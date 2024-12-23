@@ -6,13 +6,18 @@ This program monitors the Star Citizen game log in real-time, reporting player k
 ## Usage
 1. Start the game, and wait until the EasyAntiCheat splash screen closes and the main game window has appeared.
 2. If Star Citizen is installed in the default directory, simply run the program.
-2. If Star Citizen is installed elsewhere, move the program into the game folder before running,  
+2. If Star Citizen is installed elsewhere, move the program into the game folder before running.
 
 Optionally, run the program with the game log file as the first parameter in a terminal.  
 For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 
 ## Game Version Compatibility
 Developed for 4.0_PREVIEW. Mostly compatible with 3.24.3.
+
+## Known Issues
+* Antimalware False Positive  
+See https://github.com/Nuitka/Nuitka/issues/2081#issuecomment-1445422288  
+Workaround: Install Python and run `allslain.py`.
 
 ## Disclaimer
 
