@@ -27,6 +27,7 @@ SHIPS = {
     "AEGS_Vanguard_Sentinel": "Aegis Vanguard Sentinel",
     "AEGS_Vanguard": "Aegis Vanguard Warden",
     "AIModule_Unmanned_PU_SecurityNetwork": "NPC Security",
+    "AIModule_Unmanned_PU_SecurityNetwork_OrbitalSentry": "NPC Orbital Sentry",
     "ANVL_Arrow": "Anvil Arrow",
     "ANVL_Ballista_Dunestalker": "Anvil Ballista Dunestalker",
     "ANVL_Ballista_Snowblind": "Anvil Ballista Snowblind",

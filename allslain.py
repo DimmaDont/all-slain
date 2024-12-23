@@ -64,6 +64,8 @@ def clean_location(name):
 
     if name.startswith("SolarSystem_"):
         return "Space"
+    if name.startswith("TransitCarriage_"):
+        return "Elevator"
 
     return name
 
@@ -154,7 +156,7 @@ def main(filepath, show_npc_victims):
                     continue
                 if is_killer_npc and is_killed_npc:
                     print(
-                        f"{when}{KILL}: {Color.BRIGHT_WHITE(killer)} killed {Color.BRIGHT_WHITE(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.BRIGHT_BLACK(killer)} killed {Color.BRIGHT_BLACK(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}"
                     )
                 elif cause == "suicide":
                     print(
@@ -175,10 +177,10 @@ def main(filepath, show_npc_victims):
                 else:
                     driver = Color.GREEN(driver) + " in a "
                 kill_type = n[5]
-                cause = Color.GREEN(get_vehicle(n[6]))
+                killer = Color.GREEN(get_vehicle(n[6]))
                 dmgtype = Color.CYAN(n[7])
                 print(
-                    f'{when}{VKILL}: {cause} {"soft" if kill_type == '1' else "hard"} killed {driver}{vehicle} with {dmgtype} at {location}'
+                    f'{when}{VKILL}: {killer} {"soft" if kill_type == '1' else "hard"} killed {driver}{vehicle} with {dmgtype} at {location}'
                 )
                 continue
             o = LOG_RESPAWN.match(line)
