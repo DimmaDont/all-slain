@@ -31,11 +31,15 @@ def remove_id(name: str):
     try:
         i = name.rindex("_")
         entity_id = name[i + 1 :]
+
+        # ids are 12 digits
+        if len(entity_id) != 12:
+            raise ValueError('invalid entity id length')
         int(entity_id)
         # Has id
         return name[:i]
     except ValueError:
-        # No id
+        # No id or invalid id
         pass
 
     return name
@@ -72,30 +76,30 @@ def clean_location(name):
 
 def clean_name(name) -> tuple[str, int]:
     if name == "unknown":
-        return [name, 1]
+        return (name, 1)
     if name.startswith("PU_Human_Enemy_"):
         name_split = name.split("_")
-        return ["_".join(name_split[5:7]), 1]
+        return ("_".join(name_split[5:7]), 1)
     if name.startswith("PU_Human-"):
         name_split = re.split(r"[_-]+", name)
-        return ["_".join(name_split[2:6]), 1]
+        return ("_".join(name_split[2:6]), 1)
     if name.startswith("NPC_Archetypes-Human-"):
         name_split = re.split(r"[_-]+", name)
-        return ["_".join(name_split[3:7]), 1]
+        return ("_".join(name_split[3:7]), 1)
     if name.startswith("NPC_Archetypes-"):
-        return [name[: name.rindex("_")].split("-")[-1].replace("-", "_"), 1]
+        return (name[: name.rindex("_")].split("-")[-1].replace("-", "_"), 1)
     if name.startswith("Kopion_"):
-        return ["Kopion", 1]
+        return ("Kopion", 1)
     if name.startswith("PU_Pilots-"):
         name_split = re.split(r"[_-]+", name)
-        return ["_".join(["Pilot", *name_split[3:6]]), 1]
+        return ("_".join(["Pilot", *name_split[3:6]]), 1)
     if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
-        return ["NPC Security", 1]
+        return ("NPC Security", 1)
 
     if name == "Hazard-000":
-        return ["Environmental Hazard", 1]
+        return ("Environmental Hazard", 1)
 
-    return [name, 0]
+    return (name, 0)
 
 
 def clean_tool(name: str, killer: str, killed: str) -> str:
@@ -150,11 +154,11 @@ def main(filepath, show_npc_victims):
         for line in follow(f):
             if m := LOG_KILL.match(line):
                 when = m[1]
+
                 killed, is_killed_npc = clean_name(m[2])
                 location = clean_location(m[3])
                 killer, is_killer_npc = clean_name(m[4])
                 cause = clean_tool(m[5], killer, killed)
-
                 if is_killed_npc and not show_npc_victims:
                     continue
                 if is_killer_npc and is_killed_npc:
@@ -184,7 +188,7 @@ def main(filepath, show_npc_victims):
                 killer = Color.GREEN(get_vehicle(n[6]))
                 dmgtype = Color.CYAN(n[7])
                 print(
-                    f'{when}{VKILL}: {killer} {"soft" if kill_type == '1' else "hard"} killed {driver}{vehicle} with {dmgtype} at {location}'
+                    f'{when}{VKILL}: {killer} {"soft" if kill_type == "1" else "hard"} killed {driver}{vehicle} with {dmgtype} at {location}'
                 )
                 continue
             o = LOG_RESPAWN.match(line)
