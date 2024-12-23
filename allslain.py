@@ -199,12 +199,14 @@ def main(filepath: str):
                 print(f"{o[1]}{RESPAWN}: {whom} at? {where}")
                 continue
     except KeyboardInterrupt:
-        f.close()
+        pass
     except FileNotFoundError:
         print(Color.RED(f"Log file {filepath} not found."))
         print(
             "Run this again from within the game folder after starting the game, or specify a game log to read."
         )
+    finally:
+        f.close()
 
 
 if __name__ == "__main__":
