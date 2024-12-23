@@ -39,6 +39,7 @@ WEAPONS_FPS = {
     "behr_sniper_ballistic_01_arctic01": 'P6-LR "Rime" Sniper Rifle',
     "behr_sniper_ballistic_01_black01": 'P6-LR "Archangel" Sniper Rifle',
     "behr_sniper_ballistic_01": "P6-LR Sniper Rifle",
+    "GATS_BallisticGatling_Mounted_S1": "Mounted Tarantula GT-870 Mark 1 Cannon",
     "gmni_lmg_ballistic_01_blue_gold": 'F55 "Valor" LMG',
     "gmni_lmg_ballistic_01_firerats01": 'F55 "Scorched" LMG',
     "gmni_lmg_ballistic_01_green_red01": 'F55 "Alpine Sunset" LMG',
