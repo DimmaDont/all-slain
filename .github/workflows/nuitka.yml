@@ -31,10 +31,10 @@ jobs:
           path: build/allslain.exe
           include-hidden-files: true
 
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/allslain.exe
+      # - name: Release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     files: build/allslain.exe
 
       - name: VirusTotal Scan
         uses: crazy-max/ghaction-virustotal@v4
