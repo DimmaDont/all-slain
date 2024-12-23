@@ -2,7 +2,7 @@ name: Build
 on: [push]
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/tags/')
+    # if: startsWith(github.ref, 'refs/tags/')
     runs-on: windows-latest
 
     steps:
@@ -35,3 +35,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: build/allslain.exe
+
+      - name: VirusTotal Scan
+        uses: crazy-max/ghaction-virustotal@v4
+        with:
+          vt_api_key: ${{ secrets.VT_API_KEY }}
+          vt_monitor: true
+          monitor_path: /ghaction-virustotal
+          files: |
+            build/allslain.exe
