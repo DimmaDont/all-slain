@@ -67,5 +67,5 @@ class TestNameFunctions(unittest.TestCase):
         self.assertEqual(result, "ASDF1234_a1234")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

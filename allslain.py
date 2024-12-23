@@ -34,7 +34,7 @@ def remove_id(name: str):
 
         # ids are 12 digits
         if len(entity_id) != 12:
-            raise ValueError('invalid entity id length')
+            raise ValueError("invalid entity id length")
         int(entity_id)
         # Has id
         return name[:i]
