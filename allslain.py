@@ -148,7 +148,7 @@ def get_vehicle(name: str) -> str:
     return name
 
 
-def main(filepath: str, show_npc_victims: bool):
+def main(filepath: str):
     try:
         f = open(filepath, "r", encoding="utf-8")
         print(Color.RESET, end="")
@@ -160,8 +160,6 @@ def main(filepath: str, show_npc_victims: bool):
                 location = clean_location(m[3])
                 killer, is_killer_npc = clean_name(m[4])
                 cause = clean_tool(m[5], killer, killed)
-                if is_killed_npc and not show_npc_victims:
-                    continue
                 if is_killer_npc and is_killed_npc:
                     print(
                         f"{when}{KILL}: {Color.BRIGHT_BLACK(killer)} killed {Color.BRIGHT_BLACK(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}"
@@ -215,6 +213,6 @@ if __name__ == "__main__":
         filename = sys.argv[1]
     if not os.path.isfile(filename):
         filename = r"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log"
-    main(filename, True)
+    main(filename)
 
 # vim: set expandtab ts=4 sw=4
