@@ -1,11 +1,17 @@
 import unittest
 
-from allslain import *
+from allslain import (
+    clean_name,
+    remove_id,
+    LOG_KILL,
+    LOG_RESPAWN,
+    LOG_VEHICLE_KILL,
+)
 
 
 class TestNameFunctions(unittest.TestCase):
 
-    def test_npc_archetypes(self):
+    def test_clean_name(self):
         result, _ = clean_name(
             "NPC_Archetypes-Human-Blacjac-Guard-Male-Heavy_01_123456789012"
         )
@@ -53,6 +59,13 @@ class TestNameFunctions(unittest.TestCase):
         result, _ = clean_name("PU_Pilots-Human-Criminal-Gunner_Light_123456789012")
         self.assertEqual(result, "Pilot_Criminal_Gunner_Light")
 
+    def test_remove_id(self):
+        result = remove_id("ASDF1234_1234")
+        self.assertEqual(result, "ASDF1234")
 
-if __name__ == "__main__":
+        result = remove_id("ASDF1234_a1234")
+        self.assertEqual(result, "ASDF1234_a1234")
+
+
+if __name__ == '__main__':
     unittest.main()
