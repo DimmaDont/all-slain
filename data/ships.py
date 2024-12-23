@@ -26,6 +26,7 @@ SHIPS = {
     "AEGS_Vanguard_Hoplite": "Aegis Vanguard Hoplite",
     "AEGS_Vanguard_Sentinel": "Aegis Vanguard Sentinel",
     "AEGS_Vanguard": "Aegis Vanguard Warden",
+    "AIModule_Unmanned_PU_Advocacy": "NPC Advocacy",
     "AIModule_Unmanned_PU_SecurityNetwork": "NPC Security",
     "AIModule_Unmanned_PU_SecurityNetwork_OrbitalSentry": "NPC Orbital Sentry",
     "ANVL_Arrow": "Anvil Arrow",

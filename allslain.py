@@ -92,6 +92,9 @@ def clean_name(name) -> tuple[str, int]:
     if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
         return ["NPC Security", 1]
 
+    if name == "Hazard-000":
+        return ["Environmental Hazard", 1]
+
     return [name, 0]
 
 
@@ -169,6 +172,7 @@ def main(filepath, show_npc_victims):
                 continue
             if n := LOG_VEHICLE_KILL.match(line):
                 when = n[1]
+                # todo vehicle can also be an npc if it's a collision
                 vehicle = Color.GREEN(get_vehicle(n[2]))
                 location = Color.YELLOW(clean_location(n[3]))
                 driver, _ = clean_name(n[4])
@@ -188,7 +192,7 @@ def main(filepath, show_npc_victims):
                 # datetime, player, location
                 when = o[1]
                 whom = Color.GREEN(o[2])
-                where = Color.YELLOW(o[3])
+                where = Color.YELLOW(clean_location(o[3]))
                 print(f"{o[1]}{RESPAWN}: {whom} at? {where}")
                 continue
     except KeyboardInterrupt:
