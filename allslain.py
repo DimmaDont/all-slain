@@ -1,3 +1,4 @@
+from io import TextIOWrapper
 import os
 import re
 import sys
@@ -18,7 +19,12 @@ LOG_RESPAWN = re.compile(
 )
 
 
-def follow(f):
+KILL = Color.RED("KILL".rjust(10))
+VKILL = Color.RED("VKILL".rjust(10))
+RESPAWN = Color.CYAN("RESPAWN".rjust(10))
+
+
+def follow(f: TextIOWrapper):
     while True:
         if line := f.readline():
             yield line
@@ -27,7 +33,7 @@ def follow(f):
             continue
 
 
-def remove_id(name: str):
+def remove_id(name: str) -> str:
     try:
         i = name.rindex("_")
         entity_id = name[i + 1 :]
@@ -45,7 +51,7 @@ def remove_id(name: str):
     return name
 
 
-def clean_location(name):
+def clean_location(name: str) -> str:
     try:
         return LOCATIONS[name]
     except KeyError:
@@ -74,7 +80,7 @@ def clean_location(name):
     return name
 
 
-def clean_name(name) -> tuple[str, int]:
+def clean_name(name: str) -> tuple[str, int]:
     if name == "unknown":
         return (name, 1)
     if name.startswith("PU_Human_Enemy_"):
@@ -125,7 +131,7 @@ def clean_tool(name: str, killer: str, killed: str) -> str:
     return name
 
 
-def get_vehicle(name) -> str:
+def get_vehicle(name: str) -> str:
     vehicle_name = remove_id(name)
     vehicle_name = vehicle_name.replace("_PU_AI_CRIM", "")
 
@@ -142,14 +148,9 @@ def get_vehicle(name) -> str:
     return name
 
 
-KILL = Color.RED("KILL".rjust(10))
-VKILL = Color.RED("VKILL".rjust(10))
-RESPAWN = Color.CYAN("RESPAWN".rjust(10))
-
-
-def main(filepath, show_npc_victims):
+def main(filepath: str, show_npc_victims: bool):
     try:
-        f = open(filepath, "r")
+        f = open(filepath, "r", encoding="utf-8")
         print(Color.RESET, end="")
         for line in follow(f):
             if m := LOG_KILL.match(line):
@@ -176,7 +177,7 @@ def main(filepath, show_npc_victims):
                 continue
             if n := LOG_VEHICLE_KILL.match(line):
                 when = n[1]
-                # todo vehicle can also be an npc if it's a collision
+                # note: vehicle can also be an npc/player entity if it's a collision
                 vehicle = Color.GREEN(get_vehicle(n[2]))
                 location = Color.YELLOW(clean_location(n[3]))
                 driver, _ = clean_name(n[4])
@@ -209,12 +210,11 @@ def main(filepath, show_npc_victims):
 
 
 if __name__ == "__main__":
-    filename = "Game.log"
+    filename: str = "Game.log"
     if len(sys.argv) >= 2:
         filename = sys.argv[1]
     if not os.path.isfile(filename):
         filename = r"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log"
-    show_npc_victims = True
-    main(filename, show_npc_victims)
+    main(filename, True)
 
 # vim: set expandtab ts=4 sw=4
