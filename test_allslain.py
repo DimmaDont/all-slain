@@ -75,7 +75,9 @@ class TestNameFunctions(unittest.TestCase):
         )
         self.assertEqual(len(result.groups()), 7)
         self.assertEqual(result[1], "2024-12-23T00:00:00")
-        self.assertEqual(result[2], "PU_Human-NineTails-Grunt-Male-Grunt_10_123456789012")
+        self.assertEqual(
+            result[2], "PU_Human-NineTails-Grunt-Male-Grunt_10_123456789012"
+        )
         self.assertEqual(result[3], "OOC_Stanton_3a_Lyria")
         self.assertEqual(result[4], "PlayerName")
         self.assertEqual(result[5], "GATS_BallisticGatling_Mounted_S1")
