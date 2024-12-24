@@ -212,12 +212,15 @@ def main(filepath: str) -> None:
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
-        print(Color.RED(f"Log file {filepath} not found."))
+        print(Color.RED(f'Log file "{filepath}" not found.'))
         print(
             "Run this again from within the game folder after starting the game, or specify a game log to read."
         )
     finally:
-        f.close()
+        try:
+            f.close()
+        except UnboundLocalError:
+            pass
 
 
 if __name__ == "__main__":
