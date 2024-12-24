@@ -18,7 +18,7 @@ LOG_RESPAWN = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Corpse> Player '([A-Za-z0-9_-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
 )
 LOG_QUIT = re.compile(
-        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <\[EALobby\] EALobbyQuit> \[EALobby\]\[CEALobby::RequestQuitLobby\] ([A-Za-z0-9_-]+) Requesting QuitLobby.*"
+    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <\[EALobby\] EALobbyQuit> \[EALobby\]\[CEALobby::RequestQuitLobby\] ([A-Za-z0-9_-]+) Requesting QuitLobby.*"
 )
 LOG_INCAP = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> Logged an incap\.! nickname: ([A-Za-z0-9_-]+), causes: \[(.+)\]"
@@ -232,7 +232,7 @@ def main(filepath: str) -> None:
                 elif log := matches["quits"]:
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
-                    print( f"{when}{QUIT}: {whom} has quit the game session." )
+                    print(f"{when}{QUIT}: {whom} has quit the game session.")
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
