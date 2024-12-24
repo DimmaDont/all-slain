@@ -8,7 +8,6 @@ import time
 from colorize import Color
 from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 
-
 LOG_KILL = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([A-Za-z0-9_-]+)' \[\d+\] in zone '([A-Za-z0-9_-]+)' killed by '([A-Za-z0-9_-]+)' \[\d+\] using '[A-Za-z0-9_-]+' \[Class ([A-Za-z0-9_-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]"
 )
@@ -170,58 +169,65 @@ def main(filepath: str) -> None:
     try:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
-            if match_kill := LOG_KILL.match(line):
-                when = match_kill[1].replace("T", " ")
-                killed, is_killed_npc = clean_name(match_kill[2])
-                lp, location = clean_location(match_kill[3])
-                killer, is_killer_npc = clean_name(match_kill[4])
-                cause = clean_tool(match_kill[5], killer, killed)
-                if is_killer_npc and is_killed_npc:
+            matches = {
+                    'pkill': LOG_KILL.match(line),
+                    'vkill': LOG_VEHICLE_KILL.match(line),
+                    'spawn': LOG_RESPAWN.match(line),
+                    'incap': LOG_INCAP.match(line),
+                    }
+            if any( matches ):
+                if matches['pkill']:
+                    when = match_kill[1].replace("T", " ")
+                    killed, is_killed_npc = clean_name(match_kill[2])
+                    lp, location = clean_location(match_kill[3])
+                    killer, is_killer_npc = clean_name(match_kill[4])
+                    cause = clean_tool(match_kill[5], killer, killed)
+                    if is_killer_npc and is_killed_npc:
+                        print(
+                            f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                    elif cause == "suicide":
+                        print(
+                            f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                    else:
+                        print(
+                            f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                    continue
+                if matches['vkill']:
+                    when = match_vkill[1].replace("T", " ")
+                    # note: vehicle can also be an npc/player entity if it's a collision
+                    vehicle = Color.GREEN(get_vehicle(match_vkill[2]))
+                    lp, location = clean_location(match_vkill[3])
+                    driver, _ = clean_name(match_vkill[4])
+                    if driver == "unknown":
+                        driver = ""
+                    else:
+                        driver = Color.GREEN(driver) + " in a "
+                    kill_type = match_vkill[5]
+                    killer = Color.GREEN(get_vehicle(match_vkill[6]))
+                    dmgtype = Color.CYAN(match_vkill[7])
                     print(
-                        f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                     )
-                elif cause == "suicide":
+                    continue
+                if matches['spawn']:
+                    # datetime, player, location
+                    when = match_respawn[1].replace("T", " ")
+                    whom = Color.GREEN(match_respawn[2])
+                    lp, where = clean_location(match_respawn[3])
+                    print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
+                    continue
+                if matches['incap']:
+                    # datetime, player, location
+                    when = match_incap[1].replace("T", " ")
+                    whom = Color.GREEN(match_incap[2])
+                    causes = LOG_INCAP_CAUSE.findall(match_incap[3])
                     print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
                     )
-                else:
-                    print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                    )
-                continue
-            if match_vkill := LOG_VEHICLE_KILL.match(line):
-                when = match_vkill[1].replace("T", " ")
-                # note: vehicle can also be an npc/player entity if it's a collision
-                vehicle = Color.GREEN(get_vehicle(match_vkill[2]))
-                lp, location = clean_location(match_vkill[3])
-                driver, _ = clean_name(match_vkill[4])
-                if driver == "unknown":
-                    driver = ""
-                else:
-                    driver = Color.GREEN(driver) + " in a "
-                kill_type = match_vkill[5]
-                killer = Color.GREEN(get_vehicle(match_vkill[6]))
-                dmgtype = Color.CYAN(match_vkill[7])
-                print(
-                    f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
-                )
-                continue
-            if match_respawn := LOG_RESPAWN.match(line):
-                # datetime, player, location
-                when = match_respawn[1].replace("T", " ")
-                whom = Color.GREEN(match_respawn[2])
-                lp, where = clean_location(match_respawn[3])
-                print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
-                continue
-            if match_incap := LOG_INCAP.match(line):
-                # datetime, player, location
-                when = match_incap[1].replace("T", " ")
-                whom = Color.GREEN(match_incap[2])
-                causes = LOG_INCAP_CAUSE.findall(match_incap[3])
-                print(
-                    f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
-                )
-                continue
+                    continue
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
