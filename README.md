@@ -3,6 +3,8 @@ Star Citizen Game Log Reader
 
 This program monitors the Star Citizen game log in real-time, reporting player kills, vehicle kills, and respawn events.
 
+![example screenshot of the program running in windows console](https://github.com/user-attachments/assets/0fa1d08e-776e-449c-b78b-59bf07c5a20c)
+
 ## Usage
 1. Start the game, and wait until the EasyAntiCheat splash screen closes and the main game window has appeared.
 2. If Star Citizen is installed in the default directory, simply run the program.
