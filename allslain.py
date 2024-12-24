@@ -170,13 +170,13 @@ def main(filepath: str) -> None:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
             matches = {
-                    'pkill': LOG_KILL.match(line),
-                    'vkill': LOG_VEHICLE_KILL.match(line),
-                    'spawn': LOG_RESPAWN.match(line),
-                    'incap': LOG_INCAP.match(line),
-                    }
-            if any( matches ):
-                if matches['pkill']:
+                "pkill": LOG_KILL.match(line),
+                "vkill": LOG_VEHICLE_KILL.match(line),
+                "spawn": LOG_RESPAWN.match(line),
+                "incap": LOG_INCAP.match(line),
+            }
+            if any(matches):
+                if matches["pkill"]:
                     when = match_kill[1].replace("T", " ")
                     killed, is_killed_npc = clean_name(match_kill[2])
                     lp, location = clean_location(match_kill[3])
@@ -195,7 +195,7 @@ def main(filepath: str) -> None:
                             f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
                     continue
-                if matches['vkill']:
+                if matches["vkill"]:
                     when = match_vkill[1].replace("T", " ")
                     # note: vehicle can also be an npc/player entity if it's a collision
                     vehicle = Color.GREEN(get_vehicle(match_vkill[2]))
@@ -212,14 +212,14 @@ def main(filepath: str) -> None:
                         f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                     )
                     continue
-                if matches['spawn']:
+                if matches["spawn"]:
                     # datetime, player, location
                     when = match_respawn[1].replace("T", " ")
                     whom = Color.GREEN(match_respawn[2])
                     lp, where = clean_location(match_respawn[3])
                     print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
                     continue
-                if matches['incap']:
+                if matches["incap"]:
                     # datetime, player, location
                     when = match_incap[1].replace("T", " ")
                     whom = Color.GREEN(match_incap[2])
