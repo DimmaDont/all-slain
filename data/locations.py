@@ -1,4 +1,9 @@
 LOCATIONS = {
+    "@Stanton1b_Aberdeen_Prison": "Klescher Prison, Aberdeen, Hurston, Stanton",
+    "@ui_pregame_port_Area18_name": "Area18, ArcCorp, Stanton",
+    "@ui_pregame_port_Checkmate_name": "Kel-To ℞, Checkmate Station, Pyro",
+    "A18_HospitalInt_OC": "Empire Health Services, Area18, ArcCorp, Stanton",
+    "Area18_central-001": "Area18 Central, Area18, ArcCorp, Stanton",
     "jumppoint_pyro_stanton": "Pyro Gateway",
     "OOC_Stanton_1_Hurston": "Hurston, Stanton",
     "OOC_Stanton_1a_Ariel": "Ariel, Hurston, Stanton",
@@ -31,6 +36,4 @@ LOCATIONS = {
     "pyro6": "Terminus, Pyro",
     # "rs_cz_rewards_003": "",
     "rs_opendungeon_rund_002": "Contested Zone, Ruin Station, Pyro",
-    "@ui_pregame_port_Checkmate_name": "Kel-To ℞, Checkmate Station, Pyro",
-    "@Stanton1b_Aberdeen_Prison": "Klescher Prison, Aberdeen, Hurston, Stanton",
 }
