@@ -115,11 +115,11 @@ def clean_name(name: str) -> tuple[str, int]:
     if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
         return ("NPC Security", 1)
     # Some cases from Pyro observed:
-    if 'Pilot_Criminal_Pilot' in name:
+    if "Pilot_Criminal_Pilot" in name:
         return ("NPC Pilot", 1)
-    if 'Pilot_Criminal_Gunner' in name:
+    if "Pilot_Criminal_Gunner" in name:
         return ("NPC Gunner", 1)
-    if 'pyro_outlaw' in name:
+    if "pyro_outlaw" in name:
         return ("NPC Criminal", 1)
 
     if name == "Hazard-000":
@@ -156,7 +156,7 @@ def get_vehicle(name: str) -> str:
     if not vehicle:
         return name
     vehicle_name = vehicle[1]
-    salvage = vehicle[2] == 'Unmanned_Salvage'
+    salvage = vehicle[2] == "Unmanned_Salvage"
 
     try:
         return SHIPS[vehicle_name] + (" (Salvage)" if salvage else "")
