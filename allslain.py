@@ -199,7 +199,7 @@ def main(filepath: str) -> None:
                 killer = Color.GREEN(get_vehicle(n[6]))
                 dmgtype = Color.CYAN(n[7])
                 print(
-                    f'{when}{VKILL}: {killer} {"disabled" if kill_type == "1" else "destroyed"} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
+                    f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                 )
                 continue
             o = LOG_RESPAWN.match(line)
