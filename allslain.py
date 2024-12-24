@@ -17,6 +17,9 @@ LOG_VEHICLE_KILL = re.compile(
 LOG_RESPAWN = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Corpse> Player '([A-Za-z0-9_-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
 )
+LOG_QUIT = re.compile(
+        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <\[EALobby\] EALobbyQuit> \[EALobby\]\[CEALobby::RequestQuitLobby\] ([A-Za-z0-9_-]+) Requesting QuitLobby.*"
+)
 LOG_INCAP = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> Logged an incap\.! nickname: ([A-Za-z0-9_-]+), causes: \[(.+)\]"
 )
@@ -30,6 +33,7 @@ KILL = Color.RED("KILL".rjust(10))
 VKILL = Color.RED("VKILL".rjust(10))
 RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 INCAP = Color.YELLOW("INCAP".rjust(10))
+QUIT = Color.CYAN("QUIT".rjust(10))
 
 
 def follow(f: TextIOWrapper):
@@ -174,6 +178,7 @@ def main(filepath: str) -> None:
                 "vkill": LOG_VEHICLE_KILL.match(line),
                 "spawn": LOG_RESPAWN.match(line),
                 "incap": LOG_INCAP.match(line),
+                "quits": LOG_QUIT.match(line),
             }
             if any(matches):
                 if log := matches["pkill"]:
@@ -224,6 +229,10 @@ def main(filepath: str) -> None:
                     print(
                         f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
                     )
+                elif log := matches["quits"]:
+                    when = log[1].replace("T", " ")
+                    whom = Color.GREEN(log[2])
+                    print( f"{when}{QUIT}: {whom} has quit the game session." )
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
