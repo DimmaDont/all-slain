@@ -164,7 +164,6 @@ def get_vehicle(name: str) -> str:
 def main(filepath: str) -> None:
     try:
         f = open(filepath, "r", encoding="utf-8")
-        print(Color.RESET, end="")
         for line in follow(f):
             if m := LOG_KILL.match(line):
                 when = m[1]
@@ -223,6 +222,9 @@ def main(filepath: str) -> None:
 
 
 if __name__ == "__main__":
+    print(f"{Color.BRIGHT_WHITE('all-slain')}: Star Citizen Game Log Reader")
+    print(f"{Color.BRIGHT_BLUE('https://github.com/DimmaDont/all-slain')}\n")
+
     filename: str = "Game.log"
     if len(sys.argv) >= 2:
         filename = sys.argv[1]
