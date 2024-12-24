@@ -219,7 +219,7 @@ def main(filepath: str) -> None:
                 whom = Color.GREEN(match_incap[2])
                 causes = LOG_INCAP_CAUSE.findall(match_incap[3])
                 print(
-                    f"{when}{INCAP}: {whom} from {", ".join([Color.YELLOW(cause[0].replace("Damage", "")) for cause in causes])}"
+                    f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
                 )
                 continue
     except KeyboardInterrupt:
