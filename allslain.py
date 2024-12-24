@@ -171,17 +171,23 @@ def main(filepath: str) -> None:
                 location = clean_location(m[3])
                 killer, is_killer_npc = clean_name(m[4])
                 cause = clean_tool(m[5], killer, killed)
+                if 'Space' in location:
+                    at='in'
+                elif 'Elevator' in location:
+                    at='in an'
+                else:
+                    at='at'
                 if is_killer_npc and is_killed_npc:
                     print(
-                        f"{when}{KILL}: {Color.BRIGHT_BLACK(killer)} killed {Color.BRIGHT_BLACK(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.BRIGHT_BLACK(killer)} killed {Color.BRIGHT_BLACK(killed)} with a {Color.CYAN(cause)} {at} {Color.YELLOW(location)}"
                     )
                 elif cause == "suicide":
                     print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} at {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {at} {Color.YELLOW(location)}"
                     )
                 else:
                     print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} at {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {at} {Color.YELLOW(location)}"
                     )
                 continue
             if n := LOG_VEHICLE_KILL.match(line):
@@ -197,8 +203,14 @@ def main(filepath: str) -> None:
                 kill_type = n[5]
                 killer = Color.GREEN(get_vehicle(n[6]))
                 dmgtype = Color.CYAN(n[7])
+                if 'Space' in location:
+                    at='in'
+                elif 'Elevator' in location:
+                    at='in an'
+                else:
+                    at='at'
                 print(
-                    f'{when}{VKILL}: {killer} {"disabled" if kill_type == "1" else "destroyed"} a {driver}{vehicle} with {dmgtype} at {location}'
+                    f'{when}{VKILL}: {killer} {"disabled" if kill_type == "1" else "destroyed"} a {driver}{vehicle} with {dmgtype} {at} {location}'
                 )
                 continue
             o = LOG_RESPAWN.match(line)
