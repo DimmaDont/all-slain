@@ -194,7 +194,7 @@ def main(filepath: str) -> None:
                         print(
                             f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
-                elif matches['vkill']:
+                elif matches["vkill"]:
                     when = match_vkill[1].replace("T", " ")
                     # note: vehicle can also be an npc/player entity if it's a collision
                     vehicle = Color.GREEN(get_vehicle(match_vkill[2]))
@@ -210,13 +210,13 @@ def main(filepath: str) -> None:
                     print(
                         f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                     )
-                elif matches['spawn']:
+                elif matches["spawn"]:
                     # datetime, player, location
                     when = match_respawn[1].replace("T", " ")
                     whom = Color.GREEN(match_respawn[2])
                     lp, where = clean_location(match_respawn[3])
                     print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
-                elif matches['incap']:
+                elif matches["incap"]:
                     # datetime, player, location
                     when = match_incap[1].replace("T", " ")
                     whom = Color.GREEN(match_incap[2])
