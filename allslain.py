@@ -143,8 +143,11 @@ def clean_tool(name: str, killer: str, killed: str) -> str:
 
 
 def get_vehicle(name: str) -> str:
-    vehicle_name = remove_id(name)
-    vehicle_name = vehicle_name.replace("_PU_AI_CRIM", "")
+    vehicle_name = (
+        remove_id(name)
+            .replace("_PU_AI_CRIM", "")
+            .replace("_PU_AI_NineTails", "")
+    )
 
     salvage = False
     if vehicle_name.endswith("_Unmanned_Salvage"):
