@@ -25,7 +25,7 @@ VKILL = Color.RED("VKILL".rjust(10))
 RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 
 
-def follow(f: TextIOWrapper) -> str:
+def follow(f: TextIOWrapper):
     while True:
         if line := f.readline():
             yield line
@@ -48,7 +48,6 @@ def remove_id(name: str) -> str:
     except ValueError:
         # No id or invalid id
         pass
-
     return name
 
 
@@ -57,6 +56,10 @@ def clean_location(name: str) -> str:
         return LOCATIONS[name]
     except KeyError:
         pass
+    finally:
+        # Handle some special cases
+        if name.startswith( "LocationHarvestableObjectContainer_ab_pyro_" ):
+            return "Remote Asteroid Base (Pyro)"
 
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
@@ -66,7 +69,7 @@ def clean_location(name: str) -> str:
         return "Hangar"
 
     if name.startswith("RastarInteriorGridHost_"):
-        return "RastarInteriorGridHost"
+        return "Unknown Surface Facility"
 
     # Location can also be a ship id
     vehicle = get_vehicle(name)
@@ -102,6 +105,13 @@ def clean_name(name: str) -> tuple[str, int]:
         return ("_".join(["Pilot", *name_split[3:6]]), 1)
     if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
         return ("NPC Security", 1)
+    # Some cases from Pyro observed:
+    if 'Pilot_Criminal_Pilot' in name:
+        return ("NPC Pilot", 1)
+    if 'Pilot_Criminal_Gunner' in name:
+        return ("NPC Gunner", 1)
+    if 'pyro_outlaw' in name:
+        return ("NPC Criminal", 1)
 
     if name == "Hazard-000":
         return ("Environmental Hazard", 1)
@@ -188,7 +198,7 @@ def main(filepath: str) -> None:
                 killer = Color.GREEN(get_vehicle(n[6]))
                 dmgtype = Color.CYAN(n[7])
                 print(
-                    f'{when}{VKILL}: {killer} {"soft" if kill_type == "1" else "hard"} killed {driver}{vehicle} with {dmgtype} at {location}'
+                    f'{when}{VKILL}: {killer} {"disabled" if kill_type == "1" else "destroyed"} a {driver}{vehicle} with {dmgtype} at {location}'
                 )
                 continue
             o = LOG_RESPAWN.match(line)
