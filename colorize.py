@@ -12,24 +12,13 @@ class Color(IntEnum):
     CYAN = 36
     WHITE = 37
 
-    BRIGHT_BLACK = 90
-    BRIGHT_RED = 91
-    BRIGHT_GREEN = 92
-    BRIGHT_YELLOW = 93
-    BRIGHT_BLUE = 94
-    BRIGHT_MAGENTA = 95
-    BRIGHT_CYAN = 96
-    BRIGHT_WHITE = 97
-
-    def __call__(self, text) -> str:
-        return f"\x1b[{self}m{text}{Color.RESET}"
+    def __call__(self, text: str, bold: bool = False, bg: bool = False) -> str:
+        color_code = self.value + (60 if bold else 0) + (10 if bg else 0)
+        return f"\x1b[{color_code}m{text}\x1b[0m"
 
     @staticmethod
-    def rgb(r: int, g: int, b: int, text: str) -> str:
-        return f"\x1b[38;2;{r};{g};{b}m{text}{Color.RESET}"
-
-
-Color.RESET = "\x1b[0m"
+    def rgb(r: int, g: int, b: int, text: str, bg: bool = False) -> str:
+        return f"\x1b[{4 if bg else 3}8;2;{r};{g};{b}m{text}\x1b[0m"
 
 
 # vim: set expandtab ts=4 sw=4

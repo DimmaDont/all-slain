@@ -173,7 +173,7 @@ def main(filepath: str) -> None:
                 cause = clean_tool(m[5], killer, killed)
                 if is_killer_npc and is_killed_npc:
                     print(
-                        f"{when}{KILL}: {Color.BRIGHT_BLACK(killer)} killed {Color.BRIGHT_BLACK(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                     )
                 elif cause == "suicide":
                     print(
@@ -224,8 +224,8 @@ def main(filepath: str) -> None:
 
 
 if __name__ == "__main__":
-    print(f"{Color.BRIGHT_WHITE('all-slain')}: Star Citizen Game Log Reader")
-    print(f"{Color.BRIGHT_BLUE('https://github.com/DimmaDont/all-slain')}\n")
+    print(f"{Color.WHITE('all-slain', True)}: Star Citizen Game Log Reader")
+    print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', True)}\n")
 
     filename: str = "Game.log"
     if len(sys.argv) >= 2:
