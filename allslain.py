@@ -19,6 +19,8 @@ LOG_RESPAWN = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Corpse> Player '([A-Za-z0-9_-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
 )
 
+RE_VEHICLE_NAME = re.compile(
+    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|Unmanned_Salvage)?_(\d{12})")
 
 KILL = Color.RED("KILL".rjust(10))
 VKILL = Color.RED("VKILL".rjust(10))
@@ -143,16 +145,11 @@ def clean_tool(name: str, killer: str, killed: str) -> str:
 
 
 def get_vehicle(name: str) -> str:
-    vehicle_name = (
-        remove_id(name)
-            .replace("_PU_AI_CRIM", "")
-            .replace("_PU_AI_NineTails", "")
-    )
-
-    salvage = False
-    if vehicle_name.endswith("_Unmanned_Salvage"):
-        vehicle_name = vehicle_name.replace("_Unmanned_Salvage", "")
-        salvage = True
+    vehicle = RE_VEHICLE_NAME.match(name)
+    if not vehicle:
+        return name
+    vehicle_name = vehicle[1]
+    salvage = vehicle[2] == 'Unmanned_Salvage'
 
     try:
         return SHIPS[vehicle_name] + (" (Salvage)" if salvage else "")
