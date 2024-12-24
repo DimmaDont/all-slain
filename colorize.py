@@ -24,8 +24,12 @@ class Color(IntEnum):
     def __call__(self, text) -> str:
         return f"\x1b[{self}m{text}{Color.RESET}"
 
+    @staticmethod
+    def rgb(r: int, g: int, b: int, text: str) -> str:
+        return f"\x1b[38;2;{r};{g};{b}m{text}{Color.RESET}"
 
-Color.RESET = f"\x1b[0m"
+
+Color.RESET = "\x1b[0m"
 
 
 # vim: set expandtab ts=4 sw=4
