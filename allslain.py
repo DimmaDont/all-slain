@@ -18,13 +18,19 @@ LOG_VEHICLE_KILL = re.compile(
 LOG_RESPAWN = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Corpse> Player '([A-Za-z0-9_-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
 )
+LOG_INCAP = re.compile(
+    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> Logged an incap\.! nickname: ([A-Za-z0-9_-]+), causes: \[(.+)\]"
+)
+LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|Unmanned_Salvage)?_(\d{12})")
+    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|Unmanned_Salvage)?_(\d{12})"
+)
 
 KILL = Color.RED("KILL".rjust(10))
 VKILL = Color.RED("VKILL".rjust(10))
 RESPAWN = Color.CYAN("RESPAWN".rjust(10))
+INCAP = Color.YELLOW("INCAP".rjust(10))
 
 
 def follow(f: TextIOWrapper):
@@ -164,13 +170,12 @@ def main(filepath: str) -> None:
     try:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
-            if m := LOG_KILL.match(line):
-                when = m[1].replace("T", " ")
-
-                killed, is_killed_npc = clean_name(m[2])
-                lp, location = clean_location(m[3])
-                killer, is_killer_npc = clean_name(m[4])
-                cause = clean_tool(m[5], killer, killed)
+            if match_kill := LOG_KILL.match(line):
+                when = match_kill[1].replace("T", " ")
+                killed, is_killed_npc = clean_name(match_kill[2])
+                lp, location = clean_location(match_kill[3])
+                killer, is_killer_npc = clean_name(match_kill[4])
+                cause = clean_tool(match_kill[5], killer, killed)
                 if is_killer_npc and is_killed_npc:
                     print(
                         f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
@@ -184,30 +189,38 @@ def main(filepath: str) -> None:
                         f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                     )
                 continue
-            if n := LOG_VEHICLE_KILL.match(line):
-                when = n[1].replace("T", " ")
+            if match_vkill := LOG_VEHICLE_KILL.match(line):
+                when = match_vkill[1].replace("T", " ")
                 # note: vehicle can also be an npc/player entity if it's a collision
-                vehicle = Color.GREEN(get_vehicle(n[2]))
-                lp, location = clean_location(n[3])
-                driver, _ = clean_name(n[4])
+                vehicle = Color.GREEN(get_vehicle(match_vkill[2]))
+                lp, location = clean_location(match_vkill[3])
+                driver, _ = clean_name(match_vkill[4])
                 if driver == "unknown":
                     driver = ""
                 else:
                     driver = Color.GREEN(driver) + " in a "
-                kill_type = n[5]
-                killer = Color.GREEN(get_vehicle(n[6]))
-                dmgtype = Color.CYAN(n[7])
+                kill_type = match_vkill[5]
+                killer = Color.GREEN(get_vehicle(match_vkill[6]))
+                dmgtype = Color.CYAN(match_vkill[7])
                 print(
                     f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                 )
                 continue
-            o = LOG_RESPAWN.match(line)
-            if o:
+            if match_respawn := LOG_RESPAWN.match(line):
                 # datetime, player, location
-                when = o[1].replace("T", " ")
-                whom = Color.GREEN(o[2])
-                lp, where = clean_location(o[3])
+                when = match_respawn[1].replace("T", " ")
+                whom = Color.GREEN(match_respawn[2])
+                lp, where = clean_location(match_respawn[3])
                 print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
+                continue
+            if match_incap := LOG_INCAP.match(line):
+                # datetime, player, location
+                when = match_incap[1].replace("T", " ")
+                whom = Color.GREEN(match_incap[2])
+                causes = LOG_INCAP_CAUSE.findall(match_incap[3])
+                print(
+                    f"{when}{INCAP}: {whom} from {", ".join([Color.YELLOW(cause[0].replace("Damage", "")) for cause in causes])}"
+                )
                 continue
     except KeyboardInterrupt:
         pass
