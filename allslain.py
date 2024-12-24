@@ -25,7 +25,7 @@ VKILL = Color.RED("VKILL".rjust(10))
 RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 
 
-def follow(f: TextIOWrapper):
+def follow(f: TextIOWrapper) -> str:
     while True:
         if line := f.readline():
             yield line
@@ -149,7 +149,7 @@ def get_vehicle(name: str) -> str:
     return name
 
 
-def main(filepath: str):
+def main(filepath: str) -> None:
     try:
         f = open(filepath, "r", encoding="utf-8")
         print(Color.RESET, end="")

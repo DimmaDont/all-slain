@@ -21,7 +21,7 @@ class Color(IntEnum):
     BRIGHT_CYAN = 96
     BRIGHT_WHITE = 97
 
-    def __call__(self, text):
+    def __call__(self, text) -> str:
         return f"\x1b[{self}m{text}{Color.RESET}"
 
 
