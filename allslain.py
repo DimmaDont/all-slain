@@ -59,12 +59,11 @@ def clean_location(name: str) -> tuple[str, str]:
         return ("at", LOCATIONS[name])
     except KeyError:
         pass
-    finally:
-        # Handle some special cases
-        if name.startswith( "LocationHarvestableObjectContainer_ab_pyro_" ):
-            return ("at a", "Remote Asteroid Base (Pyro)")
 
- 
+    # Handle some special cases
+    if name.startswith("LocationHarvestableObjectContainer_ab_pyro_"):
+        return ("at a", "Remote Asteroid Base (Pyro)")
+
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
         return ("in a", "Bunker")
