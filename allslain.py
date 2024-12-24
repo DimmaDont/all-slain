@@ -165,7 +165,7 @@ def main(filepath: str) -> None:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
             if m := LOG_KILL.match(line):
-                when = m[1]
+                when = m[1].replace("T", " ")
 
                 killed, is_killed_npc = clean_name(m[2])
                 lp, location = clean_location(m[3])
@@ -185,7 +185,7 @@ def main(filepath: str) -> None:
                     )
                 continue
             if n := LOG_VEHICLE_KILL.match(line):
-                when = n[1]
+                when = n[1].replace("T", " ")
                 # note: vehicle can also be an npc/player entity if it's a collision
                 vehicle = Color.GREEN(get_vehicle(n[2]))
                 lp, location = clean_location(n[3])
@@ -204,10 +204,10 @@ def main(filepath: str) -> None:
             o = LOG_RESPAWN.match(line)
             if o:
                 # datetime, player, location
-                when = o[1]
+                when = o[1].replace("T", " ")
                 whom = Color.GREEN(o[2])
                 lp, where = clean_location(o[3])
-                print(f"{o[1]}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
+                print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
                 continue
     except KeyboardInterrupt:
         pass
