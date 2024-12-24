@@ -53,37 +53,39 @@ def remove_id(name: str) -> str:
     return name
 
 
-def clean_location(name: str) -> str:
+def clean_location(name: str) -> tuple[str, str]:
     try:
-        return LOCATIONS[name]
+        # todo not all are "at"
+        return ("at", LOCATIONS[name])
     except KeyError:
         pass
     finally:
         # Handle some special cases
         if name.startswith( "LocationHarvestableObjectContainer_ab_pyro_" ):
-            return "Remote Asteroid Base (Pyro)"
+            return ("at a", "Remote Asteroid Base (Pyro)")
 
+ 
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
-        return "Bunker"
+        return ("in a", "Bunker")
 
     if name.startswith("Hangar_"):
-        return "Hangar"
+        return ("in a", "Hangar")
 
     if name.startswith("RastarInteriorGridHost_"):
-        return "Unknown Surface Facility"
+        return ("in an", "Unknown Surface Facility")
 
     # Location can also be a ship id
     vehicle = get_vehicle(name)
     if vehicle != name:
-        return vehicle
+        return ("in a", vehicle)
 
     if name.startswith("SolarSystem_"):
-        return "Space"
+        return ("in", "Space")
     if name.startswith("TransitCarriage_"):
-        return "Elevator"
+        return ("in an", "Elevator")
 
-    return name
+    return ("at", name)
 
 
 def clean_name(name: str) -> tuple[str, int]:
@@ -168,33 +170,27 @@ def main(filepath: str) -> None:
                 when = m[1]
 
                 killed, is_killed_npc = clean_name(m[2])
-                location = clean_location(m[3])
+                lp, location = clean_location(m[3])
                 killer, is_killer_npc = clean_name(m[4])
                 cause = clean_tool(m[5], killer, killed)
-                if 'Space' in location:
-                    at='in'
-                elif 'Elevator' in location:
-                    at='in an'
-                else:
-                    at='at'
                 if is_killer_npc and is_killed_npc:
                     print(
-                        f"{when}{KILL}: {Color.BRIGHT_BLACK(killer)} killed {Color.BRIGHT_BLACK(killed)} with a {Color.CYAN(cause)} {at} {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.BRIGHT_BLACK(killer)} killed {Color.BRIGHT_BLACK(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                     )
                 elif cause == "suicide":
                     print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {at} {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                     )
                 else:
                     print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {at} {Color.YELLOW(location)}"
+                        f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                     )
                 continue
             if n := LOG_VEHICLE_KILL.match(line):
                 when = n[1]
                 # note: vehicle can also be an npc/player entity if it's a collision
                 vehicle = Color.GREEN(get_vehicle(n[2]))
-                location = Color.YELLOW(clean_location(n[3]))
+                lp, location = clean_location(n[3])
                 driver, _ = clean_name(n[4])
                 if driver == "unknown":
                     driver = ""
@@ -203,14 +199,8 @@ def main(filepath: str) -> None:
                 kill_type = n[5]
                 killer = Color.GREEN(get_vehicle(n[6]))
                 dmgtype = Color.CYAN(n[7])
-                if 'Space' in location:
-                    at='in'
-                elif 'Elevator' in location:
-                    at='in an'
-                else:
-                    at='at'
                 print(
-                    f'{when}{VKILL}: {killer} {"disabled" if kill_type == "1" else "destroyed"} a {driver}{vehicle} with {dmgtype} {at} {location}'
+                    f'{when}{VKILL}: {killer} {"disabled" if kill_type == "1" else "destroyed"} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                 )
                 continue
             o = LOG_RESPAWN.match(line)
@@ -218,8 +208,8 @@ def main(filepath: str) -> None:
                 # datetime, player, location
                 when = o[1]
                 whom = Color.GREEN(o[2])
-                where = Color.YELLOW(clean_location(o[3]))
-                print(f"{o[1]}{RESPAWN}: {whom} at? {where}")
+                lp, where = clean_location(o[3])
+                print(f"{o[1]}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
                 continue
     except KeyboardInterrupt:
         pass
