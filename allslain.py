@@ -41,6 +41,7 @@ INCAP = Color.YELLOW("INCAP".rjust(10))
 QUIT = Color.CYAN("QUIT".rjust(10))
 SPAWNED = Color.CYAN("SPAWNED".rjust(10))
 
+
 def follow(f: TextIOWrapper):
     while True:
         if line := f.readline():
