@@ -45,6 +45,7 @@ QUIT = Color.CYAN("QUIT".rjust(10))
 JUMP = Color.GREEN("JUMP".rjust(10))
 SPAWNED = Color.CYAN("SPAWNED".rjust(10))
 
+
 def follow(f: TextIOWrapper):
     while True:
         if line := f.readline():

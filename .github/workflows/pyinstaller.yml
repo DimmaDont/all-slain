@@ -1,4 +1,4 @@
-name: Build-Nuitka
+name: Build-PyInstaller
 on: [push]
 jobs:
   build:
@@ -15,26 +15,26 @@ jobs:
         with:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+          cache: 'pip' # caching pip dependencies
 
-      # Build python script into a single execute or app folder (macOS)
-      - uses: Nuitka/Nuitka-Action@main
-        with:
-          nuitka-version: main
-          script-name: allslain.py
-          mode: app
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          pip install pyinstaller
 
-      - name: Rename file 
-        run: mv build/allslain.exe build/allslain-nuitka.exe
+      - name: Package Application
+        shell: bash
+        run: |
+          pyinstaller --onefile allslain.py
 
       # Uploads artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: exe
-          path: build/allslain-nuitka.exe
-          include-hidden-files: true
+          path: dist/allslain.exe
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/allslain-nuitka.exe
+          files: dist/allslain.exe
