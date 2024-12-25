@@ -1,7 +1,9 @@
 LOCATIONS = {
+    # "@Stanton1_Transfer": "",
     "@Stanton1b_Aberdeen_Prison": "Klescher Prison, Aberdeen, Hurston, Stanton",
     "@ui_pregame_port_Area18_name": "Area18, ArcCorp, Stanton",
     "@ui_pregame_port_Checkmate_name": "Kel-To ℞, Checkmate Station, Pyro",
+    "@ui_pregame_port_GrimHex_name": "Grim HEX, Yela, Crusader, Stanton",
     "A18_HospitalInt_OC": "Empire Health Services, Area18, ArcCorp, Stanton",
     "Area18_central-001": "Area18 Central, Area18, ArcCorp, Stanton",
     "jumppoint_pyro_stanton": "Pyro Gateway, Stanton",
