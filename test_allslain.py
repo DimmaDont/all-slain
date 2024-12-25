@@ -6,6 +6,7 @@ from allslain import (
     get_vehicle,
     LOG_INCAP_CAUSE,
     LOG_INCAP,
+    LOG_JUMP,
     LOG_KILL,
     LOG_RESPAWN,
     LOG_VEHICLE_KILL,
@@ -201,6 +202,19 @@ class TestLogIncapRegexMultipleCause(unittest.TestCase):
         self.assertEqual(self.cause[0][1], "3.999999")
         self.assertEqual(self.cause[1][0], "SuffocationDamage")
         self.assertEqual(self.cause[1][1], "1.999999")
+
+
+class TestLogJump(unittest.TestCase):
+    def test_log_jump_regex(self):
+        result = LOG_JUMP.match(
+            "<2024-12-22T00:00:00.000Z> [Notice] <Changing Solar System> CEntityComponentJumpTunnelHost::RmChangeSolarSystem | CL12345 NOT AUTH | Pyro | JumpTunnelHost_123456789012 [123456789012] | Client entity Player-123_Name was found in tunnel zone JumpTunnelHost_123456789012, changing system from Pyro to Stanton [Team_VehicleFeatures][JumpSystem]"
+        )
+        self.assertIsNotNone(result)
+        self.assertEqual(len(result.groups()), 4)
+        self.assertEqual(result[1], "2024-12-22T00:00:00")
+        self.assertEqual(result[2], "Player-123_Name")
+        self.assertEqual(result[3], "Pyro")
+        self.assertEqual(result[4], "Stanton")
 
 
 if __name__ == "__main__":
