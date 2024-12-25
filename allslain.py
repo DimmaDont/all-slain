@@ -8,6 +8,7 @@ import time
 from colorize import Color
 from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 from log_parser import SCLogParser as SLP
+
 LP = SLP()
 
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
@@ -165,8 +166,8 @@ def main(filepath: str) -> None:
     try:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
-            matches = LP.parseLog( line )
-            if any( matches.values() ):
+            matches = LP.parseLog(line)
+            if any(matches.values()):
                 if log := matches["KILLP"]:
                     when = log[1].replace("T", " ")
                     killed, is_killed_npc = clean_name(log[2])
