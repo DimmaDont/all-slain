@@ -4,7 +4,6 @@ import unittest
 from allslain import (
     clean_name,
     get_vehicle,
-    LOG_INCAP_CAUSE,
     RE_VEHICLE_NAME,
     remove_id,
 )
