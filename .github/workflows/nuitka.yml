@@ -22,6 +22,7 @@ jobs:
           nuitka-version: main
           script-name: allslain.py
           mode: app
+          windows-icon-from-ico: icon/ded.ico
 
       - name: Rename file 
         run: mv build/allslain.exe build/allslain-nuitka.exe
