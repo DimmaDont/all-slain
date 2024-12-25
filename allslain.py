@@ -165,73 +165,72 @@ def main(filepath: str) -> None:
     try:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
-            if not (match := SCLogParser.find_match(line)):
-                continue
-            if log := match.get("KILLP"):
-                when = log[1].replace("T", " ")
-                killed, is_killed_npc = clean_name(log[2])
-                lp, location = clean_location(log[3])
-                killer, is_killer_npc = clean_name(log[4])
-                cause = clean_tool(log[5], killer, killed)
-                if cause == "suicide":
-                    print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                    )
-                elif is_killer_npc and is_killed_npc:
-                    print(
-                        f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                    )
-                else:
-                    print(
-                        f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                    )
-            elif log := match.get("KILLV"):
-                when = log[1].replace("T", " ")
-                # note: vehicle can also be an npc/player entity if it's a collision
-                vehicle = Color.GREEN(get_vehicle(log[2]))
-                lp, location = clean_location(log[3])
-                driver, _ = clean_name(log[4])
-                if driver == "unknown":
-                    driver = ""
-                else:
-                    driver = Color.GREEN(driver) + " in a "
-                kill_type = log[5]
+            if match := SCLogParser.find_match(line):
+                if log := match.get("KILLP"):
+                    when = log[1].replace("T", " ")
+                    killed, is_killed_npc = clean_name(log[2])
+                    lp, location = clean_location(log[3])
+                    killer, is_killer_npc = clean_name(log[4])
+                    cause = clean_tool(log[5], killer, killed)
+                    if cause == "suicide":
+                        print(
+                            f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                    elif is_killer_npc and is_killed_npc:
+                        print(
+                            f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                    else:
+                        print(
+                            f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                elif log := match.get("KILLV"):
+                    when = log[1].replace("T", " ")
+                    # note: vehicle can also be an npc/player entity if it's a collision
+                    vehicle = Color.GREEN(get_vehicle(log[2]))
+                    lp, location = clean_location(log[3])
+                    driver, _ = clean_name(log[4])
+                    if driver == "unknown":
+                        driver = ""
+                    else:
+                        driver = Color.GREEN(driver) + " in a "
+                    kill_type = log[5]
 
-                # note: killer can also be an npc entity
-                killer = Color.GREEN(get_vehicle(log[6]))
-                dmgtype = Color.CYAN(log[7])
-                print(
-                    f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
-                )
-            elif log := match.get("RESPAWN"):
-                # datetime, player, location
-                when = log[1].replace("T", " ")
-                whom = Color.GREEN(log[2])
-                lp, where = clean_location(log[3])
-                print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
-            elif log := match.get("INCAP"):
-                # datetime, player, causes
-                when = log[1].replace("T", " ")
-                whom = Color.GREEN(log[2])
-                causes = LOG_INCAP_CAUSE.findall(log[3])
-                print(
-                    f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
-                )
-            elif log := match.get("QUIT"):
-                when = log[1].replace("T", " ")
-                whom = Color.GREEN(log[2])
-                print(f"{when}{QUIT}: {whom} has quit the game session.")
-            elif log := match.get("SPAWN"):
-                when = log[1].replace("T", " ")
-                print(f"{when}{SPAWNED}: Character spawned!")
-            elif log := match.get("JUMP"):
-                when = log[1].replace("T", " ")
-                whom = Color.GREEN(log[2])
-                origin = Color.BLUE(log[3])
-                dest = Color.BLUE(log[4])
-                print(
-                    f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
-                )
+                    # note: killer can also be an npc entity
+                    killer = Color.GREEN(get_vehicle(log[6]))
+                    dmgtype = Color.CYAN(log[7])
+                    print(
+                        f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
+                    )
+                elif log := match.get("RESPAWN"):
+                    # datetime, player, location
+                    when = log[1].replace("T", " ")
+                    whom = Color.GREEN(log[2])
+                    lp, where = clean_location(log[3])
+                    print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
+                elif log := match.get("INCAP"):
+                    # datetime, player, causes
+                    when = log[1].replace("T", " ")
+                    whom = Color.GREEN(log[2])
+                    causes = LOG_INCAP_CAUSE.findall(log[3])
+                    print(
+                        f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
+                    )
+                elif log := match.get("QUIT"):
+                    when = log[1].replace("T", " ")
+                    whom = Color.GREEN(log[2])
+                    print(f"{when}{QUIT}: {whom} has quit the game session.")
+                elif log := match.get("SPAWN"):
+                    when = log[1].replace("T", " ")
+                    print(f"{when}{SPAWNED}: Character spawned!")
+                elif log := match.get("JUMP"):
+                    when = log[1].replace("T", " ")
+                    whom = Color.GREEN(log[2])
+                    origin = Color.BLUE(log[3])
+                    dest = Color.BLUE(log[4])
+                    print(
+                        f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
+                    )
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
