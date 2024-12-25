@@ -9,6 +9,7 @@ from allslain import (
     remove_id,
 )
 
+
 class TestCleanNameFunction(unittest.TestCase):
     def test_clean_name_npc_arch_blacjac(self):
         result, _ = clean_name(
@@ -68,6 +69,7 @@ class TestCleanNameFunction(unittest.TestCase):
         result, _ = clean_name("PU_Pilots-Human-Criminal-Gunner_Light_123456789012")
         self.assertEqual(result, "Pilot_Criminal_Gunner_Light")
 
+
 class TestRemoveIdFunction(unittest.TestCase):
     def test_remove_id_tooshort(self):
         result = remove_id("ASDF1234_1234")
@@ -80,6 +82,7 @@ class TestRemoveIdFunction(unittest.TestCase):
     def test_remove_id(self):
         result = remove_id("ASDF1234_123456789012")
         self.assertEqual(result, "ASDF1234")
+
 
 class TestVehicleNameRegex(unittest.TestCase):
     def test_re_vehicle_name_pu_ai(self):
@@ -110,6 +113,7 @@ class TestGetVehicleNameFunction(unittest.TestCase):
     def test_get_vehicle_salvage(self):
         result = get_vehicle("ANVL_Arrow_Unmanned_Salvage_123456789012")
         self.assertEqual(result, "Anvil Arrow (Salvage)")
+
 
 if __name__ == "__main__":
     unittest.main()

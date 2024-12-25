@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import unittest
 
-from allslain import (
-    LOG_INCAP_CAUSE
-)
+from allslain import LOG_INCAP_CAUSE
 
 from log_parser import SCLogParser
+
 LP = SCLogParser()
+
 
 class TestLogKillRegex(unittest.TestCase):
     def test_log_kill_regex(self):
@@ -24,6 +24,7 @@ class TestLogKillRegex(unittest.TestCase):
         self.assertEqual(result[6], "Bullet")
         self.assertEqual(result[7], "x: -0.123456, y: -0.123456, z: 0.123456")
 
+
 class TestLogVKillRegex(unittest.TestCase):
     def test_log_vkill_regex(self):
         result = LP.parseLog(
@@ -38,6 +39,7 @@ class TestLogVKillRegex(unittest.TestCase):
         self.assertEqual(result[6], "PlayerName")
         self.assertEqual(result[7], "Combat")
 
+
 class TestLogRespawnRegex(unittest.TestCase):
     def test_log_respawn_regex(self):
         result = LP.parseLog(
@@ -47,6 +49,7 @@ class TestLogRespawnRegex(unittest.TestCase):
         self.assertEqual(result[1], "2024-12-23T00:00:00")
         self.assertEqual(result[2], "PlayerName")
         self.assertEqual(result[3], "@Stanton1b_Aberdeen_Prison")
+
 
 class TestLogIncapRegexSingleCause(unittest.TestCase):
     def setUp(self):
@@ -64,6 +67,7 @@ class TestLogIncapRegexSingleCause(unittest.TestCase):
     def test_incap_cause(self):
         self.assertEqual(self.cause[0][0], "Bleed")
         self.assertEqual(self.cause[0][1], "0.350000")
+
 
 class TestLogIncapRegexMultipleCause(unittest.TestCase):
     def setUp(self):
@@ -86,6 +90,7 @@ class TestLogIncapRegexMultipleCause(unittest.TestCase):
         self.assertEqual(self.cause[0][1], "3.999999")
         self.assertEqual(self.cause[1][0], "SuffocationDamage")
         self.assertEqual(self.cause[1][1], "1.999999")
+
 
 if __name__ == "__main__":
     unittest.main()
