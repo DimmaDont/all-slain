@@ -8,6 +8,9 @@ import time
 from colorize import Color
 from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 
+LOG_JUMP = re.compile(
+    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Changing Solar System>.* Client entity ([A-Za-z0-9]*) .* changing system from ([A-Za-z0-9]*) to ([A-Za-z0-9]*) .*"
+)
 LOG_KILL = re.compile(
     r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([A-Za-z0-9_-]+)' \[\d+\] in zone '([A-Za-z0-9_-]+)' killed by '([A-Za-z0-9_-]+)' \[\d+\] using '[A-Za-z0-9_-]+' \[Class ([A-Za-z0-9_-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]"
 )
@@ -34,13 +37,13 @@ RE_VEHICLE_NAME = re.compile(
 )
 
 
-KILL = Color.RED("KILL".rjust(10))
-VKILL = Color.RED("VKILL".rjust(10))
-RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 INCAP = Color.YELLOW("INCAP".rjust(10))
+JUMP = Color.GREEN("JUMP".rjust(10))
+KILL = Color.RED("KILL".rjust(10))
 QUIT = Color.CYAN("QUIT".rjust(10))
+RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 SPAWNED = Color.CYAN("SPAWNED".rjust(10))
-
+VKILL = Color.RED("VKILL".rjust(10))
 
 def follow(f: TextIOWrapper):
     while True:
@@ -186,6 +189,9 @@ def main(filepath: str) -> None:
                 "incap": LOG_INCAP.match(line),
                 "quits": LOG_QUIT.match(line),
                 "spawned": LOG_SPAWNED.match(line),
+                "jumps": LOG_JUMP.match(line),
+                "spawned": LOG_SPAWNED.match(line),
+                "jumps": LOG_JUMP.match(line),
             }
             if any(matches):
                 if log := matches["pkill"]:
@@ -243,6 +249,23 @@ def main(filepath: str) -> None:
                 elif log := matches["spawned"]:
                     when = log[1].replace("T", " ")
                     print(f"{when}{SPAWNED}: Spawned!")
+                elif log := matches["jumps"]:
+                    when = log[1].replace("T", " ")
+                    whom = Color.GREEN(log[2])
+                    origin = Color.BLUE(log[3])
+                    dest = Color.BLUE(log[4])
+                    print(
+                        f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
+                    )
+                elif log := matches["spawned"]:
+                    when = log[1].replace("T", " ")
+                    print(f"{when}{SPAWNED}: Spawned!")
+                elif log := matches["jumps"]:
+                    when = log[1].replace("T", " ")
+                    whom = Color.GREEN(log[2])
+                    origin = Color.BLUE(log[3])
+                    dest = Color.BLUE(log[4])
+                    print(f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system.")
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
