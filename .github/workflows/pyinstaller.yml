@@ -4,7 +4,10 @@ jobs:
   build:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: windows-latest
-
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
     steps:
 
       # Check-out repository
@@ -26,6 +29,11 @@ jobs:
         shell: bash
         run: |
           pyinstaller --onefile allslain.py --icon icon/ded.ico
+
+      - name: Attest
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: '${{ github.workspace }}/dist'
 
       # Uploads artifact
       - name: Upload Artifact
