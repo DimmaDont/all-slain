@@ -25,16 +25,21 @@ LOG_INCAP = re.compile(
 )
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
+LOG_SPAWNED = re.compile(
+    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CSessionManager::OnClientSpawned\] Spawned!"
+)
+
 RE_VEHICLE_NAME = re.compile(
     r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|Unmanned_Salvage)?_(\d{12})"
 )
+
 
 KILL = Color.RED("KILL".rjust(10))
 VKILL = Color.RED("VKILL".rjust(10))
 RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 INCAP = Color.YELLOW("INCAP".rjust(10))
 QUIT = Color.CYAN("QUIT".rjust(10))
-
+SPAWNED = Color.CYAN("SPAWNED".rjust(10))
 
 def follow(f: TextIOWrapper):
     while True:
@@ -176,9 +181,10 @@ def main(filepath: str) -> None:
             matches = {
                 "pkill": LOG_KILL.match(line),
                 "vkill": LOG_VEHICLE_KILL.match(line),
-                "spawn": LOG_RESPAWN.match(line),
+                "respawn": LOG_RESPAWN.match(line),
                 "incap": LOG_INCAP.match(line),
                 "quits": LOG_QUIT.match(line),
+                "spawned": LOG_SPAWNED.match(line),
             }
             if any(matches):
                 if log := matches["pkill"]:
@@ -215,14 +221,14 @@ def main(filepath: str) -> None:
                     print(
                         f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                     )
-                elif log := matches["spawn"]:
+                elif log := matches["respawn"]:
                     # datetime, player, location
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     lp, where = clean_location(log[3])
                     print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
                 elif log := matches["incap"]:
-                    # datetime, player, location
+                    # datetime, player, causes
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     causes = LOG_INCAP_CAUSE.findall(log[3])
@@ -233,6 +239,9 @@ def main(filepath: str) -> None:
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     print(f"{when}{QUIT}: {whom} has quit the game session.")
+                elif log := matches["spawned"]:
+                    when = log[1].replace("T", " ")
+                    print(f"{when}{SPAWNED}: Spawned!")
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
