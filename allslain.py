@@ -45,6 +45,7 @@ JUMP = Color.GREEN("JUMP".rjust(10))
 SPAWNED = Color.CYAN("SPAWNED".rjust(10))
 JUMP = Color.GREEN("JUMP".rjust(10))
 
+
 def follow(f: TextIOWrapper):
     while True:
         if line := f.readline():
@@ -261,7 +262,9 @@ def main(filepath: str) -> None:
                     whom = Color.GREEN(log[2])
                     origin = Color.BLUE(log[3])
                     dest = Color.BLUE(log[4])
-                    print(f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system.")
+                    print(
+                        f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
+                    )
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
