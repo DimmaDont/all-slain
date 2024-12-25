@@ -1,8 +1,10 @@
 LOCATIONS = {
-    # "@Stanton1_Transfer": "",
+    "@Stanton1_Transfer": "Everus Harbor, Hurston, Stanton",
     "@Stanton1b_Aberdeen_Prison": "Klescher Prison, Aberdeen, Hurston, Stanton",
+    "@Stanton2_Transfer_Seraphim": "Seraphim Station, Crusader, Stanton",
+    "@Stanton3_Transfer": "Baijini Point, ArcCorp, Stanton",
     "@ui_pregame_port_Area18_name": "Area18, ArcCorp, Stanton",
-    "@ui_pregame_port_Checkmate_name": "Kel-To ℞, Checkmate Station, Pyro",
+    "@ui_pregame_port_Checkmate_name": "Checkmate Station, Pyro",
     "@ui_pregame_port_GrimHex_name": "Grim HEX, Yela, Crusader, Stanton",
     "@ui_pregame_port_Lorville_name": "Lorville, Hurston, Stanton",
     "A18_HospitalInt_OC": "Empire Health Services, Area18, ArcCorp, Stanton",
