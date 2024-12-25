@@ -4,6 +4,7 @@ LOCATIONS = {
     "@ui_pregame_port_Area18_name": "Area18, ArcCorp, Stanton",
     "@ui_pregame_port_Checkmate_name": "Kel-To ℞, Checkmate Station, Pyro",
     "@ui_pregame_port_GrimHex_name": "Grim HEX, Yela, Crusader, Stanton",
+    "@ui_pregame_port_Lorville_name": "Lorville, Hurston, Stanton",
     "A18_HospitalInt_OC": "Empire Health Services, Area18, ArcCorp, Stanton",
     "Area18_central-001": "Area18 Central, Area18, ArcCorp, Stanton",
     "jumppoint_pyro_stanton": "Pyro Gateway, Stanton",
