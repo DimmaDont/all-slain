@@ -33,7 +33,7 @@ LOG_SPAWNED = re.compile(
 )
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|Unmanned_Salvage)?_(\d{12})"
+    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|PU_AI_NT|Unmanned_Salvage)?_(\d{12})"
 )
 
 
@@ -136,6 +136,8 @@ def clean_name(name: str) -> tuple[str, int]:
 
     if name == "Hazard-000":
         return ("Environmental Hazard", 1)
+    if name.startswith("Quasigrazer_"):
+        return ("Quasigrazer", 1)
 
     return (name, 0)
 
@@ -200,13 +202,13 @@ def main(filepath: str) -> None:
                     lp, location = clean_location(log[3])
                     killer, is_killer_npc = clean_name(log[4])
                     cause = clean_tool(log[5], killer, killed)
-                    if is_killer_npc and is_killed_npc:
-                        print(
-                            f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                        )
-                    elif cause == "suicide":
+                    if cause == "suicide":
                         print(
                             f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                    elif is_killer_npc and is_killed_npc:
+                        print(
+                            f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
                     else:
                         print(
@@ -223,6 +225,8 @@ def main(filepath: str) -> None:
                     else:
                         driver = Color.GREEN(driver) + " in a "
                     kill_type = log[5]
+
+                    # note: killer can also be an npc entity
                     killer = Color.GREEN(get_vehicle(log[6]))
                     dmgtype = Color.CYAN(log[7])
                     print(
