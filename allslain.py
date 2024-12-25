@@ -46,7 +46,6 @@ SPAWNED = Color.CYAN("SPAWNED".rjust(10))
 VKILL = Color.RED("VKILL".rjust(10))
 
 
-
 def follow(f: TextIOWrapper):
     while True:
         if line := f.readline():
