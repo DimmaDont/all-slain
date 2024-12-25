@@ -33,17 +33,18 @@ LOG_SPAWNED = re.compile(
 )
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|Unmanned_Salvage)?_(\d{12})"
+    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|PU_AI_NT|Unmanned_Salvage)?_(\d{12})"
 )
 
-KILL = Color.RED("KILL".rjust(10))
-VKILL = Color.RED("VKILL".rjust(10))
-RESPAWN = Color.CYAN("RESPAWN".rjust(10))
+
 INCAP = Color.YELLOW("INCAP".rjust(10))
+JUMP = Color.GREEN("JUMP".rjust(10))
+KILL = Color.RED("KILL".rjust(10))
 QUIT = Color.CYAN("QUIT".rjust(10))
-JUMP = Color.GREEN("JUMP".rjust(10))
+RESPAWN = Color.CYAN("RESPAWN".rjust(10))
 SPAWNED = Color.CYAN("SPAWNED".rjust(10))
-JUMP = Color.GREEN("JUMP".rjust(10))
+VKILL = Color.RED("VKILL".rjust(10))
+
 
 
 def follow(f: TextIOWrapper):
@@ -137,6 +138,8 @@ def clean_name(name: str) -> tuple[str, int]:
 
     if name == "Hazard-000":
         return ("Environmental Hazard", 1)
+    if name.startswith("Quasigrazer_"):
+        return ("Quasigrazer", 1)
 
     return (name, 0)
 
@@ -189,7 +192,6 @@ def main(filepath: str) -> None:
                 "respawn": LOG_RESPAWN.match(line),
                 "incap": LOG_INCAP.match(line),
                 "quits": LOG_QUIT.match(line),
-                "jumps": LOG_JUMP.match(line),
                 "spawned": LOG_SPAWNED.match(line),
                 "jumps": LOG_JUMP.match(line),
             }
@@ -200,13 +202,13 @@ def main(filepath: str) -> None:
                     lp, location = clean_location(log[3])
                     killer, is_killer_npc = clean_name(log[4])
                     cause = clean_tool(log[5], killer, killed)
-                    if is_killer_npc and is_killed_npc:
-                        print(
-                            f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                        )
-                    elif cause == "suicide":
+                    if cause == "suicide":
                         print(
                             f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                        )
+                    elif is_killer_npc and is_killed_npc:
+                        print(
+                            f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
                     else:
                         print(
@@ -223,6 +225,8 @@ def main(filepath: str) -> None:
                     else:
                         driver = Color.GREEN(driver) + " in a "
                     kill_type = log[5]
+
+                    # note: killer can also be an npc entity
                     killer = Color.GREEN(get_vehicle(log[6]))
                     dmgtype = Color.CYAN(log[7])
                     print(
@@ -246,14 +250,6 @@ def main(filepath: str) -> None:
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     print(f"{when}{QUIT}: {whom} has quit the game session.")
-                elif log := matches["jumps"]:
-                    when = log[1].replace("T", " ")
-                    whom = Color.GREEN(log[2])
-                    origin = Color.BLUE(log[3])
-                    dest = Color.BLUE(log[4])
-                    print(
-                        f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
-                    )
                 elif log := matches["spawned"]:
                     when = log[1].replace("T", " ")
                     print(f"{when}{SPAWNED}: Spawned!")

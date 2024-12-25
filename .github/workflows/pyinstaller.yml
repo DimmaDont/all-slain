@@ -25,7 +25,7 @@ jobs:
       - name: Package Application
         shell: bash
         run: |
-          pyinstaller --onefile allslain.py
+          pyinstaller --onefile allslain.py --icon icon/ded.ico
 
       # Uploads artifact
       - name: Upload Artifact

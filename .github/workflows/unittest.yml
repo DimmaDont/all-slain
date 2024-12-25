@@ -1,0 +1,14 @@
+name: Unittest
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+      - name: Run Tests
+        shell: bash
+        run: |
+          python -m unittest
