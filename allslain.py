@@ -7,31 +7,9 @@ import time
 
 from colorize import Color
 from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
+from log_parser import SCLogParser
 
-
-LOG_JUMP = re.compile(
-    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Changing Solar System>.* Client entity ([\w-]*) .* changing system from (\w+) to (\w+) .*"
-)
-LOG_KILL = re.compile(
-    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([\w-]+)' \[\d+\] in zone '([\w-]+)' killed by '([\w-]+)' \[\d+\] using '[\w-]+' \[Class ([\w-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]"
-)
-LOG_VEHICLE_KILL = re.compile(
-    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Vehicle Destruction> CVehicle::OnAdvanceDestroyLevel: Vehicle '([\w-]+)' \[\d+\] in zone '([\w-]+)' \[pos.*\] driven by '([\w-]+)' \[\d+\] advanced from destroy level \d to (\d) caused by '([\w-]+)' \[[0-9_]+\] with '([A-Za-z]+)' \[Team_VehicleFeatures\]\[Vehicle\]"
-)
-LOG_RESPAWN = re.compile(
-    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Corpse> Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
-)
-LOG_QUIT = re.compile(
-    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <\[EALobby\] EALobbyQuit> \[EALobby\]\[CEALobby::RequestQuitLobby\] ([\w-]+) Requesting QuitLobby.*"
-)
-LOG_INCAP = re.compile(
-    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> Logged an incap\.! nickname: ([\w-]+), causes: \[(.+)\]"
-)
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
-
-LOG_SPAWNED = re.compile(
-    r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CSessionManager::OnClientSpawned\] Spawned!"
-)
 
 RE_VEHICLE_NAME = re.compile(
     r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|PU_AI_NT|Unmanned_Salvage)?_(\d{12})"
@@ -186,17 +164,8 @@ def main(filepath: str) -> None:
     try:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
-            matches = {
-                "pkill": LOG_KILL.match(line),
-                "vkill": LOG_VEHICLE_KILL.match(line),
-                "respawn": LOG_RESPAWN.match(line),
-                "incap": LOG_INCAP.match(line),
-                "quits": LOG_QUIT.match(line),
-                "spawned": LOG_SPAWNED.match(line),
-                "jumps": LOG_JUMP.match(line),
-            }
-            if any(matches):
-                if log := matches["pkill"]:
+            if match := SCLogParser.find_match(line):
+                if log := match.get("KILLP"):
                     when = log[1].replace("T", " ")
                     killed, is_killed_npc = clean_name(log[2])
                     lp, location = clean_location(log[3])
@@ -214,7 +183,7 @@ def main(filepath: str) -> None:
                         print(
                             f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
-                elif log := matches["vkill"]:
+                elif log := match.get("KILLV"):
                     when = log[1].replace("T", " ")
                     # note: vehicle can also be an npc/player entity if it's a collision
                     vehicle = Color.GREEN(get_vehicle(log[2]))
@@ -232,13 +201,13 @@ def main(filepath: str) -> None:
                     print(
                         f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                     )
-                elif log := matches["respawn"]:
+                elif log := match.get("RESPAWN"):
                     # datetime, player, location
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     lp, where = clean_location(log[3])
                     print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
-                elif log := matches["incap"]:
+                elif log := match.get("INCAP"):
                     # datetime, player, causes
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
@@ -246,14 +215,14 @@ def main(filepath: str) -> None:
                     print(
                         f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
                     )
-                elif log := matches["quits"]:
+                elif log := match.get("QUIT"):
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     print(f"{when}{QUIT}: {whom} has quit the game session.")
-                elif log := matches["spawned"]:
+                elif log := match.get("SPAWN"):
                     when = log[1].replace("T", " ")
-                    print(f"{when}{SPAWNED}: Spawned!")
-                elif log := matches["jumps"]:
+                    print(f"{when}{SPAWNED}: Character spawned!")
+                elif log := match.get("JUMP"):
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     origin = Color.BLUE(log[3])
