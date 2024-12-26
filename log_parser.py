@@ -27,9 +27,9 @@ class SCLogParser:
         ),
     }
 
-    @staticmethod
-    def find_match(line: str) -> dict:
-        for event_type, regex in SCLogParser.PATTERNS.items():
+    @classmethod
+    def find_match(cls, line: str) -> dict:
+        for event_type, regex in cls.PATTERNS.items():
             if match := regex.match(line):
                 return {event_type: match}
         return {}
