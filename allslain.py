@@ -118,6 +118,7 @@ def clean_name(name: str) -> tuple[str, int]:
         return ("Environmental Hazard", 1)
     if name.startswith("Quasigrazer_"):
         return ("Quasigrazer", 1)
+    # fun fact, kill messages aren't logged for maroks
 
     return (name, 0)
 
@@ -234,9 +235,6 @@ def main(filepath: str) -> None:
         pass
     except FileNotFoundError:
         print(Color.RED(f'Log file "{filepath}" not found.'))
-        print(
-            "Run this again from within the game folder after starting the game, or specify a game log to read."
-        )
     finally:
         try:
             f.close()
@@ -244,15 +242,31 @@ def main(filepath: str) -> None:
             pass
 
 
+TRY_FILES = [
+    "Game.log",
+    r"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log",
+    r"C:\Program Files\Roberts Space Industries\StarCitizen\LIVE\Game.log",
+]
+
+
+def find_game_log() -> str | None:
+    for file in TRY_FILES:
+        if os.path.isfile(file):
+            return file
+    return None
+
+
 if __name__ == "__main__":
     print(f"{Color.WHITE('all-slain', True)}: Star Citizen Game Log Reader")
     print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', True)}\n")
 
-    filename: str = "Game.log"
-    if len(sys.argv) >= 2:
-        filename = sys.argv[1]
-    if not os.path.isfile(filename):
-        filename = r"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log"
-    main(filename)
+    if filename := sys.argv[1] if len(sys.argv) >= 2 else find_game_log():
+        print(f"Reading \"{Color.CYAN(filename)}\"\n")
+        main(filename)
+    else:
+        print(Color.RED("No log files found in the default locations."))
+        print(
+            "Run this again from within the game folder after starting the game, or specify a game log to read."
+        )
 
 # vim: set expandtab ts=4 sw=4

@@ -161,7 +161,7 @@ WEAPONS_FPS = {
     "ksar_smg_energy_01_gold01": 'Custodian "Executive Edition" SMG',
     "ksar_smg_energy_01_green01": 'Custodian "Warhawk" SMG',
     "ksar_smg_energy_01_red01": 'Custodian "Brimstone" SMG',
-    "ksar_smg_energy_01_spc_01": "Lumin V SMG Special",
+    "ksar_smg_energy_01_spc_01": "Custodian SMG Special",
     "ksar_smg_energy_01_tan01": 'Custodian "Desert Shadow" SMG',
     "ksar_smg_energy_01_white02": 'Custodian "Boneyard" SMG',
     "ksar_smg_energy_01": "Custodian SMG",

@@ -1,7 +1,7 @@
 # all-slain
 Star Citizen Game Log Reader
 
-This program monitors the Star Citizen game log in real-time, reporting player kills, vehicle kills, and respawn events.
+This program monitors the Star Citizen game log in real-time, reporting player kills, vehicle kills, respawn events, and more.
 
 ![example screenshot of the program running in windows console](https://github.com/user-attachments/assets/0fa1d08e-776e-449c-b78b-59bf07c5a20c)
 
@@ -13,8 +13,12 @@ This program monitors the Star Citizen game log in real-time, reporting player k
 Optionally, run the program with the game log file as the first parameter in a terminal.  
 For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 
+> [!TIP]
+> The game moves previous log files into the `logbackups` folder.
+
 ## Game Version Compatibility
-Developed for 4.0_PREVIEW. Mostly compatible with 3.24.3.
+Developed for `4.0_PREVIEW`.  
+Mostly compatible with `LIVE` (3.24.3).
 
 ## Known Issues
 * Antimalware False Positive  
