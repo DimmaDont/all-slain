@@ -31,8 +31,8 @@ class TestNameFunctions(unittest.TestCase):
         self.assertEqual(result, "\x1b[48;2;1;2;3mhello\x1b[0m there")
 
     def test_inline(self):
-        result = f'{Color.BLUE.set(fg = True)}hello{Color.reset()}'
-        self.assertEqual( result, Color.BLUE('hello') )
+        result = f"{Color.BLUE.set(fg = True)}hello{Color.reset()}"
+        self.assertEqual(result, Color.BLUE("hello"))
 
 
 if __name__ == "__main__":

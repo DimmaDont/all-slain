@@ -12,12 +12,18 @@ class Color(IntEnum):
     CYAN = 6
     WHITE = 7
 
-    def __call__(self, text: str, fg: bool = True, bold: bool = False, bg: bool = False) -> str:
-        color_code = self.value + (30 if fg else 0) + (60 if bold else 0) + (40 if bg else 0)
+    def __call__(
+        self, text: str, fg: bool = True, bold: bool = False, bg: bool = False
+    ) -> str:
+        color_code = (
+            self.value + (30 if fg else 0) + (60 if bold else 0) + (40 if bg else 0)
+        )
         return f"\x1b[{color_code}m{text}\x1b[0m"
 
-    def set( self, fg: bool = False, bg: bool = False, bold: bool = False ) -> str:
-        color_code = self.value + (30 if fg else 0) + (60 if bold else 0) + (40 if bg else 0)
+    def set(self, fg: bool = False, bg: bool = False, bold: bool = False) -> str:
+        color_code = (
+            self.value + (30 if fg else 0) + (60 if bold else 0) + (40 if bg else 0)
+        )
         return f"\x1b[{color_code}m"
 
     @staticmethod
