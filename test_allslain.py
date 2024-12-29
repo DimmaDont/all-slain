@@ -2,6 +2,7 @@
 import unittest
 
 from allslain import (
+    clean_location,
     clean_name,
     get_vehicle,
     RE_VEHICLE_NAME,
@@ -100,18 +101,28 @@ class TestVehicleNameRegex(unittest.TestCase):
         self.assertIsNone(result[2])
         self.assertEqual(result[3], "123456789012")
 
-    def test_re_vehicle_name_salvage(self):
-        result = RE_VEHICLE_NAME.match("ANVL_Arrow_Unmanned_Salvage_123456789012")
-        self.assertEqual(len(result.groups()), 3)
-        self.assertEqual(result[1], "ANVL_Arrow")
-        self.assertEqual(result[2], "Unmanned_Salvage")
-        self.assertEqual(result[3], "123456789012")
-
 
 class TestGetVehicleNameFunction(unittest.TestCase):
     def test_get_vehicle_salvage(self):
         result = get_vehicle("ANVL_Arrow_Unmanned_Salvage_123456789012")
         self.assertEqual(result, "Anvil Arrow (Salvage)")
+
+
+class TestGetLocationName(unittest.TestCase):
+    def test_remove_at(self):
+        result = clean_location("@Stanton1_Transfer")
+        self.assertEqual(result[0], "at")
+        self.assertEqual(result[1], "Everus Harbor")
+
+    def test_bunker(self):
+        result = clean_location("ObjectContainer-ugf_lta_a_0003")
+        self.assertEqual(result[0], "in a")
+        self.assertEqual(result[1], "Bunker")
+
+    def test_drug_bunker(self):
+        result = clean_location("ObjectContainer-ugf_lta_a_0004_drugs")
+        self.assertEqual(result[0], "in a")
+        self.assertEqual(result[1], "Drug Bunker")
 
 
 if __name__ == "__main__":

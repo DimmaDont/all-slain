@@ -12,7 +12,7 @@ from log_parser import SCLogParser
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|PU_AI_NT|Unmanned_Salvage)?_(\d{12})"
+    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|PU_AI_NT)?_(\d{12})"
 )
 
 
@@ -54,7 +54,7 @@ def remove_id(name: str) -> str:
 def clean_location(name: str) -> tuple[str, str]:
     try:
         # todo not all are "at"
-        return ("at", LOCATIONS[name])
+        return ("at", LOCATIONS[name.replace("@", "")])
     except KeyError:
         pass
 
@@ -64,7 +64,7 @@ def clean_location(name: str) -> tuple[str, str]:
 
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
-        return ("in a", "Bunker")
+        return ("in a", ("Drug " if name.endswith("_drugs") else "") + "Bunker")
 
     if name.startswith("Hangar_"):
         return ("in a", "Hangar")
@@ -147,14 +147,13 @@ def clean_tool(name: str, killer: str, killed: str) -> str:
 
 
 def get_vehicle(name: str) -> str:
-    vehicle = RE_VEHICLE_NAME.match(name)
-    if not vehicle:
+    match = RE_VEHICLE_NAME.match(name)
+    if not match:
         return name
-    vehicle_name = vehicle[1]
-    salvage = vehicle[2] == "Unmanned_Salvage"
+    vehicle_name = match[1]
 
     try:
-        return SHIPS[vehicle_name] + (" (Salvage)" if salvage else "")
+        return SHIPS[vehicle_name]
     except KeyError:
         pass
 
@@ -206,8 +205,8 @@ def main(filepath: str) -> None:
                     # datetime, player, location
                     when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
-                    lp, where = clean_location(log[3])
-                    print(f"{when}{RESPAWN}: {whom} {lp} {Color.YELLOW(where)}")
+                    _, where = clean_location(log[3])
+                    print(f"{when}{RESPAWN}: {whom} from {Color.YELLOW(where)}")
                 elif log := match.get("INCAP"):
                     # datetime, player, causes
                     when = log[1].replace("T", " ")
@@ -244,8 +243,8 @@ def main(filepath: str) -> None:
 
 TRY_FILES = [
     "Game.log",
-    r"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log",
-    r"C:\Program Files\Roberts Space Industries\StarCitizen\LIVE\Game.log",
+    R"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log",
+    R"C:\Program Files\Roberts Space Industries\StarCitizen\LIVE\Game.log",
 ]
 
 
