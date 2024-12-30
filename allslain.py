@@ -14,6 +14,7 @@ LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 RE_VEHICLE_NAME = re.compile(
     r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|PU_AI_NT)?_(\d{12})"
 )
+RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12}_(.+)_\d{12}")
 
 
 INCAP = Color.YELLOW("INCAP".rjust(10))
@@ -156,6 +157,14 @@ def get_vehicle(name: str) -> str:
         return SHIPS[vehicle_name]
     except KeyError:
         pass
+
+    # Is it debris?
+    debris = RE_SHIP_DEBRIS.match(name)
+    if debris:
+        try:
+            return SHIPS[debris[1]] + " (Debris)"
+        except KeyError:
+            pass
 
     return name
 
