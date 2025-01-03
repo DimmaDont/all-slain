@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
+from argparse import ArgumentParser
 from io import TextIOWrapper
 import os
 import re
-import sys
 import time
 
 from colorize import Color
@@ -274,7 +274,11 @@ if __name__ == "__main__":
     print(f"{Color.WHITE('all-slain', True)}: Star Citizen Game Log Reader")
     print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', True)}\n")
 
-    if filename := sys.argv[1] if len(sys.argv) >= 2 else find_game_log():
+    parser = ArgumentParser()
+    parser.add_argument('file', nargs='?')
+    args = parser.parse_args()
+
+    if filename := args.file if args.file else find_game_log():
         print(f"Reading \"{Color.CYAN(filename)}\"\n")
         main(filename)
     else:
