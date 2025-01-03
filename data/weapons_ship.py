@@ -98,6 +98,7 @@ WEAPONS_SHIP = {
     "KRON_LaserCannon_S1": "FL-11 Cannon",
     "KRON_LaserCannon_S2": "FL-22 Cannon",
     "KRON_LaserCannon_S3": "FL-33 Cannon",
+    "MRCK_S04_BEHR_Dual_S03": "MSD-423 Missile Rack",
     "MXOX_NeutronCannon_S1": "NN-13 Cannon",
     "MXOX_NeutronCannon_S2": "NN-14 Cannon",
     "MXOX_NeutronCannon_S3": "NN-15 Cannon",

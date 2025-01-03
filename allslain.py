@@ -12,7 +12,7 @@ from log_parser import SCLogParser
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM|PU_AI_NT)?_(\d{12})"
+    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM(?:_QIG)?|PU_AI_NT|PU_AI_CRIM_ScatterGun)?_(\d{12})"
 )
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12}_(.+)_\d{12}")
 
@@ -107,6 +107,8 @@ def clean_name(name: str) -> tuple[str, int]:
         return ("_".join(["Pilot", *name_split[3:6]]), 1)
     if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
         return ("NPC Security", 1)
+    if name.startswith("AIModule_Unmanned_PU_Advocacy_"):
+        return ("NPC UEE Security", 1)
     # Some cases from Pyro observed:
     if "Pilot_Criminal_Pilot" in name:
         return ("NPC Pilot", 1)
@@ -120,6 +122,10 @@ def clean_name(name: str) -> tuple[str, int]:
     if name.startswith("Quasigrazer_"):
         return ("Quasigrazer", 1)
     # fun fact, kill messages aren't logged for maroks
+
+    # killer can be weapons too
+    # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
+    # KILL: behr_pistol_ballistic_01_123456789012 killed Headhunters_techie NPC with a unknown in an Unknown Surface Facility
 
     return (name, 0)
 

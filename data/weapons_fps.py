@@ -151,7 +151,7 @@ WEAPONS_FPS = {
     "ksar_shotgun_ballistic_01_iae2201": 'Ravager-212 "Red Alert" Twin Shotgun',
     "ksar_shotgun_ballistic_01_luminalia_blue01": 'Ravager-212 "Bright Star" Twin Shotgun',
     "ksar_shotgun_ballistic_01": "Ravager-212 Twin Shotgun",
-    "ksar_shotgun_energy_01_black_purple01": "Devastator Shotgun (Black Purple)",
+    "ksar_shotgun_energy_01_black_purple01": 'Devastator "Rager" Shotgun',
     "ksar_shotgun_energy_01_black01": 'Devastator "Midnight" Shotgun',
     "ksar_shotgun_energy_01_black02": 'Devastator "Nightstalker" Shotgun',
     "ksar_shotgun_energy_01_blue01": 'Devastator "Whirlwind" Shotgun',
@@ -201,4 +201,9 @@ WEAPONS_FPS = {
     "utfl_melee_01_red01_gungame": 'FSK-8 "Bloodline" Combat Knife',
     "utfl_melee_01_red01": 'FSK-8 "Bloodline" Combat Knife',
     "utfl_melee_01": "FSK-8 Combat Knife",
+
+    "behr_ltp_01_primed_5m": "Mine",
+    "behr_ltp_01_primed_sweeping": "Sweeping Mine",
+    "canister_gas_1_a": "Explosive Canister",
+    "canister_gas_3_a": "Explosive Canister",
 }
