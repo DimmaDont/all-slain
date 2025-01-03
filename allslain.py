@@ -12,7 +12,7 @@ from log_parser import SCLogParser
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM(?:_QIG)?|PU_AI_NT|PU_AI_CRIM_ScatterGun)?_(\d{12})"
+    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM(?:_QIG|_ScatterGun)?|PU_AI_NT)?_(\d{12})"
 )
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12}_(.+)_\d{12}")
 
