@@ -15,6 +15,7 @@ RE_VEHICLE_NAME = re.compile(
     r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM(?:_QIG|_ScatterGun)?|PU_AI_NT)?_(\d{12})"
 )
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12}_(.+)_\d{12}")
+RE_HAZARD = re.compile(r"Hazard-\d{3}")
 
 
 INCAP = Color.YELLOW("INCAP".rjust(10))
@@ -117,8 +118,10 @@ def clean_name(name: str) -> tuple[str, int]:
     if "pyro_outlaw" in name:
         return ("NPC Criminal", 1)
 
-    if name == "Hazard-000":
+    if RE_HAZARD.match(name):
         return ("Environmental Hazard", 1)
+    if name == "Nova-01":
+        return ("Nova", 1)
     if name.startswith("Quasigrazer_"):
         return ("Quasigrazer", 1)
     # fun fact, kill messages aren't logged for maroks
