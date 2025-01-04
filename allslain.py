@@ -120,6 +120,8 @@ def clean_name(name: str) -> tuple[str, int]:
 
     if RE_HAZARD.match(name):
         return ("Environmental Hazard", 1)
+    if name == "Water_Hazard":
+        return ("Water Hazard", 1)
     if name == "Nova-01":
         return ("Nova", 1)
     if name.startswith("Quasigrazer_"):
