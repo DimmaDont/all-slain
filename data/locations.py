@@ -619,6 +619,7 @@ LOCATIONS = {
     "ab_pyro_int_dung_001": "Contested Zone",
     "ab_pyro_int_dung_exec_002": "PYAM-EXHANG-0-1",
     "Area18_central-001": "Area18 Central, Area18, ArcCorp, Stanton",
+    "hangar_01": "PYAM-EXHANG-0-1 Hangar",
     "hangar_02": "PYAM-EXHANG-0-1 Hangar",
     "jumppoint_pyro_stanton": "Pyro Gateway, Stanton",
     "OOC_JumpPoint_stanton_pyro": "Pyro Gateway, Stanton",
@@ -661,4 +662,5 @@ LOCATIONS = {
     "rs_int_p2l4": "Checkmate Station, Monox, Pyro",
     "rs_int_p3leo": "Orbituary Station, Bloom, Pyro",
     "rs_opendungeon_rund_002": "Contested Zone, Ruin Station",
+    "rs_refinery_pyro": "Refinery",
 }

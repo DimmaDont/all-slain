@@ -40,6 +40,7 @@ SHIPS = {
     "AEGS_Vanguard_Unmanned_Salvage": "Aegis Vanguard Warden (Salvage)",
     "AEGS_Vanguard": "Aegis Vanguard Warden",
     "AIModule_Unmanned_PU_Advocacy": "NPC Advocacy",
+    "AIModule_Unmanned_PU_PDC": "NPC Point Defense Cannon",
     "AIModule_Unmanned_PU_SecurityNetwork": "NPC Security",
     "AIModule_Unmanned_PU_SecurityNetwork_OrbitalSentry": "NPC Orbital Sentry",
     "ANVL_Arrow_Unmanned_Salvage": "Anvil Arrow (Salvage)",
