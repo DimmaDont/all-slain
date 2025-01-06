@@ -294,6 +294,9 @@ def find_game_log() -> str | None:
 
 
 if __name__ == "__main__":
+    # Set window title and cursor shape
+    print("\x1b]0;all-slain\x07\x1b[2\x20q", end="")
+
     print(f"{Color.WHITE('all-slain', bold = True)}: Star Citizen Game Log Reader")
     print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', bold = True)}\n")
 
