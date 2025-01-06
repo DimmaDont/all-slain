@@ -197,7 +197,7 @@ def main(filepath: str) -> None:
                         )
                     elif is_killer_npc and is_killed_npc:
                         print(
-                            f"{when}{KILL}: {Color.BLACK(killer, True)} killed {Color.BLACK(killed, True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                            f"{when}{KILL}: {Color.BLACK(killer, bold = True)} killed {Color.BLACK(killed, bold = True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
                     else:
                         print(
@@ -276,8 +276,8 @@ def find_game_log() -> str | None:
 
 
 if __name__ == "__main__":
-    print(f"{Color.WHITE('all-slain', True)}: Star Citizen Game Log Reader")
-    print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', True)}\n")
+    print(f"{Color.WHITE('all-slain', bold = True)}: Star Citizen Game Log Reader")
+    print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', bold = True)}\n")
 
     parser = ArgumentParser()
     parser.add_argument('file', nargs='?')
