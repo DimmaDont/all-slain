@@ -4,3 +4,4 @@ allslain.dist/
 dist/
 build/
 allslain.spec
+tools/*.json
