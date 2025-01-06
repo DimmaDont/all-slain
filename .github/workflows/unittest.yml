@@ -3,6 +3,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

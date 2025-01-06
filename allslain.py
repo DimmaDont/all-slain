@@ -280,11 +280,11 @@ if __name__ == "__main__":
     print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', bold = True)}\n")
 
     parser = ArgumentParser()
-    parser.add_argument('file', nargs='?')
+    parser.add_argument("file", nargs="?")
     args = parser.parse_args()
 
     if filename := args.file if args.file else find_game_log():
-        print(f"Reading \"{Color.CYAN(filename)}\"\n")
+        print(f'Reading "{Color.CYAN(filename)}"\n')
         main(filename)
     else:
         print(Color.RED("No log files found in the default locations."))

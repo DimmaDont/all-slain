@@ -108,7 +108,9 @@ class TestGetVehicleNameFunction(unittest.TestCase):
         self.assertEqual(result, "Anvil Arrow (Salvage)")
 
     def test_get_vehicle_debris(self):
-        result = get_vehicle("SCItem_Debris_123456789012_RSI_Constellation_Andromeda_123456789012")
+        result = get_vehicle(
+            "SCItem_Debris_123456789012_RSI_Constellation_Andromeda_123456789012"
+        )
         self.assertEqual(result, "RSI Constellation Andromeda (Debris)")
 
 
