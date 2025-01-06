@@ -2,6 +2,7 @@
 import re
 from enum import IntEnum
 
+
 class Color(IntEnum):
     BLACK = 0
     RED = 1
@@ -12,7 +13,7 @@ class Color(IntEnum):
     CYAN = 6
     WHITE = 7
 
-    def __call__(self, text: str, fg=None, bg=None, bold: bool = False ) -> str:
+    def __call__(self, text: str, fg=None, bg=None, bold: bool = False) -> str:
         """Colorizes text.
 
         Args:
@@ -26,24 +27,26 @@ class Color(IntEnum):
         """
         color_codes = []
 
-        if not any( [fg, bg, bold] ):
-            return f'{self.set()}{text}{self.reset()}'
+        if not any([fg, bg, bold]):
+            return f"{self.set()}{text}{self.reset()}"
 
         if fg is not None:
-            color_codes.append( str( fg.value + 30 + ( 60 if bold else 0 ) ) )
+            color_codes.append(str(fg.value + 30 + (60 if bold else 0)))
         elif bold:
-            color_codes.append( str( self.value + 60 ) ) # Bold only
+            color_codes.append(str(self.value + 60))  # Bold only
 
         if bg is not None:
-            color_codes.append( str( bg.value + 40 ) )
+            color_codes.append(str(bg.value + 40))
 
         if not color_codes:
             return text
         else:
             return f'\x1b[{";".join( color_codes )}m{text}\x1b[0m'
 
-    def set( self, fg: bool = True, bg: bool = False, bold: bool = False ) -> str:
-        color_code = self.value + (30 if fg else 0) + (60 if bold else 0) + (40 if bg else 0)
+    def set(self, fg: bool = True, bg: bool = False, bold: bool = False) -> str:
+        color_code = (
+            self.value + (30 if fg else 0) + (60 if bold else 0) + (40 if bg else 0)
+        )
         return f"\x1b[{color_code}m"
 
     @staticmethod
