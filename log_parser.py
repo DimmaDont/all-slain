@@ -25,6 +25,18 @@ class SCLogParser:
         "SPAWN": re.compile(
             r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CSessionManager::OnClientSpawned\] Spawned!"
         ),
+        "CONNECTING": re.compile(
+            r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CSessionManager::ConnectCmd\] Connect started!"
+        ),
+        "CONNECTED": re.compile(
+            r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CSessionManager::OnClientConnected\] Connected!"
+        ),
+        "LOADING": re.compile(
+            r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CGlobalGameUI::OpenLoadingScreen\] Request context transition to LoadingScreenView"
+        ),
+        "LOADED": re.compile(
+            r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> Loading screen for (\w+) : SC_Frontend closed after (\d+.\d+) seconds"
+        ),
     }
 
     @classmethod

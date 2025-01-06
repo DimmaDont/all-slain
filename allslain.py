@@ -23,8 +23,10 @@ JUMP = Color.GREEN("JUMP".rjust(10))
 KILL = Color.RED("KILL".rjust(10))
 QUIT = Color.CYAN("QUIT".rjust(10))
 RESPAWN = Color.CYAN("RESPAWN".rjust(10))
-SPAWNED = Color.CYAN("SPAWNED".rjust(10))
+SPAWNED = Color.WHITE("SPAWNED".rjust(10), bold=True)
 VKILL = Color.RED("VKILL".rjust(10))
+CONNECT = Color.WHITE("CONNECT".rjust(10), bold=True)
+LOAD = Color.WHITE("LOAD".rjust(10), bold=True)
 
 
 def follow(f: TextIOWrapper):
@@ -249,6 +251,22 @@ def main(filepath: str) -> None:
                     dest = Color.BLUE(log[4])
                     print(
                         f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
+                    )
+                elif log := match.get("CONNECTING"):
+                    when = log[1].replace("T", " ")
+                    print(f"{when}{CONNECT}: Connecting...")
+                elif log := match.get("CONNECTED"):
+                    when = log[1].replace("T", " ")
+                    print(f"{when}{CONNECT}: Connected!")
+                elif log := match.get("LOADING"):
+                    when = log[1].replace("T", " ")
+                    print(f"{when}{LOAD}: Loading...")
+                elif log := match.get("LOADED"):
+                    when = log[1].replace("T", " ")
+                    what = Color.GREEN(log[2])
+                    seconds = Color.GREEN(log[3])
+                    print(
+                        f"{when}{LOAD}: Loaded! {what} took {seconds} seconds to load."
                     )
     except KeyboardInterrupt:
         pass
