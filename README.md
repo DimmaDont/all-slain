@@ -22,7 +22,7 @@ Mostly compatible with `LIVE` (3.24.3).
 
 ## Known Issues
 * Antimalware False Positive  
-See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md) and https://github.com/Nuitka/Nuitka/issues/2081#issuecomment-1445422288  
+See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).  
 Workaround: Install Python and run `allslain.py`.
 
 ## Disclaimer
