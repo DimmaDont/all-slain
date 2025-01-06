@@ -20,6 +20,7 @@ class Color(IntEnum):
         CYAN: Represents the color cyan.
         WHITE: Represents the color white.
     """
+
     BLACK = 0
     RED = 1
     GREEN = 2
@@ -88,10 +89,10 @@ class Color(IntEnum):
 
     @staticmethod
     def rgb(
-            fg: list[ int | None ] = None,
-            bg: list[ int | None ] = None,
-            bold: bool = False,
-            text: str = ''
+        fg: list[int | None] = None,
+        bg: list[int | None] = None,
+        bold: bool = False,
+        text: str = "",
     ) -> str:
         """
         Colorizes the given text using RGB color values.
@@ -110,27 +111,32 @@ class Color(IntEnum):
         Returns:
             The colorized text string using RGB color values.
         """
-        if not any( [ fg, bg ] ):
-            raise ValueError( 'rgb() called without specifying either fg or bg' )
+        if not any([fg, bg]):
+            raise ValueError("rgb() called without specifying either fg or bg")
         color_codes = []
         if fg is not None:
-            if not( fg == [None, None, None] or ( all( isinstance( x, int ) for x in fg ) and len(fg) == 3 ) ):
-                raise ValueError( f'fg must be a list of 3 integers.  {fg=}' )
+            if not (
+                fg == [None, None, None]
+                or (all(isinstance(x, int) for x in fg) and len(fg) == 3)
+            ):
+                raise ValueError(f"fg must be a list of 3 integers.  {fg=}")
             if fg != [None, None, None]:
-                color_codes.append( f'38;2;{fg[0]};{fg[1]};{fg[2]}' )
+                color_codes.append(f"38;2;{fg[0]};{fg[1]};{fg[2]}")
         if bg is not None:
-            if not( bg == [None, None, None] or ( all( isinstance( x, int ) for x in bg ) and len(bg) == 3 ) ):
-                raise ValueError( f'bg must be a list of 3 integers.  {bg=}' )
+            if not (
+                bg == [None, None, None]
+                or (all(isinstance(x, int) for x in bg) and len(bg) == 3)
+            ):
+                raise ValueError(f"bg must be a list of 3 integers.  {bg=}")
             if bg != [None, None, None]:
-                color_codes.append( f'48;2;{bg[0]};{bg[1]};{bg[2]}' )
+                color_codes.append(f"48;2;{bg[0]};{bg[1]};{bg[2]}")
         if bold:
-            color_codes.append( '1' )
+            color_codes.append("1")
 
         if not color_codes:
             return text
         else:
             return f'\x1b[{";".join(color_codes)}m{text}\x1b[0m'
-
 
 
 # vim: set expandtab ts=4 sw=4
