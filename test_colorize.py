@@ -23,11 +23,11 @@ class TestNameFunctions(unittest.TestCase):
         self.assertEqual(result, "\x1b[67;44mhello\x1b[0m there")
 
     def test_rgb(self):
-        result = f"{Color.rgb(1, 2, 3, 'hello')} there"
+        result = f"{Color.rgb( fg = [1, 2, 3], text = 'hello')} there"
         self.assertEqual(result, "\x1b[38;2;1;2;3mhello\x1b[0m there")
 
     def test_rgb_bold(self):
-        result = f"{Color.rgb(1, 2, 3, 'hello', bg = True)} there"
+        result = f"{Color.rgb( bg = [1, 2, 3 ], text = 'hello')} there"
         self.assertEqual(result, "\x1b[48;2;1;2;3mhello\x1b[0m there")
 
     def test_inline(self):
