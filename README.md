@@ -1,5 +1,12 @@
+<img src="icon/ded.svg" width="100%" height="128">
+
 # all-slain
 Star Citizen Game Log Reader
+
+![GitHub Release](https://img.shields.io/github/v/release/DimmaDont/all-slain)
+![GitHub Downloads](https://img.shields.io/github/downloads/DimmaDont/all-slain/total)
+![Python: 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg?logo=python&logoColor=white)
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
 
 This program monitors the Star Citizen game log in real-time, reporting player kills, vehicle kills, respawn events, and more.
 
