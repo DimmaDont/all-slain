@@ -40,8 +40,8 @@ class SCLogParser:
     }
 
     @classmethod
-    def find_match(cls, line: str) -> dict:
+    def find_match(cls, line: str) -> tuple[str, re.Match] | None:
         for event_type, regex in cls.PATTERNS.items():
             if match := regex.match(line):
-                return {event_type: match}
-        return {}
+                return (event_type, match)
+        return None

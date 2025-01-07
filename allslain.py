@@ -187,8 +187,10 @@ def main(filepath: str) -> None:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
             if match := SCLogParser.find_match(line):
-                if log := match.get("KILLP"):
-                    when = log[1].replace("T", " ")
+                log_type = match[0]
+                log = match[1]
+                when = log[1].replace("T", " ")
+                if log_type == "KILLP":
                     killed, is_killed_npc = clean_name(log[2])
                     lp, location = clean_location(log[3])
                     killer, is_killer_npc = clean_name(log[4])
@@ -205,8 +207,7 @@ def main(filepath: str) -> None:
                         print(
                             f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
-                elif log := match.get("KILLV"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "KILLV":
                     # note: vehicle can also be an npc/player entity if it's a collision
                     vehicle = Color.GREEN(get_vehicle(log[2]))
                     lp, location = clean_location(log[3])
@@ -223,46 +224,37 @@ def main(filepath: str) -> None:
                     print(
                         f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
                     )
-                elif log := match.get("RESPAWN"):
+                elif log_type == "RESPAWN":
                     # datetime, player, location
-                    when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     _, where = clean_location(log[3])
                     print(f"{when}{RESPAWN}: {whom} from {Color.YELLOW(where)}")
-                elif log := match.get("INCAP"):
+                elif log_type == "INCAP":
                     # datetime, player, causes
-                    when = log[1].replace("T", " ")
                     whom = Color.GREEN(log[2])
                     causes = LOG_INCAP_CAUSE.findall(log[3])
                     print(
                         f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
                     )
-                elif log := match.get("QUIT"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "QUIT":
                     whom = Color.GREEN(log[2])
                     print(f"{when}{QUIT}: {whom} has quit the game session.")
-                elif log := match.get("SPAWN"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "SPAWN":
                     print(f"{when}{SPAWNED}: Character spawned!")
-                elif log := match.get("JUMP"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "JUMP":
                     whom = Color.GREEN(log[2])
                     origin = Color.BLUE(log[3])
                     dest = Color.BLUE(log[4])
                     print(
                         f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
                     )
-                elif log := match.get("CONNECTING"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "CONNECTING":
                     print(f"{when}{CONNECT}: Connecting...")
-                elif log := match.get("CONNECTED"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "CONNECTED":
                     print(f"{when}{CONNECT}: Connected!")
-                elif log := match.get("LOADING"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "LOADING":
                     print(f"{when}{LOAD}: Loading...")
-                elif log := match.get("LOADED"):
-                    when = log[1].replace("T", " ")
+                elif log_type == "LOADED":
                     what = Color.GREEN(log[2])
                     seconds = Color.GREEN(log[3])
                     print(
