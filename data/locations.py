@@ -663,4 +663,6 @@ LOCATIONS = {
     "rs_int_p3leo": "Orbituary Station, Bloom, Pyro",
     "rs_opendungeon_rund_002": "Contested Zone, Ruin Station",
     "rs_refinery_pyro": "Refinery",
+    #
+    "int_s4_dc_sasu_goldenrod": "Sakura Sun Goldenrod Workcenter",
 }
