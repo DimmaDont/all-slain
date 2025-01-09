@@ -38,6 +38,21 @@ class TestNameFunctions(unittest.TestCase):
         result = f'{Color.BLUE("hello")} there'
         self.assertEqual(result, "\x1b[34mhello\x1b[0m there")
 
+    def test_parse(self):
+        test_strings = [
+                Color.parse( 'This is a test') ,
+                Color.parse( 'This is a (Rf)test(X).') ,
+                Color.parse( 'This is a (R)test.(X)') ,
+                Color.parse( 'This is a (Rf)(Bb)test(X).') ,
+                ]
+        valid_strings = [
+                f'This is a test',
+                f'This is a {Color.RED("test")}.',
+                f'This is a {Color.RED("test.")}',
+                f'This is a {Color.RED.set()}{Color.BLUE.set( bg = True, fg = False )}test{Color.reset()}.',
+                ]
+        for parse_str, valid_str in zip( test_strings, valid_strings ):
+            self.assertEqual( parse_str, valid_str )
 
 if __name__ == "__main__":
     unittest.main()
