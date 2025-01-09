@@ -256,7 +256,7 @@ def main(filepath: str) -> None:
                     print(
                         f"{when}{INCAP}: {whom} from {', '.join([Color.YELLOW(cause[0].replace('Damage', '')) for cause in causes])}"
                     )
-                elif log_type == "QUIT":
+                elif log_type == "QUITLOBBY":
                     whom = Color.GREEN(log[2])
                     print(f"{when}{QUIT}: {whom} has quit the game session.")
                 elif log_type == "SPAWN":
