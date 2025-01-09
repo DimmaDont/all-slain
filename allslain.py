@@ -183,6 +183,7 @@ def get_vehicle(name: str) -> str:
 
 
 def main(filepath: str) -> None:
+    is_prev_line_cet = False
     try:
         f = open(filepath, "r", encoding="utf-8")
         for line in follow(f):
@@ -190,6 +191,25 @@ def main(filepath: str) -> None:
                 log_type = match[0]
                 log = match[1]
                 when = log[1].replace("T", " ")
+                if log_type == "CET":
+                    which = (
+                        "Complete"
+                        if log[2] == "ContextEstablisherTaskFinished"
+                        else Color.YELLOW("Busy".rjust(8))
+                    )
+                    taskname = log[3]
+                    step = log[4]
+                    num = log[5]
+                    secs = log[6]
+                    if is_prev_line_cet:
+                        # Move cursor up one line and clear it
+                        print("\x1b[1A\x1b[2K", end="")
+                    print(
+                        f"{when}{LOAD}: {which}: {num.rjust(2)}/15 {Color.CYAN(step)}:{Color.CYAN(taskname)} in {secs}s"
+                    )
+                    is_prev_line_cet = True
+                    continue
+
                 if log_type == "KILLP":
                     killed, is_killed_npc = clean_name(log[2])
                     lp, location = clean_location(log[3])
@@ -260,6 +280,9 @@ def main(filepath: str) -> None:
                     print(
                         f"{when}{LOAD}: Loaded! {what} took {seconds} seconds to load."
                     )
+                else:
+                    continue
+                is_prev_line_cet = False
     except KeyboardInterrupt:
         pass
     except FileNotFoundError:
