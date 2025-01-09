@@ -12,15 +12,15 @@ class TestNameFunctions(unittest.TestCase):
 
     def test_fg_bold(self):
         result = f"{Color.BLUE('hello', bold = True)} there"
-        self.assertEqual(result, "\x1b[64mhello\x1b[0m there")
+        self.assertEqual(result, "\x1b[94mhello\x1b[0m there")
 
     def test_bg(self):
         result = f"{Color.WHITE('hello', bg=Color.BLUE)} there"
-        self.assertEqual(result, "\x1b[44mhello\x1b[0m there")
+        self.assertEqual(result, "\x1b[37;44mhello\x1b[0m there")
 
     def test_bg_bold(self):
         result = f"{Color.WHITE('hello', bold = True, bg = Color.BLUE)} there"
-        self.assertEqual(result, "\x1b[67;44mhello\x1b[0m there")
+        self.assertEqual(result, "\x1b[97;44mhello\x1b[0m there")
 
     def test_rgb(self):
         result = f"{Color.rgb( fg = [1, 2, 3], text = 'hello')} there"
