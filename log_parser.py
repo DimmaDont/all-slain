@@ -40,6 +40,9 @@ class SCLogParser:
         "JUMP": re.compile(
             r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Changing Solar System>.* Client entity ([\w-]*) .* changing system from ([\w-]*) to ([A-Za-z0-9]*) .*"
         ),
+        "QUIT": re.compile(
+            r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <SystemQuit> CSystem::Quit invoked .+"
+        ),
     }
 
     @classmethod

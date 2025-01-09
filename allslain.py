@@ -280,6 +280,8 @@ def main(filepath: str) -> None:
                     print(
                         f"{when}{LOAD}: Loaded! {what} took {seconds} seconds to load."
                     )
+                elif log_type == "QUIT":
+                    print(f"{when}{QUIT}: Game quit.")
                 else:
                     continue
                 is_prev_line_cet = False
