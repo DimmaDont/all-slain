@@ -193,19 +193,24 @@ def main(filepath: str) -> None:
                 when = log[1].replace("T", " ")
                 if log_type == "CET":
                     which = (
-                        "Complete"
+                        ("Complete", "in")
                         if log[2] == "ContextEstablisherTaskFinished"
-                        else Color.YELLOW("Busy".rjust(8))
+                        else (Color.YELLOW("Busy".rjust(8)), "for")
                     )
                     taskname = log[3]
                     step = log[4]
-                    num = log[5]
-                    secs = log[6]
+                    step_num = log[5]
+                    secs = float(log[6])
+                    if secs > 60:
+                        secs = secs / 60
+                        u = "min"
+                    else:
+                        u = "s"
                     if is_prev_line_cet:
                         # Move cursor up one line and clear it
                         print("\x1b[1A\x1b[2K", end="")
                     print(
-                        f"{when}{LOAD}: {which}: {num.rjust(2)}/15 {Color.CYAN(step)}:{Color.CYAN(taskname)} in {secs}s"
+                        f"{when}{LOAD}: {which[0]}: {step_num.rjust(2)}/15 {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {secs:0.1f}{u}"
                     )
                     is_prev_line_cet = True
                     continue
