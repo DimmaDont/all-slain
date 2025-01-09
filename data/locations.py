@@ -643,6 +643,7 @@ LOCATIONS = {
     "p2l4_contestedzone": "Contested Zone, Checkmate",
     "P3_L4": "PYAM-SUPVISR-3-4, Pyro",
     "P3_L5": "PYAM-SUPVISR-3-5, Pyro",
+    "P5_L2": "Gaslight",
     "p5l2_contestedzone": "Contested Zone, Orbituary",
     "pyro1": "Pyro I, Pyro",
     "pyro2": "Monox, Pyro",
