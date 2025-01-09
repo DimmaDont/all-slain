@@ -78,7 +78,7 @@ class Color(IntEnum):
         return f"\x1b[{color_code}m"
 
     @classmethod
-    def parse( cls, text: str ) -> str:
+    def parse(cls, text: str) -> str:
         """Parses a string for color tags and replaces them with ANSI escape codes.
 
         This method searches for tags in the format `(C)` or `(Cb)`, where `C` is a
@@ -98,25 +98,25 @@ class Color(IntEnum):
             '\x1b[41mRed background \x1b[32mGreen text \x1b[0m Back to normal'
         """
         color_map = {
-            'K': cls.BLACK,
-            'R': cls.RED,
-            'G': cls.GREEN,
-            'Y': cls.YELLOW,
-            'B': cls.BLUE,
-            'M': cls.MAGENTA,
-            'C': cls.CYAN,
-            'W': cls.WHITE
+            "K": cls.BLACK,
+            "R": cls.RED,
+            "G": cls.GREEN,
+            "Y": cls.YELLOW,
+            "B": cls.BLUE,
+            "M": cls.MAGENTA,
+            "C": cls.CYAN,
+            "W": cls.WHITE,
         }
-        tags = re.findall( r"\(([XKRGYBMCW][fb]?)\)", text )
+        tags = re.findall(r"\(([XKRGYBMCW][fb]?)\)", text)
         for tag in tags:
-            if tag[0] == 'X':
-                text = text.replace( f'({tag})', cls.reset(), -1 )
+            if tag[0] == "X":
+                text = text.replace(f"({tag})", cls.reset(), -1)
             else:
                 c = color_map[tag[0]]
-                if len(tag) == 2 and tag[-1] == 'b':
-                    text = text.replace( f'({tag})', c.set( fg = None, bg = c ), -1 )
+                if len(tag) == 2 and tag[-1] == "b":
+                    text = text.replace(f"({tag})", c.set(fg=None, bg=c), -1)
                 else:
-                    text = text.replace( f'({tag})', c.set( fg = c, bg = None ), -1 )
+                    text = text.replace(f"({tag})", c.set(fg=c, bg=None), -1)
         return text
 
     @staticmethod
