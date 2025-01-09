@@ -1,0 +1,14 @@
+on:
+  release:
+    types: [released]
+jobs:
+  build:
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+    uses: ./.github/workflows/pyinstaller.yml
+    with:
+      file: allslain.py
+      icon: icon/ded.ico
+      output: dist/allslain.exe

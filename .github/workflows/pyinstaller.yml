@@ -1,48 +1,57 @@
 name: Build-PyInstaller
-on: [push]
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: false
+        type: string
+        default: windows-latest
+      python-version:
+        required: false
+        type: string
+        default: 3.x
+      file:
+        required: true
+        type: string
+      icon:
+        required: true
+        type: string
+      output:
+        required: true
+        type: string
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: windows-latest
+    runs-on: ${{ inputs.os }}
     permissions:
       id-token: write
       contents: write
       attestations: write
     steps:
-
-      # Check-out repository
       - uses: actions/checkout@v4
-
-      # Setup Python
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-          cache: 'pip' # caching pip dependencies
-
+          python-version: ${{ inputs.python-version }}
+          architecture: x64
+          cache: pip
       - name: Install Dependencies
         shell: bash
         run: |
           pip install pyinstaller
-
       - name: Package Application
         shell: bash
         run: |
-          pyinstaller --onefile allslain.py --icon icon/ded.ico
-
+          pyinstaller --onefile ${{ inputs.file }} --icon ${{ inputs.icon }}
       - name: Attest
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: '${{ github.workspace }}/dist'
-
-      # Uploads artifact
+          subject-path: ${{ github.workspace }}/dist
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: exe
-          path: dist/allslain.exe
-
+          path: ${{ inputs.output }}
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/allslain.exe
+          files: ${{ inputs.output }}
