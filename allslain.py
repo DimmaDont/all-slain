@@ -16,6 +16,7 @@ RE_VEHICLE_NAME = re.compile(
 )
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12}_(.+)_\d{12}")
 RE_HAZARD = re.compile(r"Hazard-\d{3}")
+RE_ASTEROID = re.compile(r"OscillationSimple-\d{3}")
 
 
 INCAP = Color.YELLOW("INCAP".rjust(10))
@@ -130,6 +131,9 @@ def clean_name(name: str) -> tuple[str, int]:
         return ("Quasigrazer", 1)
     # fun fact, kill messages aren't logged for maroks
 
+    if RE_ASTEROID.match(name):
+        return ("Asteroid", 1)
+
     # killer can be weapons too
     # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
     # KILL: behr_pistol_ballistic_01_123456789012 killed Headhunters_techie NPC with a unknown in an Unknown Surface Facility
@@ -145,6 +149,10 @@ def clean_tool(name: str, killer: str, killed: str) -> str:
         # Ship collision
         if killer == killed:
             return "suicide"
+
+        if RE_ASTEROID.match(killer):
+            return "skill check"
+
         return name
 
     try:
@@ -163,6 +171,10 @@ def clean_tool(name: str, killer: str, killed: str) -> str:
 def get_vehicle(name: str) -> str:
     match = RE_VEHICLE_NAME.match(name)
     if not match:
+        # Is it a moving asteroid?...
+        asteroid = RE_ASTEROID.match(name)
+        if asteroid:
+            return "Asteroid"
         return name
     vehicle_name = match[1]
 
@@ -219,7 +231,7 @@ def main(filepath: str) -> None:
                     killed, is_killed_npc = clean_name(log[2])
                     lp, location = clean_location(log[3])
                     killer, is_killer_npc = clean_name(log[4])
-                    cause = clean_tool(log[5], killer, killed)
+                    cause = clean_tool(log[5], log[4], log[2])
                     if cause == "suicide":
                         print(
                             f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
