@@ -77,6 +77,48 @@ class Color(IntEnum):
         )
         return f"\x1b[{color_code}m"
 
+    @classmethod
+    def parse(cls, text: str) -> str:
+        """Parses a string for color tags and replaces them with ANSI escape codes.
+
+        This method searches for tags in the format `(C)` or `(Cb)`, where `C` is a
+        single character representing a color (K=Black, R=Red, G=Green, Y=Yellow,
+        B=Blue, M=Magenta, C=Cyan, W=White) and `b` indicates a background color.
+        The tag `(X)` resets the color to default.
+
+        Args:
+            text: The string to parse for color tags.
+
+        Returns:
+            The string with color tags replaced by ANSI escape codes, or the
+            original string if no valid tags are found.
+
+        Example:
+            >>> Color.parse('(Rb)Red background (G)Green text (X) Back to normal')
+            '\x1b[41mRed background \x1b[32mGreen text \x1b[0m Back to normal'
+        """
+        color_map = {
+            "K": cls.BLACK,
+            "R": cls.RED,
+            "G": cls.GREEN,
+            "Y": cls.YELLOW,
+            "B": cls.BLUE,
+            "M": cls.MAGENTA,
+            "C": cls.CYAN,
+            "W": cls.WHITE,
+        }
+        tags = re.findall(r"\(([XKRGYBMCW][fb]?)\)", text)
+        for tag in tags:
+            if tag[0] == "X":
+                text = text.replace(f"({tag})", cls.reset(), -1)
+            else:
+                c = color_map[tag[0]]
+                if len(tag) == 2 and tag[-1] == "b":
+                    text = text.replace(f"({tag})", c.set(fg=None, bg=c), -1)
+                else:
+                    text = text.replace(f"({tag})", c.set(fg=c, bg=None), -1)
+        return text
+
     @staticmethod
     def reset() -> str:
         """
