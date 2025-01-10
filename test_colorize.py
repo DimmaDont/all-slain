@@ -18,9 +18,13 @@ class TestNameFunctions(unittest.TestCase):
         result = f"{Color.WHITE('hello', bg=Color.BLUE)} there"
         self.assertEqual(result, "\x1b[37;44mhello\x1b[0m there")
 
-    def test_bg_bold(self):
+    def test_fg_bold_and_bg(self):
         result = f"{Color.WHITE('hello', bold = True, bg = Color.BLUE)} there"
         self.assertEqual(result, "\x1b[97;44mhello\x1b[0m there")
+
+    def test_fg_and_bg_bold(self):
+        result = f"{Color.WHITE('hello', bg=Color.BLUE, bg_bold=True)} there"
+        self.assertEqual(result, "\x1b[37;104mhello\x1b[0m there")
 
     def test_rgb(self):
         result = f"{Color.rgb( fg = [1, 2, 3], text = 'hello')} there"
@@ -46,7 +50,7 @@ class TestNameFunctions(unittest.TestCase):
             Color.parse("This is a (Rf)(Bb)test(X)."),
         ]
         valid_strings = [
-            f"This is a test",
+            "This is a test",
             f'This is a {Color.RED("test")}.',
             f'This is a {Color.RED("test.")}',
             f"This is a {Color.RED.set()}{Color.BLUE.set( bg = True, fg = False )}test{Color.reset()}.",

@@ -1,6 +1,28 @@
 #!/usr/bin/env python3
-import re
+"""
+This module provides a class for colorizing terminal output using virtual
+terminal sequences.
+
+Classes:
+    Color: Class containing methods to colorize text.
+
+Methods:
+    __call__: Colorizes text.
+    set: Returns a terminal sequence for setting the specified color and
+        attributes.
+    parse: Parses a string containing color tags and replaces them with the
+        appropriate terminal sequences.
+    reset: Returns a terminal sequence to reset colors to default.
+    rgb: Colorizes text using RGB color values.
+"""
+
 from enum import IntEnum
+import re
+
+try:
+    from typing import Self  # 3.11+
+except ImportError:
+    from typing_extensions import Self
 
 
 class Color(IntEnum):
@@ -30,35 +52,34 @@ class Color(IntEnum):
     CYAN = 6
     WHITE = 7
 
-    def __call__(self, text: str, fg=None, bg=None, bold: bool = False) -> str:
+    def __call__(
+        self,
+        text: str,
+        bold: bool = False,
+        bg: Self | None = None,
+        bg_bold: bool = False,
+    ) -> str:
         """Colorizes text.
 
         Args:
-            text: str   The text to colorize
-            fg: Color   The foreground color.  Defaults to self.
-            bg: Color   The background color.  Defaults to None
-            bold: bool  Whether to make the text bold
+            text: The text to colorize.
+            bold: Whether to make the foreground text bold.
+            bg: The background color.
+            bg_bold: Whether to make the background color bold.
 
         Returns:
             The colorized text
         """
-        color_codes = []
 
-        if not any([fg, bg, bold]):
+        if not any([bold, bg, bg_bold]):
             return f"{self.set()}{text}{self.reset()}"
 
-        if fg is not None:
-            color_codes.append(str(fg.value + 30 + (60 if bold else 0)))
-        elif bold:
-            color_codes.append(str(self.value + 60))  # Bold only
+        color_codes = [str(self.value + 30 + (60 if bold else 0))]
 
-        if bg is not None:
-            color_codes.append(str(bg.value + 40))
+        if bg:
+            color_codes.append(str(bg.value + 40 + (60 if bg_bold else 0)))
 
-        if not color_codes:
-            return text
-        else:
-            return f'\x1b[{";".join( color_codes )}m{text}\x1b[0m'
+        return f'\x1b[{";".join(color_codes)}m{text}\x1b[0m'
 
     def set(self, fg: bool = True, bg: bool = False, bold: bool = False) -> str:
         """
@@ -110,13 +131,13 @@ class Color(IntEnum):
         tags = re.findall(r"\(([XKRGYBMCW][fb]?)\)", text)
         for tag in tags:
             if tag[0] == "X":
-                text = text.replace(f"({tag})", cls.reset(), -1)
+                text = text.replace(f"({tag})", cls.reset())
             else:
                 c = color_map[tag[0]]
-                if len(tag) == 2 and tag[-1] == "b":
-                    text = text.replace(f"({tag})", c.set(fg=None, bg=c), -1)
+                if len(tag) == 2 and tag[1] == "b":
+                    text = text.replace(f"({tag})", c.set(fg=False, bg=True))
                 else:
-                    text = text.replace(f"({tag})", c.set(fg=c, bg=None), -1)
+                    text = text.replace(f"({tag})", c.set())
         return text
 
     @staticmethod
@@ -127,12 +148,12 @@ class Color(IntEnum):
         Returns:
             The ANSI escape sequence for resetting colors.
         """
-        return f"\x1b[0m"
+        return "\x1b[0m"
 
     @staticmethod
     def rgb(
-        fg: list[int | None] = None,
-        bg: list[int | None] = None,
+        fg: list[int | None] | None = None,
+        bg: list[int | None] | None = None,
         bold: bool = False,
         text: str = "",
     ) -> str:
@@ -175,10 +196,9 @@ class Color(IntEnum):
         if bold:
             color_codes.append("1")
 
-        if not color_codes:
-            return text
-        else:
+        if color_codes:
             return f'\x1b[{";".join(color_codes)}m{text}\x1b[0m'
+        return text
 
 
 # vim: set expandtab ts=4 sw=4

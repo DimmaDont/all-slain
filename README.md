@@ -32,6 +32,10 @@ Mostly compatible with `LIVE` (3.24.3).
 See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).  
 Workaround: Install Python and run `allslain.py`.
 
+## Supported Python Versions
+* 3.11+
+* 3.10 with `typing-extensions`
+
 ## Disclaimer
 
 "This is an unofficial Fansite."
