@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 from argparse import ArgumentParser
+from datetime import timedelta
 from io import TextIOWrapper
 import os
 import re
 import time
+from collections.abc import Generator
+from typing import Any, NoReturn
 
 from colorize import Color
 from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
@@ -30,7 +33,7 @@ CONNECT = Color.WHITE("CONNECT".rjust(10), bold=True)
 LOAD = Color.WHITE("LOAD".rjust(10), bold=True)
 
 
-def follow(f: TextIOWrapper):
+def follow(f: TextIOWrapper) -> Generator[str, Any, NoReturn]:
     while True:
         if line := f.readline():
             yield line
@@ -204,25 +207,20 @@ def main(filepath: str) -> None:
                 log = match[1]
                 when = log[1].replace("T", " ")
                 if log_type == "CET":
+                    step_num = log[5]
                     which = (
-                        ("Complete", "in")
+                        (Color.GREEN("Complete") if step_num == "15" else "Complete", "in")
                         if log[2] == "ContextEstablisherTaskFinished"
                         else (Color.YELLOW("Busy".rjust(8)), "for")
                     )
                     taskname = log[3]
                     step = log[4]
-                    step_num = log[5]
-                    secs = float(log[6])
-                    if secs > 60:
-                        secs = secs / 60
-                        u = "min"
-                    else:
-                        u = "s"
+                    running_time = Color.CYAN(str(timedelta(seconds=int(float(log[6])))))
                     if is_prev_line_cet:
                         # Move cursor up one line and clear it
                         print("\x1b[1A\x1b[2K", end="")
                     print(
-                        f"{when}{LOAD}: {which[0]}: {step_num.rjust(2)}/15 {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {secs:0.1f}{u}"
+                        f"{when}{LOAD}: {which[0]}: {step_num.rjust(2)}/15 {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time}"
                     )
                     is_prev_line_cet = True
                     continue
@@ -293,9 +291,9 @@ def main(filepath: str) -> None:
                     print(f"{when}{LOAD}: Loading...")
                 elif log_type == "LOADED":
                     what = Color.GREEN(log[2])
-                    seconds = Color.GREEN(log[3])
+                    running_time = Color.GREEN(str(timedelta(seconds=float(log[3]))))
                     print(
-                        f"{when}{LOAD}: Loaded! {what} took {seconds} seconds to load."
+                        f"{when}{LOAD}: Loaded! {what} took {running_time} to load."
                     )
                 elif log_type == "QUIT":
                     print(f"{when}{QUIT}: Game quit.")
