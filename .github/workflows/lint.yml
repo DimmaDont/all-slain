@@ -1,0 +1,26 @@
+name: Lint
+on:
+  push: null
+  pull_request: null
+jobs:
+  build:
+    name: Black
+    if: >
+      github.event_name == 'push' &&
+      github.ref_name != github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Lint
+        uses: psf/black@stable
+        with:
+          options: "--verbose"
+      - name: Commit and push linting fixes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "chore: fix linting issues"
+          commit_user_name: black
