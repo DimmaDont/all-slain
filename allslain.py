@@ -209,13 +209,18 @@ def main(filepath: str) -> None:
                 if log_type == "CET":
                     step_num = log[5]
                     which = (
-                        (Color.GREEN("Complete") if step_num == "15" else "Complete", "in")
+                        (
+                            Color.GREEN("Complete") if step_num == "15" else "Complete",
+                            "in",
+                        )
                         if log[2] == "ContextEstablisherTaskFinished"
                         else (Color.YELLOW("Busy".rjust(8)), "for")
                     )
                     taskname = log[3]
                     step = log[4]
-                    running_time = Color.CYAN(str(timedelta(seconds=int(float(log[6])))))
+                    running_time = Color.CYAN(
+                        str(timedelta(seconds=int(float(log[6]))))
+                    )
                     if is_prev_line_cet:
                         # Move cursor up one line and clear it
                         print("\x1b[1A\x1b[2K", end="")
@@ -292,9 +297,7 @@ def main(filepath: str) -> None:
                 elif log_type == "LOADED":
                     what = Color.GREEN(log[2])
                     running_time = Color.GREEN(str(timedelta(seconds=float(log[3]))))
-                    print(
-                        f"{when}{LOAD}: Loaded! {what} took {running_time} to load."
-                    )
+                    print(f"{when}{LOAD}: Loaded! {what} took {running_time} to load.")
                 elif log_type == "QUIT":
                     print(f"{when}{QUIT}: Game quit.")
                 else:
