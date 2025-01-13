@@ -197,10 +197,13 @@ def get_vehicle(name: str) -> str:
     return name
 
 
+LOG_ENCODING = "latin-1"
+
+
 def main(filepath: str) -> None:
     is_prev_line_cet = False
     try:
-        f = open(filepath, "r", encoding="latin-1")
+        f = open(filepath, "r", encoding=LOG_ENCODING)
         for line in follow(f):
             if match := SCLogParser.find_match(line):
                 log_type = match[0]

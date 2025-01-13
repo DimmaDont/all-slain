@@ -4,10 +4,23 @@ import unittest
 from allslain import (
     clean_location,
     clean_name,
+    find_game_log,
     get_vehicle,
+    LOG_ENCODING,
     RE_VEHICLE_NAME,
     remove_id,
 )
+
+
+@unittest.skipUnless(find_game_log(), "No game logs are available.")
+class TestLogReading(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.log = find_game_log()
+
+    def test_log_decode(self):
+        with open(self.log, "r", encoding=LOG_ENCODING) as f:
+            f.read()
 
 
 class TestCleanNameFunction(unittest.TestCase):
