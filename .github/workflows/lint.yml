@@ -1,7 +1,5 @@
 name: Lint
-on:
-  push: null
-  pull_request: null
+on: [push, pull_request]
 jobs:
   build:
     name: Black

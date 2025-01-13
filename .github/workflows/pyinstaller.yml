@@ -19,8 +19,17 @@ on:
       output:
         required: true
         type: string
+      attest:
+        required: false
+        type: boolean
+        default: false
+      release:
+        required: false
+        type: boolean
+        default: false
 jobs:
   build:
+    name: PyInstaller
     runs-on: ${{ inputs.os }}
     permissions:
       id-token: write
@@ -37,14 +46,13 @@ jobs:
           cache: pip
       - name: Install Dependencies
         shell: bash
-        run: |
-          pip install pyinstaller
+        run: pip install pyinstaller
       - name: Package Application
         shell: bash
-        run: |
-          pyinstaller --onefile ${{ inputs.file }} --icon ${{ inputs.icon }}
+        run: pyinstaller --onefile ${{ inputs.file }} --icon ${{ inputs.icon }}
       - name: Attest
         uses: actions/attest-build-provenance@v2
+        if: ${{ inputs.attest }}
         with:
           subject-path: ${{ github.workspace }}/dist
       - name: Upload Artifact
@@ -54,5 +62,6 @@ jobs:
           path: ${{ inputs.output }}
       - name: Release
         uses: softprops/action-gh-release@v2
+        if: ${{ inputs.release }}
         with:
           files: ${{ inputs.output }}

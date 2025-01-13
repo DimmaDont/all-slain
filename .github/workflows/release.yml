@@ -1,9 +1,10 @@
-name: Build
+name: Release
 on:
   release:
     types: [released]
 jobs:
   build:
+    name: Build and release
     permissions:
       attestations: write
       contents: write
@@ -13,3 +14,5 @@ jobs:
       file: allslain.py
       icon: icon/ded.ico
       output: dist/allslain.exe
+      attest: true
+      release: true
