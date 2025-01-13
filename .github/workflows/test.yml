@@ -1,15 +1,26 @@
-name: Unittest
+name: Test
 on: [push]
 jobs:
   build:
+    name: unittest
     runs-on: ubuntu-latest
     permissions: {}
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        shell: bash
+        run: pip install -r requirements.txt
+      - name: Install dependencies for Python 3.10
+        if: ${{ matrix.python-version == "3.10" }}
+        shell: bash
+        run: pip install typing_extensions
       - name: Run Tests
         shell: bash
-        run: |
-          python -m unittest
+        run: python -m unittest
