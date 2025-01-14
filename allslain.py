@@ -147,6 +147,10 @@ def clean_name(name: str) -> tuple[str, int]:
     # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
     # KILL: behr_pistol_ballistic_01_123456789012 killed Headhunters_techie NPC with a unknown in an Unknown Surface Facility
 
+    if name.endswith("-CIG"):
+        return (f"🌟{name}🌟", 0)
+        # ⭐ doesn't render correctly in windows terminal
+
     return (name, 0)
 
 
