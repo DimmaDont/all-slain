@@ -18,7 +18,12 @@ RE_VEHICLE_NAME = re.compile(
     r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM(?:_QIG|_ScatterGun)?|PU_AI_NT)?_(\d{12})"
 )
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12}_(.+)_\d{12}")
-RE_HAZARD = re.compile(r"Hazard-\d{3}")
+
+RE_HAZARD = re.compile(r"(Radiation|Water)_Hazard")
+RE_HAZARD_NUM = re.compile(r"Hazard-\d{3}")
+# Seen: 000, 002, 003, 004
+# there's also a "Hazard_Area18" at Area 18
+
 RE_ASTEROID = re.compile(r"OscillationSimple-\d{3}")
 
 
@@ -124,10 +129,11 @@ def clean_name(name: str) -> tuple[str, int]:
     if "pyro_outlaw" in name:
         return ("NPC Criminal", 1)
 
-    if RE_HAZARD.match(name):
+    if hazard := RE_HAZARD.match(name):
+        return (f"{hazard[1]} Hazard", 1)
+    if RE_HAZARD_NUM.match(name):
         return ("Environmental Hazard", 1)
-    if name == "Water_Hazard":
-        return ("Water Hazard", 1)
+
     if name == "Nova-01":
         return ("Nova", 1)
     if name.startswith("Quasigrazer_"):
@@ -261,7 +267,7 @@ def main(filepath: str) -> None:
                         driver = Color.GREEN(driver) + " in a "
                     kill_type = log[5]
 
-                    # note: killer can also be an npc entity
+                    # todo: killer can also be an npc or player entity
                     killer = Color.GREEN(get_vehicle(log[6]))
                     dmgtype = Color.CYAN(log[7])
                     print(
@@ -289,7 +295,7 @@ def main(filepath: str) -> None:
                     origin = Color.BLUE(log[3])
                     dest = Color.BLUE(log[4])
                     print(
-                        f"{when}{JUMP}: {whom} haѕ departed {origin} for the {dest} system."
+                        f"{when}{JUMP}: {whom} has departed {origin} for the {dest} system."
                     )
                 elif log_type == "CONNECTING":
                     print(f"{when}{CONNECT}: Connecting...")

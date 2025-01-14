@@ -144,5 +144,22 @@ class TestGetLocationName(unittest.TestCase):
         self.assertEqual(result[1], "Drug Bunker")
 
 
+class TestGetHazardNames(unittest.TestCase):
+    def test_radiation_hazard(self):
+        result = clean_name("Radiation_Hazard")
+        self.assertEqual(result[0], "Radiation Hazard")
+        self.assertEqual(result[1], 1)
+
+    def test_water_hazard(self):
+        result = clean_name("Water_Hazard")
+        self.assertEqual(result[0], "Water Hazard")
+        self.assertEqual(result[1], 1)
+
+    def test_numbered_hazard(self):
+        result = clean_name("Hazard-003")
+        self.assertEqual(result[0], "Environmental Hazard")
+        self.assertEqual(result[1], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
