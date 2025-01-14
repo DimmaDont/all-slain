@@ -7,6 +7,7 @@ from allslain import (
     find_game_log,
     get_vehicle,
     LOG_ENCODING,
+    LOG_NEWLINE,
     RE_VEHICLE_NAME,
     remove_id,
 )
@@ -19,7 +20,7 @@ class TestLogReading(unittest.TestCase):
         cls.log = find_game_log()
 
     def test_log_decode(self):
-        with open(self.log, "r", encoding=LOG_ENCODING) as f:
+        with open(self.log, "r", encoding=LOG_ENCODING, newline=LOG_NEWLINE) as f:
             f.read()
 
 
