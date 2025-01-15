@@ -150,19 +150,19 @@ def clean_name(name: str) -> tuple[str, int]:
     return (name, 0)
 
 
-def clean_tool(name: str, killer: str, killed: str) -> str:
+def clean_tool(name: str, killer: str, killed: str, damage_type: str) -> str:
     if name == "Player":
         return "suicide"
 
     if name == "unknown":
         # Ship collision
         if killer == killed:
-            return "suicide"
+            return f"suicide by {damage_type}"
 
         if RE_ASTEROID.match(killer):
             return "skill check"
 
-        return name
+        return damage_type
 
     try:
         return WEAPONS_FPS[name]
@@ -244,8 +244,8 @@ def main(filepath: str) -> None:
                     killed, is_killed_npc = clean_name(log[2])
                     lp, location = clean_location(log[3])
                     killer, is_killer_npc = clean_name(log[4])
-                    cause = clean_tool(log[5], log[4], log[2])
-                    if cause == "suicide":
+                    cause = clean_tool(log[5], log[4], log[2], log[6])
+                    if cause.startswith("suicide"):
                         print(
                             f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
