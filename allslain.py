@@ -250,14 +250,20 @@ def main(filepath: str) -> None:
                     )
                     taskname = log[3]
                     step = log[4]
-                    running_time = Color.CYAN(
-                        str(timedelta(seconds=int(float(log[6]))))
+                    running_time = int(float(log[6]))
+                    running_time_color = (
+                        "RED"
+                        if running_time > 300
+                        else ("YELLOW" if running_time > 150 else "CYAN")
+                    )
+                    running_time_text = Color[running_time_color](
+                        str(timedelta(seconds=running_time))
                     )
                     if is_prev_line_cet:
                         # Move cursor up one line and clear it
                         print("\x1b[1A\x1b[2K", end="")
                     print(
-                        f"{when}{LOAD}: {which[0]}: {step_num.rjust(2)}/15 {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time}"
+                        f"{when}{LOAD}: {which[0]}: {step_num.rjust(2)}/15 {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time_text}"
                     )
                     is_prev_line_cet = True
                     continue
