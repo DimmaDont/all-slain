@@ -86,9 +86,9 @@ def clean_location(name: str) -> tuple[str, str]:
         return ("in an", "Unknown Surface Facility")
 
     # Location can also be a ship id
-    vehicle = get_vehicle(name)
-    if vehicle != name:
-        return ("in a", vehicle)
+    vehicle_name, found = get_vehicle(name)
+    if found:
+        return ("in a", vehicle_name)
 
     if name.startswith("SolarSystem_"):
         return ("in", "Space")
@@ -99,6 +99,12 @@ def clean_location(name: str) -> tuple[str, str]:
 
 
 def clean_name(name: str) -> tuple[str, int]:
+    """
+    Returns:
+        A tuple (name, npc), where:
+        - name: name of the entity
+        - npc: whether the entity is an npc (if name matched a pattern below)
+    """
     if name == "unknown":
         return (name, 1)
     if name.startswith("PU_Human_Enemy_"):
@@ -144,7 +150,8 @@ def clean_name(name: str) -> tuple[str, int]:
         return ("Asteroid", 1)
 
     # or vehicles
-    if (vehicle_name := get_vehicle(name)) != name:
+    vehicle_name, found = get_vehicle(name)
+    if found:
         return (vehicle_name, 1)
 
     # killer can be weapons too
@@ -186,18 +193,24 @@ def clean_tool(name: str, killer: str, killed: str, damage_type: str) -> str:
     return name
 
 
-def get_vehicle(name: str) -> str:
+def get_vehicle(name: str) -> tuple[str, bool]:
+    """
+    Returns:
+        A tuple (name, found) where:
+        - name: the name of the ship if found
+        - found: whether the vehicle was found
+    """
     match = RE_VEHICLE_NAME.match(name)
     if not match:
         # Is it a moving asteroid?...
         asteroid = RE_ASTEROID.match(name)
         if asteroid:
-            return "Asteroid"
-        return name
+            return ("Asteroid", True)
+        return (name, False)
     vehicle_name = match[1]
 
     try:
-        return SHIPS[vehicle_name]
+        return (SHIPS[vehicle_name], True)
     except KeyError:
         pass
 
@@ -205,11 +218,11 @@ def get_vehicle(name: str) -> str:
     debris = RE_SHIP_DEBRIS.match(name)
     if debris:
         try:
-            return SHIPS[debris[1]] + " (Debris)"
+            return (SHIPS[debris[1]] + " (Debris)", True)
         except KeyError:
             pass
 
-    return name
+    return (name, False)
 
 
 LOG_ENCODING = "latin-1"
@@ -267,21 +280,30 @@ def main(filepath: str) -> None:
                             f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
                 elif log_type == "KILLV":
-                    # note: vehicle can also be an npc/player entity if it's a collision
-                    vehicle = Color.GREEN(get_vehicle(log[2]))
+                    # log[2] and log[6] are vehicles, or if the event is a collision, npc/player entities
+                    vehicle_name, found = get_vehicle(log[2])
+                    vehicle = Color.GREEN(
+                        vehicle_name if found else clean_name(log[2])[0]
+                    )
                     lp, location = clean_location(log[3])
                     driver, _ = clean_name(log[4])
                     if driver == "unknown":
                         driver = ""
                     else:
                         driver = Color.GREEN(driver) + " in a "
-                    kill_type = log[5]
+                    kill_type = (
+                        Color.YELLOW("disabled")
+                        if log[5] == "1"
+                        else Color.RED("destroyed")
+                    )
 
-                    # todo: killer can also be an npc or player entity
-                    killer = Color.GREEN(get_vehicle(log[6]))
+                    vehicle_name2, found2 = get_vehicle(log[6])
+                    killer = Color.GREEN(
+                        vehicle_name2 if found2 else clean_name(log[6])[0]
+                    )
                     dmgtype = Color.CYAN(log[7])
                     print(
-                        f'{when}{VKILL}: {killer} {Color.YELLOW("disabled") if kill_type == "1" else Color.RED("destroyed")} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}'
+                        f"{when}{VKILL}: {killer} {kill_type} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}"
                     )
                 elif log_type == "RESPAWN":
                     # datetime, player, location

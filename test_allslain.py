@@ -126,13 +126,20 @@ class TestVehicleNameRegex(unittest.TestCase):
 class TestGetVehicleNameFunction(unittest.TestCase):
     def test_get_vehicle_salvage(self):
         result = get_vehicle("ANVL_Arrow_Unmanned_Salvage_123456789012")
-        self.assertEqual(result, "Anvil Arrow (Salvage)")
+        self.assertEqual(result[0], "Anvil Arrow (Salvage)")
+        self.assertEqual(result[1], True)
 
     def test_get_vehicle_debris(self):
         result = get_vehicle(
             "SCItem_Debris_123456789012_RSI_Constellation_Andromeda_123456789012"
         )
-        self.assertEqual(result, "RSI Constellation Andromeda (Debris)")
+        self.assertEqual(result[0], "RSI Constellation Andromeda (Debris)")
+        self.assertEqual(result[1], True)
+
+    def test_get_non_vehicle(self):
+        result = get_vehicle("invalidvehicle_123456789012")
+        self.assertEqual(result[0], "invalidvehicle_123456789012")
+        self.assertEqual(result[1], False)
 
 
 class TestGetLocationName(unittest.TestCase):
