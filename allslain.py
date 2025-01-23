@@ -23,9 +23,9 @@ LOADED_ITEM = {
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?(PU_AI_NineTails|PU_AI_CRIM(?:_QIG|_ScatterGun)?|PU_AI_NT)?_(\d{12})"
+    r"(.*?)_?((?:EA|PU)_AI_(?:CRIM(?:_QIG|_ScatterGun)?|NineTails|NT|PIR(?:_Elite)?|UEE|VAN_Alpha))?_(\d{12,})"
 )
-RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12}_(.+)_\d{12}")
+RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}_(.+)_\d{12,}")
 
 RE_HAZARD = re.compile(r"(Radiation|Water)_Hazard")
 RE_HAZARD_NUM = re.compile(r"Hazard-\d{3}")
@@ -55,20 +55,12 @@ def follow(f: TextIOWrapper) -> Generator[str, Any, NoReturn]:
             continue
 
 
-def remove_id(name: str) -> str:
-    try:
-        i = name.rindex("_")
-        entity_id = name[i + 1 :]
+PATTERN_ID = re.compile(r"([\w-]+)_\d{12,}")
 
-        # ids are 12 digits
-        if len(entity_id) != 12:
-            raise ValueError("invalid entity id length")
-        int(entity_id)
-        # Has id
-        return name[:i]
-    except ValueError:
-        # No id or invalid id
-        pass
+
+def remove_id(name: str) -> str:
+    if match := PATTERN_ID.match(name):
+        return match.group(1)
     return name
 
 

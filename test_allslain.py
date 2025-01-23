@@ -99,7 +99,7 @@ class TestRemoveIdFunction(unittest.TestCase):
 
 
 class TestVehicleNameRegex(unittest.TestCase):
-    def test_re_vehicle_name_pu_ai(self):
+    def test_pu_ai(self):
         result = RE_VEHICLE_NAME.match(
             "CNOU_Mustang_Delta_PU_AI_NineTails_123456789012"
         )
@@ -108,12 +108,19 @@ class TestVehicleNameRegex(unittest.TestCase):
         self.assertEqual(result[2], "PU_AI_NineTails")
         self.assertEqual(result[3], "123456789012")
 
-    def test_re_vehicle_name_regular(self):
+    def test_regular(self):
         result = RE_VEHICLE_NAME.match("CNOU_Mustang_Delta_123456789012")
         self.assertEqual(len(result.groups()), 3)
         self.assertEqual(result[1], "CNOU_Mustang_Delta")
         self.assertIsNone(result[2])
         self.assertEqual(result[3], "123456789012")
+
+    def test_id_len_13(self):
+        result = RE_VEHICLE_NAME.match("MISC_Freelancer_MAX_PU_AI_CRIM_1234567890123")
+        self.assertEqual(len(result.groups()), 3)
+        self.assertEqual(result[1], "MISC_Freelancer_MAX")
+        self.assertEqual(result[2], "PU_AI_CRIM")
+        self.assertEqual(result[3], "1234567890123")
 
 
 class TestGetVehicleNameFunction(unittest.TestCase):
