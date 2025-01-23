@@ -12,6 +12,14 @@ from colorize import Color
 from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 from log_parser import SCLogParser
 
+
+LOADED_ITEM = {
+    "pu": "Stanton",
+    "pyro": "Pyro",
+    "Frontend_Main": "Main Menu",
+}
+
+
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(
@@ -305,9 +313,13 @@ def main(filepath: str) -> None:
                 elif log_type == "LOADING":
                     print(f"{when}{LOAD}: Loading...")
                 elif log_type == "LOADED":
-                    what = Color.GREEN(log[2])
-                    running_time = Color.GREEN(str(timedelta(seconds=float(log[3]))))
-                    print(f"{when}{LOAD}: Loaded! {what} took {running_time} to load.")
+                    what = Color.GREEN(LOADED_ITEM.get(log[2], log[2]))
+                    running_time_text = Color.GREEN(
+                        str(timedelta(seconds=float(log[3]))).rstrip("0")
+                    )
+                    print(
+                        f"{when}{LOAD}: Loaded! {what} took {running_time_text} to load."
+                    )
                 elif log_type == "QUIT":
                     print(f"{when}{QUIT}: Game quit.")
                 else:
