@@ -143,9 +143,18 @@ def clean_name(name: str) -> tuple[str, int]:
     if RE_ASTEROID.match(name):
         return ("Asteroid", 1)
 
+    # or vehicles
+    if (vehicle_name := get_vehicle(name)) != name:
+        return (vehicle_name, 1)
+
     # killer can be weapons too
     # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
     # KILL: behr_pistol_ballistic_01_123456789012 killed Headhunters_techie NPC with a unknown in an Unknown Surface Facility
+    try:
+        if (fps_name := remove_id(name)) != name:
+            return (WEAPONS_FPS[fps_name], 1)
+    except KeyError:
+        pass
 
     return (name, 0)
 
