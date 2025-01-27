@@ -44,6 +44,7 @@ SPAWNED = Color.WHITE("SPAWNED".rjust(10), bold=True)
 VKILL = Color.RED("VKILL".rjust(10))
 CONNECT = Color.WHITE("CONNECT".rjust(10), bold=True)
 LOAD = Color.WHITE("LOAD".rjust(10), bold=True)
+QUANTUM = Color.BLACK("QUANTUM".rjust(10), bold=True)
 
 
 def follow(f: TextIOWrapper) -> Generator[str, Any, NoReturn]:
@@ -311,6 +312,10 @@ def main(filepath: str) -> None:
                     print(
                         f"{when}{VKILL}: {killer} {kill_type} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}"
                     )
+                elif log_type == "QUANTUM":
+                    name = Color.GREEN(log[2])
+                    dest = Color.YELLOW(clean_location(log[3])[1])
+                    print(f"{when}{QUANTUM}: {name} started quantum travel to {dest}")
                 elif log_type == "RESPAWN":
                     # datetime, player, location
                     whom = Color.GREEN(log[2])
@@ -330,8 +335,8 @@ def main(filepath: str) -> None:
                     print(f"{when}{SPAWNED}: Character spawned!")
                 elif log_type == "JUMP":
                     whom = Color.GREEN(log[2])
-                    origin = Color.BLUE(log[3])
-                    dest = Color.BLUE(log[4])
+                    origin = Color.BLUE(log[3], bold=True)
+                    dest = Color.BLUE(log[4], bold=True)
                     print(
                         f"{when}{JUMP}: {whom} has departed {origin} for the {dest} system."
                     )
