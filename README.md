@@ -9,7 +9,7 @@ Star Citizen Game Log Reader
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://black.readthedocs.io/en/stable/index.html)
 [![Docstring style: google](https://img.shields.io/badge/docstring%20style-google-000000.svg)](https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings)
 
-This program monitors the Star Citizen `Game.log` file in real-time, reporting player kills, vehicle kills, game loading progress, respawn events, and more.
+This program monitors the Star Citizen `Game.log` file in real-time, reporting player kills, vehicle kills, game loading progress, respawn events, and [more](#supported-events).
 
 ![example screenshot of the program running in windows console](https://github.com/user-attachments/assets/0fa1d08e-776e-449c-b78b-59bf07c5a20c)
 
@@ -18,27 +18,38 @@ This program monitors the Star Citizen `Game.log` file in real-time, reporting p
 2. If Star Citizen is installed in the default location, simply run the program.
 3. If Star Citizen is installed elsewhere, move the program into the game folder before running.
 
-The program can also be run with the game log file as the first parameter in a terminal.  
+The program can also be run with the game log file as the first parameter in a terminal.\
 For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 
 > [!TIP]
-> The game copies previous log files into the `logbackups` folder.
+> Previous log files can be found in the `logbackups` folder.
 
 ## Game Version Compatibility
-Developed for `4.0_PREVIEW`.  
+Developed for `4.0_PREVIEW`.\
 Mostly compatible with `LIVE` (3.24.3).
+
+## Supported Events
+* Player/NPC deaths
+* Ship/vehicle destruction
+* Player respawns
+* Game load progress[^1]
+* Quantum travel events, including inter-system jumps[^1]
+* Quit to menu/desktop[^1]
+* Incapacitation events[^2]
+
+[^1]: Local client only
+[^2]: Excludes incaps from combat
 
 ## Fun Fact
 * Kills weren't logged until `3.24`
 
 ## Known Issues
-* Antimalware False Positive  
-See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).  
+* Antimalware False Positive\
+See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).\
 Workaround: Install [Python](https://www.python.org/downloads/) manually, download a copy of the repo, and run `allslain.py`.
 
 ## Supported Python Versions
-* 3.11+
-* 3.10 with `typing-extensions`
+* 3.10+
 
 ## Disclaimer
 "This is an unofficial Fansite."
