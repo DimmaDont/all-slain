@@ -14,7 +14,7 @@ from log_parser import SCLogParser
 
 
 LOADED_ITEM = {
-    "pu": "Stanton",
+    "pu": "PU",
     "pyro": "Pyro",
     "Frontend_Main": "Main Menu",
 }
