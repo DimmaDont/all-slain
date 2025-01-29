@@ -136,6 +136,13 @@ class TestGetVehicleNameFunction(unittest.TestCase):
         self.assertEqual(result[0], "RSI Constellation Andromeda (Debris)")
         self.assertEqual(result[1], True)
 
+    def test_get_vehicle_with_type_debris(self):
+        result = get_vehicle(
+            "SCItem_Debris_123456789012_RSI_Scorpius_Antares_PU_AI_CRIM_123456789012"
+        )
+        self.assertEqual(result[0], "RSI Scorpius Antares (Debris)")
+        self.assertEqual(result[1], True)
+
     def test_get_non_vehicle(self):
         result = get_vehicle("invalidvehicle_123456789012")
         self.assertEqual(result[0], "invalidvehicle_123456789012")

@@ -23,9 +23,9 @@ LOADED_ITEM = {
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?((?:EA|PU)_AI_(?:CRIM(?:_QIG|_ScatterGun)?|NineTails|NT|PIR(?:_Elite)?|UEE|VAN_Alpha))?_(\d{12,})"
+    r"(.*?)_?((?:EA|PU)_AI_(?:CFP|CIV|CRIM(?:_QIG|_ScatterGun)?|NineTails|NT|PIR(?:_Elite)?|UEE|VAN_Alpha|Xenothreat))?_(\d{12,})"
 )
-RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}_(.+)_\d{12,}")
+RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}_(.*?)(?:_(?:PU|EA)_.*)?_\d{12,}")
 
 RE_HAZARD = re.compile(r"(Radiation|Water)_Hazard")
 RE_HAZARD_NUM = re.compile(r"Hazard-\d{3}")
@@ -194,6 +194,30 @@ def clean_tool(name: str, killer: str, killed: str, damage_type: str) -> str:
     return name
 
 
+def get_vehicle_type(name: str) -> str:
+    match name:
+        case "PU_AI_CFP":
+            return "CFP"
+        case "PU_AI_CIV":
+            return "Civilian"
+        case "PU_AI_CRIM" | "PU_AI_CRIM_QIG" | "PU_AI_CRIM_ScatterGun":
+            return "Criminal"
+        case "PU_AI_NineTails" | "PU_AI_NT":
+            return "NineTails"
+        case "PU_AI_PIR" | "EA_AI_PIR":
+            return "Pirate"
+        case "PU_AI_PIR_Elite" | "EA_AI_PIR_Elite":
+            return "Elite Pirate"
+        case "PU_AI_UEE":
+            return "UEE"
+        case "PU_AI_Xenothreat":
+            return "Xenothreat"
+        case "EA_AI_VAN_Alpha":
+            return "Vanduul"
+        case _:
+            return name
+
+
 def get_vehicle(name: str) -> tuple[str, bool]:
     """
     Returns:
@@ -209,9 +233,10 @@ def get_vehicle(name: str) -> tuple[str, bool]:
             return ("Asteroid", True)
         return (name, False)
     vehicle_name = match[1]
+    vehicle_type = get_vehicle_type(match[2]) + " " if match[2] else ""
 
     try:
-        return (SHIPS[vehicle_name], True)
+        return (vehicle_type + SHIPS[vehicle_name], True)
     except KeyError:
         pass
 
