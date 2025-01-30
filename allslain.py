@@ -65,38 +65,38 @@ def remove_id(name: str) -> str:
     return name
 
 
-def clean_location(name: str) -> tuple[str, str]:
+def clean_location(name: str) -> tuple[str, str, str]:
     try:
         # todo not all are "at"
-        return ("at", LOCATIONS[name.replace("@", "")])
+        return ("at", LOCATIONS[name.replace("@", "")], "loc")
     except KeyError:
         pass
 
     # Handle some special cases
     if name.startswith("LocationHarvestableObjectContainer_ab_pyro_"):
-        return ("at a", "Remote Asteroid Base (Pyro)")
+        return ("at a", "Remote Asteroid Base (Pyro)", "loc")
 
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
-        return ("in a", ("Drug " if name.endswith("_drugs") else "") + "Bunker")
+        return ("in a", ("Drug " if name.endswith("_drugs") else "") + "Bunker", "loc")
 
     if name.startswith("Hangar_"):
-        return ("in a", "Hangar")
+        return ("in a", "Hangar", "loc")
 
     if name.startswith("RastarInteriorGridHost_"):
-        return ("in an", "Unknown Surface Facility")
+        return ("in an", "Unknown Surface Facility", "loc")
 
     # Location can also be a ship id
     vehicle_name, found = get_vehicle(name)
     if found:
-        return ("in a", vehicle_name)
+        return ("in a", vehicle_name, "ship")
 
     if name.startswith("SolarSystem_"):
-        return ("in", "Space")
+        return ("in", "Space", "loc")
     if name.startswith("TransitCarriage_"):
-        return ("in an", "Elevator")
+        return ("in an", "Elevator", "loc")
 
-    return ("at", name)
+    return ("at", name, "loc")
 
 
 def clean_name(name: str) -> tuple[str, int]:
@@ -295,7 +295,8 @@ def main(filepath: str) -> None:
 
                 if log_type == "KILLP":
                     killed, is_killed_npc = clean_name(log[2])
-                    lp, location = clean_location(log[3])
+                    lp, location, location_type = clean_location(log[3])
+                    is_ship = "ship" == location_type
                     killer, is_killer_npc = clean_name(log[4])
                     cause = clean_tool(log[5], log[4], log[2], log[6])
                     if cause.startswith("suicide"):
@@ -303,20 +304,30 @@ def main(filepath: str) -> None:
                             f"{when}{KILL}: {Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
                         )
                     elif is_killer_npc and is_killed_npc:
-                        print(
-                            f"{when}{KILL}: {Color.BLACK(killer, bold = True)} killed {Color.BLACK(killed, bold = True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                        )
+                        if is_ship:
+                            print(
+                                f"{when}{KILL}: {Color.BLACK(killer, bold = True)} killed {Color.BLACK(killed, bold = True)} {lp} {Color.YELLOW(location)} with a {Color.CYAN(cause)}"
+                            )
+                        else:
+                            print(
+                                f"{when}{KILL}: {Color.BLACK(killer, bold = True)} killed {Color.BLACK(killed, bold = True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                            )
                     else:
-                        print(
-                            f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-                        )
+                        if is_ship:
+                            print(
+                                f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} {lp} {Color.YELLOW(location)} with a {Color.CYAN(cause)}"
+                            )
+                        else:
+                            print(
+                                f"{when}{KILL}: {Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
+                            )
                 elif log_type == "KILLV":
                     # log[2] and log[6] are vehicles, or if the event is a collision, npc/player entities
                     vehicle_name, found = get_vehicle(log[2])
                     vehicle = Color.GREEN(
                         vehicle_name if found else clean_name(log[2])[0]
                     )
-                    lp, location = clean_location(log[3])
+                    lp, location, _ = clean_location(log[3])
                     driver, _ = clean_name(log[4])
                     if driver == "unknown":
                         driver = ""
@@ -339,7 +350,7 @@ def main(filepath: str) -> None:
                 elif log_type == "RESPAWN":
                     # datetime, player, location
                     whom = Color.GREEN(log[2])
-                    _, where = clean_location(log[3])
+                    _, where, _ = clean_location(log[3])
                     print(f"{when}{RESPAWN}: {whom} from {Color.YELLOW(where)}")
                 elif log_type == "INCAP":
                     # datetime, player, causes
