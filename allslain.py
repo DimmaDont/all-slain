@@ -336,10 +336,6 @@ def main(filepath: str) -> None:
                     print(
                         f"{when}{VKILL}: {killer} {kill_type} a {driver}{vehicle} with {dmgtype} {lp} {Color.YELLOW(location)}"
                     )
-                elif log_type == "QUANTUM":
-                    name = Color.GREEN(log[2])
-                    dest = Color.YELLOW(clean_location(log[3])[1])
-                    print(f"{when}{QUANTUM}: {name} started quantum travel to {dest}")
                 elif log_type == "RESPAWN":
                     # datetime, player, location
                     whom = Color.GREEN(log[2])
@@ -380,6 +376,10 @@ def main(filepath: str) -> None:
                     )
                 elif log_type == "QUIT":
                     print(f"{when}{QUIT}: Game quit.")
+                elif log_type == "QUANTUM":
+                    name = Color.GREEN(log[2])
+                    dest = Color.YELLOW(clean_location(log[3])[1])
+                    print(f"{when}{QUANTUM}: {name} started quantum travel to {dest}")
                 else:
                     continue
                 is_prev_line_cet = False

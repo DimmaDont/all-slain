@@ -24,21 +24,23 @@ For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 > [!TIP]
 > Previous log files can be found in the `logbackups` folder.
 
-## Game Version Compatibility
-Developed for `4.0_PREVIEW`.\
-Mostly compatible with `LIVE` (3.24.3).
+## Game Log Version Compatibility
+Compatible with `LIVE` (`4.0.1`).\
+Originally developed for `4.0_PREVIEW`.\
+Mostly compatible with `3.24.X`.
 
 ## Supported Events
 * Player/NPC deaths
 * Ship/vehicle destruction
 * Player respawns
 * Game load progress[^1]
-* Quantum travel events, including inter-system jumps[^1]
+* Quantum travel events[^1][^3], including inter-system jumps[^1]
 * Quit to menu/desktop[^1]
 * Incapacitation events[^2]
 
 [^1]: Local client only
 [^2]: Excludes incaps from combat
+[^3]: Only available for `4.0_PREVIEW`
 
 ## Fun Fact
 * Kills weren't logged until `3.24`
