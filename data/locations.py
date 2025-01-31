@@ -2,6 +2,7 @@ LOCATIONS = {
     "A18_HospitalInt_OC": "Empire Health Services, Area18, ArcCorp, Stanton",
     "ab_pyro_int_dung_001": "Contested Zone",
     "ab_pyro_int_dung_exec_002": "PYAM-EXHANG-0-1",
+    "ab_pyro_int_dung_exec_004": "PYAM-EXHANG-0-1",
     "Area18_central-001": "Area18 Central, Area18, ArcCorp, Stanton",
     "hangar_01": "PYAM-EXHANG-0-1 Hangar",
     "hangar_02": "PYAM-EXHANG-0-1 Hangar",
