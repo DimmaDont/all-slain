@@ -407,7 +407,7 @@ def main(filepath: str) -> None:
 
 TRY_FILES = [
     "Game.log",
-    R"C:\Program Files\Roberts Space Industries\StarCitizen\4.0_PREVIEW\Game.log",
+    R"C:\Program Files\Roberts Space Industries\StarCitizen\HOTFIX\Game.log",
     R"C:\Program Files\Roberts Space Industries\StarCitizen\LIVE\Game.log",
 ]
 
