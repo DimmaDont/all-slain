@@ -16,4 +16,5 @@ jobs:
       icon: icon/ded.ico
       output: dist/allslain.exe
       attest: false
-      release: false
+      release: true
+      latest: true
