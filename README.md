@@ -14,10 +14,12 @@ This program monitors the Star Citizen `Game.log` file in real-time, reporting p
 
 ![example screenshot of the program running in windows console](https://github.com/user-attachments/assets/0fa1d08e-776e-449c-b78b-59bf07c5a20c)
 
+## Requirements
+* If the log file is not specified, RSI Launcher `2.2.0` is required to automatically find it.
+
 ## Usage
 1. Start the game, and wait until the EasyAntiCheat splash screen closes and the main game window has appeared.
-2. If Star Citizen is installed in the default location, simply run the program.
-3. If Star Citizen is installed elsewhere, move the program into the game folder before running.
+2. Run the program.
 
 The program can also be run with the game log file as the first parameter in a terminal.\
 For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
@@ -26,10 +28,10 @@ For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 > Previous log files can be found in the `logbackups` folder.
 
 <details>
-<summary><b><code>allslain.py --help</code></b></summary>
+<summary><b><code>allslain.exe --help</code></b></summary>
 
 ```
-usage: allslain.py [-h] [-d] [-r] [-q] [-v] [file]
+usage: allslain.exe [-h] [-d] [-r] [-q] [-v] [file]
 positional arguments:
   file
 
@@ -66,7 +68,7 @@ Mostly compatible with `3.24.X`.
 ## Known Issues
 * Antimalware False Positive\
 See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).\
-Workaround: Install [Python](https://www.python.org/downloads/) manually, download a copy of the repo, and run `allslain.py`.
+Workaround: Install [Python](https://www.python.org/downloads/) manually, download a copy of the repo, install dependencies, and run `allslain.py`.
 
 ## Supported Python Versions
 * 3.10+
