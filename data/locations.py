@@ -74,6 +74,7 @@ LOCATIONS = {
     "rs_cz_rewards_003": "CZ Rewards Area, Orbituary",
     "rs_int_p2l4": "Checkmate Station, Monox, Pyro",
     "rs_int_p3leo": "Orbituary Station, Bloom, Pyro",
+    "rs_int_p6leo_ruinstation": "Ruin Station, Terminus, Pyro",
     "rs_opendungeon_rund_002": "Contested Zone, Ruin Station",
     "rs_refinery_pyro": "Refinery",
     "stanton2c": "Yela",

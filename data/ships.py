@@ -174,6 +174,7 @@ SHIPS = {
     "KRIG_P52_Merlin": "Kruger P-52 Merlin",
     "KRIG_P72_Archimedes_Emerald": "Kruger P-72 Archimedes Emerald",
     "KRIG_P72_Archimedes": "Kruger P-72 Archimedes",
+    "MISC_Fortune": "MISC Fortune",
     "MISC_Freelancer_DUR_Unmanned_Salvage": "MISC Freelancer DUR (Salvage)",
     "MISC_Freelancer_DUR": "MISC Freelancer DUR",
     "MISC_Freelancer_MAX_Unmanned_Salvage": "MISC Freelancer MAX (Salvage)",

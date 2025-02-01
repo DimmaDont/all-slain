@@ -192,6 +192,7 @@ WEAPONS_FPS = {
     "lbco_sniper_energy_imp01": 'Atzkav "Deadeye" Sniper Rifle',
     "none_melee_01": "Prison Shiv",
     "none_shotgun_ballistic_01": "Deadrig Shotgun",
+    "none_smg_energy_01": "Ripper SMG",
     "rrs_melee_01_fallout01": 'TBF-4 "Balefire" Combat Knife',
     "rrs_melee_01_orange01": 'TBF-4 "Sunspike" Combat Knife',
     "utfl_melee_01_brown01": 'FSK-8 "Mirage" Combat Knife',
