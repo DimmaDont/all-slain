@@ -35,20 +35,27 @@ class AllSlain:
 
     @classmethod
     def get_logs(cls):
-        with open(f"{os.getenv('APPDATA')}\\rsilauncher\\launcher store.json", "rb") as f:
-            encrypted_data = f.read()
+        try:
+            with open(
+                f"{os.getenv('APPDATA')}\\rsilauncher\\launcher store.json", "rb"
+            ) as f:
+                encrypted_data = f.read()
 
-        crypt = CryptSindresorhusConf(
-            b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4=", encrypted_data[:16]
-        )
-        decrypted = crypt.decrypt(encrypted_data)
-        data = json.loads(decrypted)
+            crypt = CryptSindresorhusConf(
+                b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4=", encrypted_data[:16]
+            )
+            decrypted = crypt.decrypt(encrypted_data)
+            data = json.loads(decrypted)
 
-        base_folder = data["library"]["libraryFolder"]
-        sc = [game for game in data["library"]["available"] if game["id"] == "SC"][0]
+            base_folder = data["library"]["libraryFolder"]
+            sc = [game for game in data["library"]["available"] if game["id"] == "SC"][0]  # fmt: skip
 
-        for channel in sc["channels"]:
-            yield f"{base_folder}{channel['installDir']}\\{channel['id']}\\Game.log"
+            for channel in sc["channels"]:
+                yield f"{base_folder}{channel['installDir']}\\{channel['id']}\\Game.log"
+        except OSError:
+            pass
+        except LookupError:
+            pass
 
     def follow(self, f: TextIOWrapper) -> Generator[str, Any, None]:
         if self.args.quit_on_eof:
