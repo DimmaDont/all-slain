@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -5,6 +6,8 @@ from argparse import ArgumentParser
 from collections.abc import Generator
 from io import TextIOWrapper
 from typing import Any
+
+from crypt_sindresorhus_conf import CryptSindresorhusConf
 
 from colorize import Color
 from log_parser import LogParser
@@ -23,10 +26,29 @@ class AllSlain:
 
     @classmethod
     def find_game_log(cls) -> str | None:
-        for file in cls.TRY_FILES:
+        if os.path.isfile("Game.log"):
+            return "Game.log"
+        for file in cls.get_logs():
             if os.path.isfile(file):
                 return file
         return None
+
+    @classmethod
+    def get_logs(cls):
+        with open(f"{os.getenv('APPDATA')}\\rsilauncher\\launcher store.json", "rb") as f:
+            encrypted_data = f.read()
+
+        crypt = CryptSindresorhusConf(
+            b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4=", encrypted_data[:16]
+        )
+        decrypted = crypt.decrypt(encrypted_data)
+        data = json.loads(decrypted)
+
+        base_folder = data["library"]["libraryFolder"]
+        sc = [game for game in data["library"]["available"] if game["id"] == "SC"][0]
+
+        for channel in sc["channels"]:
+            yield f"{base_folder}{channel['installDir']}\\{channel['id']}\\Game.log"
 
     def follow(self, f: TextIOWrapper) -> Generator[str, Any, None]:
         if self.args.quit_on_eof:
@@ -79,9 +101,7 @@ class AllSlain:
             print(f'Reading "{Color.CYAN(filename)}"\n')
         else:
             print(Color.RED("No log files found in the default locations."))
-            print(
-                "Run this again from within the game folder after starting the game, or specify a game log to read."
-            )
+            print("Run this again after starting the game, or specify a game log to read.")
             return
 
         log_parser = LogParser(self.args)
