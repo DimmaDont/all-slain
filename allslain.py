@@ -18,23 +18,11 @@ class AllSlain:
     LOG_ENCODING = "latin-1"
     LOG_NEWLINE = "\r\n"
 
-    TRY_FILES = [
-        "Game.log",
-        R"C:\Program Files\Roberts Space Industries\StarCitizen\HOTFIX\Game.log",
-        R"C:\Program Files\Roberts Space Industries\StarCitizen\LIVE\Game.log",
-    ]
-
     @classmethod
-    def find_game_log(cls) -> str | None:
-        if os.path.isfile("Game.log"):
-            return "Game.log"
-        for file in cls.get_logs():
-            if os.path.isfile(file):
-                return file
-        return None
-
-    @classmethod
-    def get_logs(cls):
+    def get_log(cls) -> str | None:
+        """
+        Returns: Path of the latest game log.
+        """
         try:
             with open(
                 f"{os.getenv('APPDATA')}\\rsilauncher\\launcher store.json", "rb"
@@ -50,12 +38,22 @@ class AllSlain:
             base_folder = data["library"]["libraryFolder"]
             sc = [game for game in data["library"]["available"] if game["id"] == "SC"][0]  # fmt: skip
 
+            # Option is saved immediately after selection in launcher, but check modification times anyway.
+            # channel_id = [i["channelId"] for i in data["library"]["defaults"] if i["gameId"] == "SC"][0]
+
+            files = {}
             for channel in sc["channels"]:
-                yield f"{base_folder}{channel['installDir']}\\{channel['id']}\\Game.log"
-        except OSError:
-            pass
-        except LookupError:
-            pass
+                file = f"{base_folder}{channel['installDir']}\\{channel['id']}\\Game.log"
+                try:
+                    files[file] = os.path.getmtime(file)
+                except OSError:
+                    pass
+            return max(files, key=files.__getitem__)
+        except (OSError, LookupError, ValueError, json.JSONDecodeError) as e:
+            print(
+                f"Failed to find game installation directory or log files: {Color.RED(str(e))}"
+            )
+        return None
 
     def follow(self, f: TextIOWrapper) -> Generator[str, Any, None]:
         if self.args.quit_on_eof:
@@ -104,11 +102,13 @@ class AllSlain:
         print(f"{Color.WHITE('all-slain', bold=True)}: Star Citizen Game Log Reader")
         print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', bold=True)}\n")
 
-        if filename := self.args.file if self.args.file else self.find_game_log():
+        if filename := self.args.file if self.args.file else self.get_log():
             print(f'Reading "{Color.CYAN(filename)}"\n')
         else:
-            print(Color.RED("No log files found in the default locations."))
-            print("Run this again after starting the game, or specify a game log to read.")
+            print(Color.RED("No log files found."))
+            print(
+                "Run this again after starting the game, or specify a game log to read."
+            )
             return
 
         log_parser = LogParser(self.args)

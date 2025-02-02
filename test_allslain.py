@@ -4,11 +4,11 @@ from allslain import AllSlain
 from functions import RE_VEHICLE_NAME, clean_location, clean_name, get_vehicle, strip_id
 
 
-@unittest.skipUnless(AllSlain.find_game_log(), "No game logs are available.")
+@unittest.skipUnless(AllSlain.get_log(), "No game logs are available.")
 class TestLogReading(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.log = AllSlain.find_game_log()
+        cls.log = AllSlain.get_log()
 
     def test_log_decode(self):
         with open(
