@@ -9,7 +9,7 @@ from collections.abc import Generator
 from typing import Any, NoReturn
 
 from colorize import Color
-from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
+from data import ACTORS, LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
 from log_parser import SCLogParser
 
 
@@ -59,8 +59,17 @@ def follow(f: TextIOWrapper) -> Generator[str, Any, NoReturn]:
 PATTERN_ID = re.compile(r"([\w-]+)_\d{12,}")
 
 
-def remove_id(name: str) -> str:
+def strip_id(name: str) -> str:
     if match := PATTERN_ID.match(name):
+        return match.group(1)
+    return name
+
+
+PATTERN_ACTOR_VARIANT = re.compile(r"([\w-]+)_\d{2}")
+
+
+def strip_actor_variant(name: str) -> str:
+    if match := PATTERN_ACTOR_VARIANT.match(name):
         return match.group(1)
     return name
 
@@ -108,33 +117,12 @@ def clean_name(name: str) -> tuple[str, int]:
     """
     if name == "unknown":
         return (name, 1)
-    if name.startswith("PU_Human_Enemy_"):
-        name_split = name.split("_")
-        return ("_".join(name_split[5:7]), 1)
-    if name.startswith("PU_Human-"):
-        name_split = re.split(r"[_-]+", name)
-        return ("_".join(name_split[2:6]), 1)
-    if name.startswith("NPC_Archetypes-Human-"):
-        name_split = re.split(r"[_-]+", name)
-        return ("_".join(name_split[3:7]), 1)
-    if name.startswith("NPC_Archetypes-"):
-        return (name[: name.rindex("_")].split("-")[-1].replace("-", "_"), 1)
-    if name.startswith("Kopion_"):
-        return ("Kopion", 1)
-    if name.startswith("PU_Pilots-"):
-        name_split = re.split(r"[_-]+", name)
-        return ("_".join(["Pilot", *name_split[3:6]]), 1)
-    if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
-        return ("NPC Security", 1)
-    if name.startswith("AIModule_Unmanned_PU_Advocacy_"):
-        return ("NPC UEE Security", 1)
-    # Some cases from Pyro observed:
-    if "Pilot_Criminal_Pilot" in name:
-        return ("NPC Pilot", 1)
-    if "Pilot_Criminal_Gunner" in name:
-        return ("NPC Gunner", 1)
-    if "pyro_outlaw" in name:
-        return ("NPC Criminal", 1)
+
+    try:
+        actor_name = strip_actor_variant(strip_id(name))
+        return (ACTORS[actor_name], 1)
+    except KeyError:
+        pass
 
     if hazard := RE_HAZARD.match(name):
         return (f"{hazard[1]} Hazard", 1)
@@ -143,8 +131,7 @@ def clean_name(name: str) -> tuple[str, int]:
 
     if name == "Nova-01":
         return ("Nova", 1)
-    if name.startswith("Quasigrazer_"):
-        return ("Quasigrazer", 1)
+
     # fun fact, kill messages aren't logged for maroks
 
     if RE_ASTEROID.match(name):
@@ -159,7 +146,7 @@ def clean_name(name: str) -> tuple[str, int]:
     # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
     # KILL: behr_pistol_ballistic_01_123456789012 killed Headhunters_techie NPC with a unknown in an Unknown Surface Facility
     try:
-        if (fps_name := remove_id(name)) != name:
+        if (fps_name := strip_id(name)) != name:
             return (WEAPONS_FPS[fps_name], 1)
     except KeyError:
         pass

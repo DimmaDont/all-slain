@@ -1,5 +1,4 @@
 import json
-from msvcrt import getch
 
 
 def get_item_name(labels: dict[str, str], item_name_ref: str):
@@ -150,14 +149,11 @@ def main(directory: str):
                 except KeyError:
                     print(f'Could not find item with name "{item["name"]}"')
 
-    dump_to_file(ships, "ships.json")
-    dump_to_file(weapons_fps, "weapons_fps.json")
-    dump_to_file(weapons_ship, "weapons_ship.json")
-    dump_to_file(locations, "locations.json")
+    dump_to_file(ships, "tools\\ships.json")
+    dump_to_file(weapons_fps, "tools\\weapons_fps.json")
+    dump_to_file(weapons_ship, "tools\\weapons_ship.json")
+    dump_to_file(locations, "tools\\locations.json")
 
 
 if __name__ == "__main__":
-    # Run scunpacked, then run this on the json folder
-    main(R"..\..\data_json\\")
-    print('Press the "any" key to continue...', end="", flush=True)
-    getch()
+    main(R"..\\LIVE_EXTRACT2\\")
