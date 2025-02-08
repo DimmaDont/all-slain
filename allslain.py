@@ -9,7 +9,7 @@ from collections.abc import Generator
 from typing import Any, NoReturn
 
 from colorize import Color
-from data import ACTORS, LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
+from data import ACTORS, LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP, VEHICLE_TYPES
 from log_parser import SCLogParser
 
 
@@ -22,9 +22,7 @@ LOADED_ITEM = {
 
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
-RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?((?:EA|PU)_AI_(?:CFP|CIV|CRIM(?:_QIG|_ScatterGun)?|NineTails|NT(?:_NonLethal)?|PIR(?:_Elite)?|UEE|VAN_Alpha|Xenothreat))?_(\d{12,})"
-)
+RE_VEHICLE_NAME = re.compile(r"(.*?)_?((?:PU|EA)_AI_.*)?_(\d{12,})")
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}_(.*?)(?:_(?:PU|EA)_.*)?_\d{12,}")
 
 RE_HAZARD = re.compile(r"(Radiation|Water)_Hazard")
@@ -179,25 +177,6 @@ def clean_tool(name: str, killer: str, killed: str, damage_type: str) -> str:
         pass
 
     return name
-
-
-VEHICLE_TYPES = {
-    "PU_AI_CFP": "CFP",
-    "PU_AI_CIV": "Civilian",
-    "PU_AI_CRIM": "Criminal",
-    "PU_AI_CRIM_QIG": "Criminal",
-    "PU_AI_CRIM_ScatterGun": "Criminal",
-    "PU_AI_NineTails": "NineTails",
-    "PU_AI_NT": "NineTails",
-    "PU_AI_NT_NonLethal": "NineTails",
-    "PU_AI_PIR": "Pirate",
-    "EA_AI_PIR": "Pirate",
-    "PU_AI_PIR_Elite": "Elite Pirate",
-    "EA_AI_PIR_Elite": "Elite Pirate",
-    "PU_AI_UEE": "UEE",
-    "PU_AI_Xenothreat": "Xenothreat",
-    "EA_AI_VAN_Alpha": "Vanduul",
-}
 
 
 def get_vehicle_type(name: str) -> str:
