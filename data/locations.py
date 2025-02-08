@@ -54,6 +54,8 @@ LOCATIONS = {
     "P5_L4": "Rod's Fuel 'N Supplies",
     "P5_L5": "Rat's Nest",
     "p5l2_contestedzone": "Contested Zone, Orbituary",
+    "P6_L1": "PYR6 L1",
+    "P6_L2": "PYR6 L2",
     "P6_L3": "Endgame",
     "P6_L4": "Dudley & Daughters",
     "P6_L5": "Megumi Refueling",

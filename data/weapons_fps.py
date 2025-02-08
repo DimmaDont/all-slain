@@ -88,6 +88,7 @@ WEAPONS_FPS = {
     "gmni_sniper_ballistic_01_imp01": 'A03 "Wildwood" Sniper Rifle',
     "gmni_sniper_ballistic_01_urban01": 'A03 "Lodestone" Sniper Rifle',
     "gmni_sniper_ballistic_01": "A03 Sniper Rifle",
+    "grin_multitool_01_default_cutter_AI": "Multi-Tool (AI OxyTorch Cutter)",
     "hdgw_pistol_ballistic_01_engraved01": "Salvo Saeed Frag Pistol",
     "hdgw_pistol_ballistic_01_engraved02": "Salvo Esteban Frag Pistol",
     "hdgw_pistol_ballistic_01": "Salvo Frag Pistol",
