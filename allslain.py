@@ -24,7 +24,7 @@ LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 RE_VEHICLE_NAME = re.compile(r"(.*?)_?((?:PU|EA)_AI_.*)?_(\d{12,})")
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}_(.*?)(?:_(?:PU|EA)_.*)?_\d{12,}")
-
+RE_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}")
 RE_HAZARD = re.compile(r"(Radiation|Water)_Hazard")
 RE_HAZARD_NUM = re.compile(r"Hazard-\d{3}")
 # Seen: 000, 002, 003, 004
@@ -148,6 +148,9 @@ def clean_name(name: str) -> tuple[str, int]:
             return (WEAPONS_FPS[fps_name], 1)
     except KeyError:
         pass
+
+    if RE_DEBRIS.match(name):
+        return ("Debris", 1)
 
     return (name, 0)
 

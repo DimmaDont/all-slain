@@ -140,6 +140,7 @@ SHIPS = {
     "DRAK_Cutlass_Black_BIS2950": "Drake Cutlass Black (BIS2950)",
     "DRAK_Cutlass_Black_Exec_Military": "Cutlass Black Executive Military",
     "DRAK_Cutlass_Black_Exec_Stealth": "Cutlass Black Executive Stealth",
+    "DRAK_Cutlass_Black_Mission_PIR_Package": "Cutlass Black (Mission)",
     "DRAK_Cutlass_Black_ShipShowdown": "Drake Cutlass (BIS2949)",
     "DRAK_Cutlass_Black_Unmanned_NineTails": "Drake Cutlass Black (NineTails)",
     "DRAK_Cutlass_Black_Unmanned_Salvage": "Drake Cutlass Black (Salvage)",
