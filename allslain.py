@@ -9,7 +9,7 @@ from collections.abc import Generator
 from typing import Any, NoReturn
 
 from colorize import Color
-from data import LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP
+from data import ACTORS, LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP, VEHICLE_TYPES
 from log_parser import SCLogParser
 
 
@@ -22,11 +22,9 @@ LOADED_ITEM = {
 
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
-RE_VEHICLE_NAME = re.compile(
-    r"(.*?)_?((?:EA|PU)_AI_(?:CFP|CIV|CRIM(?:_QIG|_ScatterGun)?|NineTails|NT(?:_NonLethal)?|PIR(?:_Elite)?|UEE|VAN_Alpha|Xenothreat))?_(\d{12,})"
-)
+RE_VEHICLE_NAME = re.compile(r"(.*?)_?((?:PU|EA)_AI_.*)?_(\d{12,})")
 RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}_(.*?)(?:_(?:PU|EA)_.*)?_\d{12,}")
-
+RE_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}")
 RE_HAZARD = re.compile(r"(Radiation|Water)_Hazard")
 RE_HAZARD_NUM = re.compile(r"Hazard-\d{3}")
 # Seen: 000, 002, 003, 004
@@ -59,8 +57,17 @@ def follow(f: TextIOWrapper) -> Generator[str, Any, NoReturn]:
 PATTERN_ID = re.compile(r"([\w-]+)_\d{12,}")
 
 
-def remove_id(name: str) -> str:
+def strip_id(name: str) -> str:
     if match := PATTERN_ID.match(name):
+        return match.group(1)
+    return name
+
+
+PATTERN_ACTOR_VARIANT = re.compile(r"([\w-]+)_\d{2}")
+
+
+def strip_actor_variant(name: str) -> str:
+    if match := PATTERN_ACTOR_VARIANT.match(name):
         return match.group(1)
     return name
 
@@ -108,33 +115,12 @@ def clean_name(name: str) -> tuple[str, int]:
     """
     if name == "unknown":
         return (name, 1)
-    if name.startswith("PU_Human_Enemy_"):
-        name_split = name.split("_")
-        return ("_".join(name_split[5:7]), 1)
-    if name.startswith("PU_Human-"):
-        name_split = re.split(r"[_-]+", name)
-        return ("_".join(name_split[2:6]), 1)
-    if name.startswith("NPC_Archetypes-Human-"):
-        name_split = re.split(r"[_-]+", name)
-        return ("_".join(name_split[3:7]), 1)
-    if name.startswith("NPC_Archetypes-"):
-        return (name[: name.rindex("_")].split("-")[-1].replace("-", "_"), 1)
-    if name.startswith("Kopion_"):
-        return ("Kopion", 1)
-    if name.startswith("PU_Pilots-"):
-        name_split = re.split(r"[_-]+", name)
-        return ("_".join(["Pilot", *name_split[3:6]]), 1)
-    if name.startswith("AIModule_Unmanned_PU_SecurityNetwork_"):
-        return ("NPC Security", 1)
-    if name.startswith("AIModule_Unmanned_PU_Advocacy_"):
-        return ("NPC UEE Security", 1)
-    # Some cases from Pyro observed:
-    if "Pilot_Criminal_Pilot" in name:
-        return ("NPC Pilot", 1)
-    if "Pilot_Criminal_Gunner" in name:
-        return ("NPC Gunner", 1)
-    if "pyro_outlaw" in name:
-        return ("NPC Criminal", 1)
+
+    try:
+        actor_name = strip_actor_variant(strip_id(name))
+        return (ACTORS[actor_name], 1)
+    except KeyError:
+        pass
 
     if hazard := RE_HAZARD.match(name):
         return (f"{hazard[1]} Hazard", 1)
@@ -143,8 +129,7 @@ def clean_name(name: str) -> tuple[str, int]:
 
     if name == "Nova-01":
         return ("Nova", 1)
-    if name.startswith("Quasigrazer_"):
-        return ("Quasigrazer", 1)
+
     # fun fact, kill messages aren't logged for maroks
 
     if RE_ASTEROID.match(name):
@@ -159,10 +144,13 @@ def clean_name(name: str) -> tuple[str, int]:
     # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
     # KILL: behr_pistol_ballistic_01_123456789012 killed Headhunters_techie NPC with a unknown in an Unknown Surface Facility
     try:
-        if (fps_name := remove_id(name)) != name:
+        if (fps_name := strip_id(name)) != name:
             return (WEAPONS_FPS[fps_name], 1)
     except KeyError:
         pass
+
+    if RE_DEBRIS.match(name):
+        return ("Debris", 1)
 
     return (name, 0)
 
@@ -192,25 +180,6 @@ def clean_tool(name: str, killer: str, killed: str, damage_type: str) -> str:
         pass
 
     return name
-
-
-VEHICLE_TYPES = {
-    "PU_AI_CFP": "CFP",
-    "PU_AI_CIV": "Civilian",
-    "PU_AI_CRIM": "Criminal",
-    "PU_AI_CRIM_QIG": "Criminal",
-    "PU_AI_CRIM_ScatterGun": "Criminal",
-    "PU_AI_NineTails": "NineTails",
-    "PU_AI_NT": "NineTails",
-    "PU_AI_NT_NonLethal": "NineTails",
-    "PU_AI_PIR": "Pirate",
-    "EA_AI_PIR": "Pirate",
-    "PU_AI_PIR_Elite": "Elite Pirate",
-    "EA_AI_PIR_Elite": "Elite Pirate",
-    "PU_AI_UEE": "UEE",
-    "PU_AI_Xenothreat": "Xenothreat",
-    "EA_AI_VAN_Alpha": "Vanduul",
-}
 
 
 def get_vehicle_type(name: str) -> str:
