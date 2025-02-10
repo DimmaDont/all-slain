@@ -1,26 +1,25 @@
-#!/usr/bin/env python3
 import unittest
 
-from allslain import (
+from allslain import AllSlain
+from functions import (
     clean_location,
     clean_name,
-    find_game_log,
-    get_vehicle,
-    LOG_ENCODING,
-    LOG_NEWLINE,
-    RE_VEHICLE_NAME,
     strip_id,
+    get_vehicle,
+    RE_VEHICLE_NAME,
 )
 
 
-@unittest.skipUnless(find_game_log(), "No game logs are available.")
+@unittest.skipUnless(AllSlain.find_game_log(), "No game logs are available.")
 class TestLogReading(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.log = find_game_log()
+        cls.log = AllSlain.find_game_log()
 
     def test_log_decode(self):
-        with open(self.log, "r", encoding=LOG_ENCODING, newline=LOG_NEWLINE) as f:
+        with open(
+            self.log, "r", encoding=AllSlain.LOG_ENCODING, newline=AllSlain.LOG_NEWLINE
+        ) as f:
             f.read()
 
 
