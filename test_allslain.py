@@ -1,13 +1,7 @@
 import unittest
 
 from allslain import AllSlain
-from functions import (
-    clean_location,
-    clean_name,
-    strip_id,
-    get_vehicle,
-    RE_VEHICLE_NAME,
-)
+from functions import RE_VEHICLE_NAME, clean_location, clean_name, get_vehicle, strip_id
 
 
 @unittest.skipUnless(AllSlain.find_game_log(), "No game logs are available.")

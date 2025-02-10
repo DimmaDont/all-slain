@@ -1,6 +1,6 @@
 import re
 
-from data import ACTORS, LOCATIONS, SHIPS, WEAPONS_FPS, WEAPONS_SHIP, VEHICLE_TYPES
+from data import ACTORS, LOCATIONS, SHIPS, VEHICLE_TYPES, WEAPONS_FPS, WEAPONS_SHIP
 
 
 RE_ASTEROID = re.compile(r"OscillationSimple-\d{3}")

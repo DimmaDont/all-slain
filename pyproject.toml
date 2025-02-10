@@ -2,3 +2,7 @@
 
 [tool.black]
 target-version = ['py310', 'py311', 'py312', 'py313']
+
+[tool.isort]
+lines_after_imports = 2
+profile = "black"

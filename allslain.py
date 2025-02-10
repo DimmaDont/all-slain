@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+import os
+import time
 from argparse import ArgumentParser
 from collections.abc import Generator
 from io import TextIOWrapper
-import os
-import time
 from typing import Any
 
 from colorize import Color
