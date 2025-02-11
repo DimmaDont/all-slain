@@ -6,6 +6,7 @@ LOCATIONS = {
     "Area18_central-001": "Area18 Central, Area18, ArcCorp, Stanton",
     "hangar_01": "PYAM-EXHANG-0-1 Hangar",
     "hangar_02": "PYAM-EXHANG-0-1 Hangar",
+    "hangar_03": "PYAM-EXHANG-0-1 Hangar",
     "jumppoint_pyro_stanton": "Stanton Gateway, Pyro",
     "OOC_JumpPoint_stanton_magnus": "Magnus Gateway, Stanton",
     "OOC_JumpPoint_stanton_pyro": "Pyro Gateway, Stanton",

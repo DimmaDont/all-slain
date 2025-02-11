@@ -68,6 +68,8 @@ SHIPS = {
     "ANVL_Hornet_F7C_Wildfire": "Anvil F7C Hornet Wildfire Mk I",
     "ANVL_Hornet_F7C": "Anvil F7C Hornet Mk I",
     "ANVL_Hornet_F7CM_Heartseeker": "Anvil F7C-M Hornet Heartseeker Mk I",
+    "ANVL_Hornet_F7CM_Mk2_Heartseeker": "Anvil F7C-M Hornet Heartseeker Mk II",
+    "ANVL_Hornet_F7CM_Mk2": "Anvil F7C-M Super Hornet Mk II",
     "ANVL_Hornet_F7CM": "Anvil F7C-M Super Hornet Mk I",
     "ANVL_Hornet_F7CR_Mk2": "Anvil F7C-R Hornet Tracker Mk II",
     "ANVL_Hornet_F7CR": "Anvil F7C-R Hornet Tracker Mk I",
