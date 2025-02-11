@@ -1,4 +1,5 @@
 from handlers import (
+    Branch,
     Cet,
     Connected,
     Connecting,
@@ -20,9 +21,9 @@ from state import State
 
 class LogParser:
     def __init__(self) -> None:
-        self.state = State()
-
+        self.state = State({})
         self.handlers: dict[str, Handler] = {
+            "BRANCH": Branch(self.state),
             "CET": Cet(self.state),
             "KILLP": KillP(self.state),
             "KILLV": KillV(self.state),
@@ -38,6 +39,7 @@ class LogParser:
             "QUIT": Quit(self.state),
             "QUANTUM": Quantum(self.state),
         }
+        self.state.handlers = self.handlers
 
     def find_match(self, line: str):
         for event_type, handler in self.handlers.items():

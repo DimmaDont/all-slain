@@ -1,3 +1,4 @@
+from .branch import Branch
 from .cet import Cet
 from .connected import Connected
 from .connecting import Connecting
@@ -16,6 +17,7 @@ from .spawn import Spawn
 
 
 __all__ = [
+    "Branch",
     "Cet",
     "Connected",
     "Connecting",
