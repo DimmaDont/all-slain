@@ -1,9 +1,9 @@
 from .actors import ACTORS
 from .locations import LOCATIONS
 from .ships import SHIPS
+from .vehicle_types import VEHICLE_TYPES
 from .weapons_fps import WEAPONS_FPS
 from .weapons_ship import WEAPONS_SHIP
-from .vehicle_types import VEHICLE_TYPES
 
 
 __all__ = [

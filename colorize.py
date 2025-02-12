@@ -16,8 +16,9 @@ Methods:
     rgb: Colorizes text using RGB color values.
 """
 
-from enum import IntEnum
 import re
+from enum import IntEnum
+
 
 try:
     from typing import Self  # 3.11+

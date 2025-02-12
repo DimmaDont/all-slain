@@ -1,13 +1,15 @@
-#!/usr/bin/env python3
 import unittest
 
-from allslain import LOG_INCAP_CAUSE
-from log_parser import SCLogParser
+from handlers.incap import LOG_INCAP_CAUSE
+from log_parser import LogParser
 
 
 class TestLogKillRegex(unittest.TestCase):
+    def setUp(self):
+        self.parser = LogParser()
+
     def test_log_kill_regex(self):
-        match = SCLogParser.find_match(
+        match = self.parser.find_match(
             "<2024-12-23T00:00:00.000Z> [Notice] <Actor Death> CActor::Kill: 'PU_Human-NineTails-Grunt-Male-Grunt_10_123456789012' [123456789012] in zone 'OOC_Stanton_3a_Lyria' killed by 'Player-123_Name' [123456789012] using 'GATS_BallisticGatling_Mounted_S1_123456789012' [Class GATS_BallisticGatling_Mounted_S1] with damage type 'Bullet' from direction x: -0.123456, y: -0.123456, z: 0.123456 [Team_ActorTech][Actor]"
         )
         self.assertIsNotNone(match)
@@ -26,8 +28,11 @@ class TestLogKillRegex(unittest.TestCase):
 
 
 class TestLogVKillRegex(unittest.TestCase):
+    def setUp(self):
+        self.parser = LogParser()
+
     def test_log_vkill_regex(self):
-        match = SCLogParser.find_match(
+        match = self.parser.find_match(
             "<2024-12-23T00:00:00.000Z> [Notice] <Vehicle Destruction> CVehicle::OnAdvanceDestroyLevel: Vehicle 'MRAI_Guardian_QI_123456789012' [123456789012] in zone 'OOC_Stanton_3a_Lyria' [pos x: -200000.000000, y: 100000.000000, z: 60000.000000 vel x: 0.000000, y: 0.000000, z: 0.000000] driven by 'unknown' [0] advanced from destroy level 1 to 2 caused by 'Player-123_Name' [123456789012] with 'Combat' [Team_VehicleFeatures][Vehicle]"
         )
         self.assertIsNotNone(match)
@@ -44,8 +49,11 @@ class TestLogVKillRegex(unittest.TestCase):
 
 
 class TestLogRespawnRegex(unittest.TestCase):
+    def setUp(self):
+        self.parser = LogParser()
+
     def test_log_respawn_regex(self):
-        match = SCLogParser.find_match(
+        match = self.parser.find_match(
             "<2024-12-23T00:00:00.000Z> [Notice] <Corpse> Player 'Player-123_Name' <remote client>: DoesLocationContainHospital: Searching landing zone location \"@Stanton1b_Aberdeen_Prison\" for the closest hospital. [Team_ActorTech][Actor]"
         )
         self.assertIsNotNone(match)
@@ -59,7 +67,8 @@ class TestLogRespawnRegex(unittest.TestCase):
 
 class TestLogIncapRegexSingleCause(unittest.TestCase):
     def setUp(self):
-        match = SCLogParser.find_match(
+        self.parser = LogParser()
+        match = self.parser.find_match(
             "<2024-12-18T00:00:00.000Z> Logged an incap.! nickname: Player-123_Name, causes: [Bleed (0.350000 damage)]"
         )
         self.assertIsNotNone(match)
@@ -80,7 +89,8 @@ class TestLogIncapRegexSingleCause(unittest.TestCase):
 
 class TestLogIncapRegexMultipleCause(unittest.TestCase):
     def setUp(self):
-        match = SCLogParser.find_match(
+        self.parser = LogParser()
+        match = self.parser.find_match(
             "<2024-12-22T00:00:00.000Z> Logged an incap.! nickname: Player-123_Name, causes: [DepressurizationDamage (3.999999 damage), SuffocationDamage (1.999999 damage)]"
         )
         self.assertIsNotNone(match)
