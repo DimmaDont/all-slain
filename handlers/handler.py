@@ -18,6 +18,9 @@ class Handler(ABC):
     def __call__(self, data: Match[str]) -> None:
         when = data[1].replace("T", " ")
         print(f"{when}{self.header_text}: {self.format(data)}")
+        self.after(data)
 
     @abstractmethod
     def format(self, data: Match[str]) -> str: ...
+
+    def after(self, data: Match[str]) -> None: ...

@@ -14,3 +14,7 @@ class QuitLobby(Handler):
     def format(self, data) -> str:
         whom = Color.GREEN(data[2])
         return f"{whom} has quit the game session."
+
+    def after(self, _):
+        # Move CET to beginning
+        self.state.handlers = {"CET": None} | self.state.handlers
