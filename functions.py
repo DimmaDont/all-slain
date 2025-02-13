@@ -152,8 +152,7 @@ def get_vehicle_type(name: str) -> str:
     return VEHICLE_TYPES.get(name, name)
 
 
-RE_VEHICLE_NAME = re.compile(r"(.*?)_?((?:PU|EA)_AI_.*)?_(\d{12,})")
-RE_SHIP_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}_(.*?)(?:_(?:PU|EA)_.*)?_\d{12,}")
+RE_VEHICLE_NAME = re.compile(r"_?(.*?)_?((?:PU|EA)_AI_.*)?_(\d{12,})")
 
 
 def get_vehicle(name: str) -> tuple[str, bool]:
@@ -163,27 +162,32 @@ def get_vehicle(name: str) -> tuple[str, bool]:
         - name: the name of the ship if found
         - found: whether the vehicle was found
     """
-    match = RE_VEHICLE_NAME.match(name)
-    if not match:
+    matches = RE_VEHICLE_NAME.findall(name)
+    if not matches:
         # Is it a moving asteroid?...
         asteroid = RE_ASTEROID.match(name)
         if asteroid:
             return ("Asteroid", True)
         return (name, False)
-    vehicle_name = match[1]
-    vehicle_type = get_vehicle_type(match[2]) + " " if match[2] else ""
+
+    if len(matches) == 2:
+        # Is it debris?
+        debris = matches[0][0] == "SCItem_Debris"
+        if debris:
+            vehicle_type = (
+                get_vehicle_type(matches[1][1]) + " " if matches[1][1] else ""
+            )
+            try:
+                return (vehicle_type + SHIPS[matches[1][0]] + " (Debris)", True)
+            except KeyError:
+                pass
+
+    vehicle_name = matches[0][0]
+    vehicle_type = get_vehicle_type(matches[0][1]) + " " if matches[0][1] else ""
 
     try:
         return (vehicle_type + SHIPS[vehicle_name], True)
     except KeyError:
         pass
-
-    # Is it debris?
-    debris = RE_SHIP_DEBRIS.match(name)
-    if debris:
-        try:
-            return (SHIPS[debris[1]] + " (Debris)", True)
-        except KeyError:
-            pass
 
     return (name, False)
