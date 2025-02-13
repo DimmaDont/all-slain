@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import logging
 import os
 import time
 from argparse import ArgumentParser
@@ -28,19 +29,32 @@ class AllSlain:
         return None
 
     def follow(self, f: TextIOWrapper) -> Generator[str, Any, None]:
-        while True:
-            if line := f.readline():
-                yield line
-            else:
-                if self.args.quit_on_eof:
-                    return
-                time.sleep(1)
+        if self.args.quit_on_eof:
+            while line := f.readline():
+                yield line.rstrip(self.LOG_NEWLINE)
+        else:
+            while True:
+                if line := f.readline():
+                    yield line.rstrip(self.LOG_NEWLINE)
+                else:
+                    time.sleep(1)
 
     def __init__(self):
         parser = ArgumentParser()
         parser.add_argument("file", nargs="?")
-        parser.add_argument("-q", "--quit-on-eof", action="store_true")
+        parser.add_argument("-d", "--debug", action="store_true")
+        parser.add_argument(
+            "-q",
+            "--quit-on-eof",
+            action="store_true",
+            help="quit when end of log is reached",
+        )
+        parser.add_argument("-v", "--verbose", action="store_true")
         self.args = parser.parse_args()
+
+        if self.args.debug:
+            logging.getLogger().setLevel(logging.DEBUG)
+            self.args.verbose = True
 
     def run(self) -> None:
         # Set window title and cursor shape
@@ -57,7 +71,7 @@ class AllSlain:
             )
             return
 
-        log_parser = LogParser()
+        log_parser = LogParser(self.args)
         try:
             with open(
                 filename, "r", encoding=self.LOG_ENCODING, newline=self.LOG_NEWLINE

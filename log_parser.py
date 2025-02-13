@@ -1,3 +1,5 @@
+from argparse import Namespace
+
 from handlers import (
     Branch,
     Cet,
@@ -20,8 +22,8 @@ from state import State
 
 
 class LogParser:
-    def __init__(self) -> None:
-        self.state = State({})
+    def __init__(self, args: Namespace | None = None) -> None:
+        self.state = State(args) if args else State()
         self.handlers: dict[str, Handler] = {
             "BRANCH": Branch(self.state),
             "CET": Cet(self.state),
@@ -40,10 +42,13 @@ class LogParser:
             "QUANTUM": Quantum(self.state),
         }
         self.state.handlers = self.handlers
+        self.state.count = {p[0]: 0 for p in self.handlers.items()}
 
     def find_match(self, line: str):
         for event_type, handler in self.state.handlers.items():
             if match := handler.pattern.match(line):
+                logging.debug("%s %s", event_type, line)
+                self.state.count[event_type] += 1
                 return (event_type, match)
         return (False, None)
 

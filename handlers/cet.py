@@ -45,7 +45,7 @@ class Cet(Handler):
         running_time_text = Color[running_time_color](
             str(timedelta(seconds=running_time))
         )
-        if self.state.is_prev_line_cet:
+        if self.state.is_prev_line_cet and not self.state.args.verbose:
             # Move cursor up one line and clear it
             print("\x1b[1A\x1b[2K", end="")
         return f"{which[0]}: {step_num.rjust(2)}/{self.state.cet_steps} {Color.CYAN(self.step)}:{Color.CYAN(self.taskname)} {which[1]} {running_time_text}"
