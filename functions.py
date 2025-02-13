@@ -102,7 +102,7 @@ def clean_name(name: str) -> tuple[str, int]:
     if found:
         return (vehicle_name, 1)
 
-    # killer can be weapons too
+    # killer can be weapons
     # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
     # KILL: behr_pistol_ballistic_01_123456789012 killed Headhunters_techie NPC with a unknown in an Unknown Surface Facility
     try:
@@ -110,6 +110,10 @@ def clean_name(name: str) -> tuple[str, int]:
             return (WEAPONS_FPS[fps_name], 1)
     except KeyError:
         pass
+
+    # and items too, usually by Collision
+    # note: don't bother dumping the item list.
+    # there are a lot of items, and this only happens rarely.
 
     if RE_DEBRIS.match(name):
         return ("Debris", 1)

@@ -3,7 +3,6 @@ from handlers import (
     Cet,
     Connected,
     Connecting,
-    Handler,
     Incap,
     Jump,
     KillP,
@@ -16,6 +15,7 @@ from handlers import (
     Respawn,
     Spawn,
 )
+from handlers.handler import Handler
 from state import State
 
 
@@ -42,7 +42,7 @@ class LogParser:
         self.state.handlers = self.handlers
 
     def find_match(self, line: str):
-        for event_type, handler in self.handlers.items():
+        for event_type, handler in self.state.handlers.items():
             if match := handler.pattern.match(line):
                 return (event_type, match)
         return (False, None)
@@ -52,6 +52,6 @@ class LogParser:
         if not event_type:
             return
 
-        self.handlers[event_type](match)
+        self.state.handlers[event_type](match)
 
-        self.state.is_prev_line_cet = "CET" == event_type
+        self.state.is_prev_line_cet = event_type == "CET"

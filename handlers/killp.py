@@ -15,7 +15,7 @@ class KillP(Handler):
     def format(self, data) -> str:
         killed, is_killed_npc = clean_name(data[2])
         lp, location, location_type = clean_location(data[3])
-        is_ship = "ship" == location_type
+        is_ship = location_type == "ship"
         killer, is_killer_npc = clean_name(data[4])
         cause = clean_tool(data[5], data[4], data[2], data[6])
         if cause.startswith("suicide"):

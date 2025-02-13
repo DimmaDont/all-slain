@@ -17,6 +17,12 @@ class TestLogReading(unittest.TestCase):
             f.read()
 
 
+class TestCleanNameFunction(unittest.TestCase):
+    def test_clean_name_debris(self):
+        result, _ = clean_name("SCItem_Debris_123456789012")
+        self.assertEqual(result, "Debris")
+
+
 class TestRemoveIdFunction(unittest.TestCase):
     def test_remove_id_tooshort(self):
         result = strip_id("ASDF1234_1234")
