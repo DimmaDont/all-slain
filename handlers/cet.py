@@ -12,19 +12,19 @@ class Cet(Handler):
         r'<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <(ContextEstablisherTaskFinished|CContextEstablisherTaskLongWait)> establisher="\w+" message="[\w\s]+" taskname="([\w\.]+)" state=eCVS_(\w+)\((\d+)\) status="\w+" runningTime=(\d+\.\d).*'
     )
 
-    def format(self, log: re.Match[str]) -> str:
-        step_num = log[5]
+    def format(self, data) -> str:
+        step_num = data[5]
         which = (
             (
                 Color.GREEN("Complete") if step_num == "15" else "Complete",
                 "in",
             )
-            if log[2] == "ContextEstablisherTaskFinished"
+            if data[2] == "ContextEstablisherTaskFinished"
             else (Color.YELLOW("Busy".rjust(8)), "for")
         )
-        taskname = log[3]
-        step = log[4]
-        running_time = int(float(log[6]))
+        taskname = data[3]
+        step = data[4]
+        running_time = int(float(data[6]))
         if running_time > 300:
             running_time_color = "RED"
         elif running_time > 150:

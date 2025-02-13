@@ -11,5 +11,5 @@ class Quit(Handler):
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <SystemQuit> CSystem::Quit invoked .+"
     )
 
-    def format(self, _: re.Match) -> str:
+    def format(self, _) -> str:
         return "Game quit."

@@ -12,7 +12,7 @@ class Quantum(Handler):
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Quantum Navtarget> CSCItemQuantumDrive::RmMulticastOnQTToPoint : Local client user ([\w-]*)\[\d{12}\] received QT data for Entity:\w+_\d{12,}\[\d{12,}\] to Target (\w+).*"
     )
 
-    def format(self, log: re.Match) -> str:
-        name = Color.GREEN(log[2])
-        dest = Color.YELLOW(clean_location(log[3])[1])
+    def format(self, data) -> str:
+        name = Color.GREEN(data[2])
+        dest = Color.YELLOW(clean_location(data[3])[1])
         return f"{name} started quantum travel to {dest}"

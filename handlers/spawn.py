@@ -11,5 +11,5 @@ class Spawn(Handler):
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CSessionManager::OnClientSpawned\] Spawned!"
     )
 
-    def format(self, _: re.Match) -> str:
+    def format(self, _) -> str:
         return "Character spawned!"

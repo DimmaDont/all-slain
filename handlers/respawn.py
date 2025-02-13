@@ -12,8 +12,8 @@ class Respawn(Handler):
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Corpse> Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
     )
 
-    def format(self, log: re.Match) -> str:
+    def format(self, data) -> str:
         # datetime, player, location
-        whom = Color.GREEN(log[2])
-        _, where, _ = clean_location(log[3])
+        whom = Color.GREEN(data[2])
+        _, where, _ = clean_location(data[3])
         return f"{whom} from {Color.YELLOW(where)}"

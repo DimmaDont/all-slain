@@ -11,5 +11,5 @@ class Loading(Handler):
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[CGlobalGameUI::OpenLoadingScreen\] Request context transition to LoadingScreenView"
     )
 
-    def format(self, _: re.Match) -> str:
+    def format(self, _) -> str:
         return "Loading..."

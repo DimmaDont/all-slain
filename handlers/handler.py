@@ -1,5 +1,5 @@
-import re
 from abc import ABC, abstractmethod
+from re import Match, Pattern
 
 from colorize import Color
 from state import State
@@ -7,7 +7,7 @@ from state import State
 
 class Handler(ABC):
     header: tuple[str, Color, bool]
-    pattern: re.Pattern
+    pattern: Pattern
 
     def __init__(self, state: State):
         self.state = state
@@ -15,9 +15,9 @@ class Handler(ABC):
             self.header[0].rjust(self.state.header_width), bold=self.header[2]
         )
 
-    def __call__(self, log: re.Match[str]) -> None:
-        when = log[1].replace("T", " ")
-        print(f"{when}{self.header_text}: {self.format(log)}")
+    def __call__(self, data: Match[str]) -> None:
+        when = data[1].replace("T", " ")
+        print(f"{when}{self.header_text}: {self.format(data)}")
 
     @abstractmethod
-    def format(self, log: re.Match) -> str: ...
+    def format(self, data: Match[str]) -> str: ...

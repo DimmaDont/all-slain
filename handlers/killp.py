@@ -12,12 +12,12 @@ class KillP(Handler):
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([\w-]+)' \[\d+\] in zone '([\w-]+)' killed by '([\w-]+)' \[\d+\] using '[\w-]+' \[Class ([\w-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]"
     )
 
-    def format(self, log: re.Match) -> str:
-        killed, is_killed_npc = clean_name(log[2])
-        lp, location, location_type = clean_location(log[3])
+    def format(self, data) -> str:
+        killed, is_killed_npc = clean_name(data[2])
+        lp, location, location_type = clean_location(data[3])
         is_ship = "ship" == location_type
-        killer, is_killer_npc = clean_name(log[4])
-        cause = clean_tool(log[5], log[4], log[2], log[6])
+        killer, is_killer_npc = clean_name(data[4])
+        cause = clean_tool(data[5], data[4], data[2], data[6])
         if cause.startswith("suicide"):
             return f"{Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
         if is_killer_npc and is_killed_npc:
