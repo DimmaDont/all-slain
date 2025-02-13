@@ -44,6 +44,12 @@ class AllSlain:
         parser.add_argument("file", nargs="?")
         parser.add_argument("-d", "--debug", action="store_true")
         parser.add_argument(
+            "-r",
+            "--replay",
+            action="store_true",
+            help="replays the log as if running live",
+        )
+        parser.add_argument(
             "-q",
             "--quit-on-eof",
             action="store_true",

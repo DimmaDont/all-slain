@@ -1,3 +1,6 @@
+import datetime
+import logging
+import time
 from argparse import Namespace
 
 from handlers import (
@@ -44,6 +47,10 @@ class LogParser:
         self.state.handlers = self.handlers
         self.state.count = {p[0]: 0 for p in self.handlers.items()}
 
+        self.delay: float = 0
+        self.now: datetime.datetime | None = None
+        self.prev: datetime.datetime | None = None
+
     def find_match(self, line: str):
         for event_type, handler in self.state.handlers.items():
             if match := handler.pattern.match(line):
@@ -56,6 +63,15 @@ class LogParser:
         event_type, match = self.find_match(line)
         if not event_type:
             return
+
+        if self.state.args.replay:
+            self.now = datetime.datetime.fromisoformat(match[1])
+            self.delay = (
+                self.now - (self.prev if self.prev else self.now)
+            ).total_seconds()
+            logging.debug("%s %s pausing for %f", self.prev, self.now, self.delay)
+            self.prev = self.now
+            time.sleep(self.delay)
 
         self.state.handlers[event_type](match)
 
