@@ -74,4 +74,4 @@ class LogParser:
 
         self.state.handlers[event_type](match)
 
-        self.state.is_prev_line_cet = event_type == "CET"
+        self.state.prev_event = (event_type, match)

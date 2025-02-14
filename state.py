@@ -1,5 +1,6 @@
 from argparse import Namespace
 from dataclasses import dataclass, field
+from re import Match
 from typing import TYPE_CHECKING
 
 
@@ -14,4 +15,4 @@ class State:
     count: dict[str, int] = field(default_factory=dict)
     handlers: dict[str, "Handler"] = field(default_factory=dict)
     header_width = 9
-    is_prev_line_cet: bool = False
+    prev_event: tuple[str, Match[str]] | None = None
