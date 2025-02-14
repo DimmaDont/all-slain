@@ -50,6 +50,9 @@ jobs:
           cache: pip
       - name: Install Dependencies
         shell: bash
+        run: pip install -r requirements.txt
+      - name: Install PyInstaller
+        shell: bash
         run: pip install pyinstaller
       - name: Package Application
         shell: bash
