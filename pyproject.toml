@@ -1,3 +1,21 @@
+[project]
+name = "all-slain"
+
+dynamic = ["version"]
+description = "Star Citizen Game Log Event Viewer"
+
+readme = "README.md"
+requires-python = ">=3.10"
+
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.urls]
+homepage = "https://github.com/DimmaDont/all-slain"
+source = "https://github.com/DimmaDont/all-slain"
+issues = "https://github.com/DimmaDont/all-slain/issues"
+
+
 [tool]
 
 [tool.black]

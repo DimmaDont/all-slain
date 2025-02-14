@@ -25,6 +25,23 @@ For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 > [!TIP]
 > Previous log files can be found in the `logbackups` folder.
 
+<details>
+<summary><b><code>allslain.py --help</code></b></summary>
+
+```
+usage: allslain.py [-h] [-d] [-r] [-q] [-v] [file]
+positional arguments:
+  file
+
+options:
+  -h, --help         show this help message and exit
+  -d, --debug
+  -r, --replay       replays the log as if running live
+  -q, --quit-on-eof  quit when end of log is reached
+  -v, --verbose
+```
+</details>
+
 ## Game Log Version Compatibility
 Compatible with `LIVE` (`4.0.1`).\
 Originally developed for `4.0_PREVIEW`.\

@@ -1,7 +1,7 @@
 **/__pycache__
-allslain.dist/
 **/*.swp
 dist/
 build/
 allslain.spec
 tools/*.json
+venv/

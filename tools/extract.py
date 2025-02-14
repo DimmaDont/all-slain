@@ -116,6 +116,7 @@ def main(directory: str):
                         item["className"].startswith("crlf_medgun_"),
                         item["className"].startswith("grin_multitool_"),
                         item["className"].startswith("sasu_pistol_toy_"),
+                        "_test_" in item["className"],
                     ]
                 ):
                     continue

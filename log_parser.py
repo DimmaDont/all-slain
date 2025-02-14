@@ -54,7 +54,6 @@ class LogParser:
     def find_match(self, line: str):
         for event_type, handler in self.state.handlers.items():
             if match := handler.pattern.match(line):
-                logging.debug("%s %s", event_type, line)
                 self.state.count[event_type] += 1
                 return (event_type, match)
         return (False, None)

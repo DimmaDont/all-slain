@@ -69,7 +69,8 @@ jobs:
         if: ${{ inputs.release && !inputs.latest }}
         with:
           files: ${{ inputs.output }}
-      - id: vars
+      - name: Get commit hash
+        id: vars
         if: ${{ inputs.release && inputs.latest }}
         shell: bash
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT

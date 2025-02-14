@@ -15,9 +15,10 @@ def main(game_xml: str, outfile):
             if match := p.match(line):
                 classname = str(match[1])
                 vehicle_types[classname] = classname
+    vehicle_types = dict(sorted(vehicle_types.items(), key=lambda x: x[0].lower()))
     with open(outfile, "w", encoding="latin-1") as f:
         f.write("VEHICLE_TYPES = " + json.dumps(vehicle_types, indent=4) + "\n")
 
 
 if __name__ == "__main__":
-    main(R"..\\LIVE_EXTRACT\\Data\\Game2.xml", "data\\vehicle_types1.py")
+    main(R"..\\LIVE_EXTRACT\\Data\\Game2.xml", "data\\vehicle_types.py")

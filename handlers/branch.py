@@ -16,11 +16,13 @@ class Branch(Handler):
         # Remove from handlers after use -- appears only once per log file
         del self.state.handlers["BRANCH"]
 
+        version = data[2].rsplit("-", maxsplit=1)[-1]
+
         # Quantum is only available for 4.0.0
-        if data[2] != "sc-alpha-4.0.0":
+        if version != "4.0.0":
             del self.state.handlers["QUANTUM"]
 
-        if data[2] == "sc-alpha-4.0.2":
+        if version == "4.0.2":
             # 4.0.2 added a ReadyToReplicate step
             self.state.cet_steps = 16
         else:

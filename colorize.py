@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 This module provides a class for colorizing terminal output using virtual
 terminal sequences.
