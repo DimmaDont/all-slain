@@ -61,13 +61,13 @@ class AllSlain:
             action=UpdateCheck,
             help="check for updates and exit",
         )
-        parser.add_argument("-v", "--verbose", action="store_true")
+        parser.add_argument("-v", "--verbose", action="count")
         parser.add_argument("--version", action="version", version=__version__)
         self.args = parser.parse_args()
 
         if self.args.debug:
             logging.getLogger().setLevel(logging.DEBUG)
-            self.args.verbose = True
+            self.args.verbose = 1
 
     def run(self) -> None:
         # Set window title and cursor shape
