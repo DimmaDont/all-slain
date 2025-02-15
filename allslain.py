@@ -8,7 +8,7 @@ from typing import Any
 
 from colorize import Color
 from log_parser import LogParser
-from version import __version__
+from version import UpdateCheck, __version__
 
 
 class AllSlain:
@@ -54,6 +54,12 @@ class AllSlain:
             "--quit-on-eof",
             action="store_true",
             help="quit when end of log is reached",
+        )
+        parser.add_argument(
+            "-u",
+            "--check-for-updates",
+            action=UpdateCheck,
+            help="check for updates and exit",
         )
         parser.add_argument("-v", "--verbose", action="store_true")
         parser.add_argument("--version", action="version", version=__version__)
