@@ -35,19 +35,33 @@ class AllSlain:
             decrypted = crypt.decrypt(encrypted_data)
             data = json.loads(decrypted)
 
+            available = [
+                channel["id"]
+                for channel in [
+                    game for game in data["library"]["available"] if game["id"] == "SC"
+                ][0]["channels"]
+            ]
             install_dirs = {
                 game["channelId"]: game["installDir"]
                 for game in data["library"]["settings"]
-                if game["gameId"] == "SC"
+                if game["gameId"] == "SC" and game["channelId"] in available
             }
-            sc = [game for game in data["library"]["installed"] if game["id"] == "SC"][0]  # fmt: skip
+
+            # `installed` channels are not guaranteed to have a "installDir" key, hence `install_dirs`
+            installed = {
+                channel["id"]: channel
+                for channel in [
+                    game for game in data["library"]["installed"] if game["id"] == "SC"
+                ][0]["channels"]
+                if channel["id"] in available
+            }
 
             # Option is saved immediately after selection in launcher, but check modification times anyway.
             # channel_id = [i["channelId"] for i in data["library"]["defaults"] if i["gameId"] == "SC"][0]
 
             files = {}
-            for channel in sc["channels"]:
-                file = f"{channel['libraryFolder']}{install_dirs.get(channel['id'])}\\{channel['id']}\\Game.log"
+            for channel in available:
+                file = f"{installed[channel]['libraryFolder']}{install_dirs.get(channel)}\\{channel}\\Game.log"
                 try:
                     files[file] = os.path.getmtime(file)
                 except OSError:
