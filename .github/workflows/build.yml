@@ -17,4 +17,4 @@ jobs:
       output: dist/allslain.exe
       attest: false
       release: true
-      latest: true
+      tag_name: latest
