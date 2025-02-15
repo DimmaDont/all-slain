@@ -35,6 +35,9 @@ jobs:
   build:
     name: PyInstaller
     runs-on: ${{ inputs.os }}
+    defaults:
+      run:
+        shell: bash
     permissions:
       id-token: write
       contents: write
@@ -49,13 +52,13 @@ jobs:
           architecture: x64
           cache: pip
       - name: Install Dependencies
-        shell: bash
         run: pip install -r requirements.txt
       - name: Install PyInstaller
-        shell: bash
         run: pip install pyinstaller
+      - name: Set version number
+        if: ${{ inputs.release && !inputs.latest }}
+        run: sed -i 's/VERSION_HERE/${{ github.ref_name }}/' version.py
       - name: Package Application
-        shell: bash
         run: pyinstaller --onefile ${{ inputs.file }} --icon ${{ inputs.icon }}
       - name: Attest
         uses: actions/attest-build-provenance@v2
@@ -75,7 +78,6 @@ jobs:
       - name: Get commit hash
         id: vars
         if: ${{ inputs.release && inputs.latest }}
-        shell: bash
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Release
         uses: softprops/action-gh-release@v2

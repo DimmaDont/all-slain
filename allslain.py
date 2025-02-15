@@ -8,6 +8,7 @@ from typing import Any
 
 from colorize import Color
 from log_parser import LogParser
+from version import __version__
 
 
 class AllSlain:
@@ -55,6 +56,7 @@ class AllSlain:
             help="quit when end of log is reached",
         )
         parser.add_argument("-v", "--verbose", action="store_true")
+        parser.add_argument("--version", action="version", version=__version__)
         self.args = parser.parse_args()
 
         if self.args.debug:
