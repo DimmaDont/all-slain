@@ -6,6 +6,9 @@ from crypt_sindresorhus_conf import CryptSindresorhusConf
 from colorize import Color
 
 
+KEY = b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4="
+
+
 def get_log() -> str | None:
     """
     Returns: Path of the latest game log.
@@ -16,9 +19,7 @@ def get_log() -> str | None:
         ) as f:
             encrypted_data = f.read()
 
-        crypt = CryptSindresorhusConf(
-            b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4=", encrypted_data[:16]
-        )
+        crypt = CryptSindresorhusConf(KEY, encrypted_data[:16])
         decrypted = crypt.decrypt(encrypted_data)
         data = json.loads(decrypted)
 
