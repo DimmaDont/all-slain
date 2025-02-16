@@ -9,13 +9,14 @@ from .handler import Handler
 class Cet(Handler):
     header = ("LOAD", Color.WHITE, True)
     pattern = re.compile(
-        r'<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <(ContextEstablisherTaskFinished|CContextEstablisherTaskLongWait)> establisher="\w+" message="[\w\s]+" taskname="([\w\.]+)" state=eCVS_(\w+)\((\d+)\) status="\w+" runningTime=(\d+\.\d+) numRuns=\d+ map="megamap" gamerules="(.*?)" .*'
+        # dashes in session id when establisher is CReplicationModel
+        r'<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[(?:Notice|Error)\] <C?ContextEstablisherTask(Finished|LongWait|Failed)> establisher="\w+" message="[\w\s]+" taskname="([\w\.]+)" state=eCVS_(\w+)\((\d+)\) status="[\w\s\d\.]+" runningTime=(\d+\.\d+) numRuns=\d+ map="megamap" gamerules="(.*?)" .*'
     )
 
     def format(self, data) -> str:
         step_num = data[5]
-        which = (
-            (
+        if data[2] == "Finished":
+            which = (
                 (
                     Color.GREEN("Complete")
                     if step_num == str(self.state.cet_steps)
@@ -23,9 +24,10 @@ class Cet(Handler):
                 ),
                 "in",
             )
-            if data[2] == "ContextEstablisherTaskFinished"
-            else (Color.YELLOW("Busy".rjust(8)), "for")
-        )
+        elif data[2] == "LongWait":
+            which = (Color.YELLOW("Busy".rjust(8)), "for")
+        else:  # ContextEstablisherTaskFailed
+            which = (Color.RED("Failed".rjust(8)), "after")
 
         taskname = data[3]
         step = data[4]
