@@ -54,7 +54,7 @@ def get_log() -> str | None:
                 files[file] = os.path.getmtime(file)
             except OSError:
                 pass
-        return max(files, key=files.__getitem__)
+        return max(files, key=files.__getitem__) if files else None
     except (OSError, LookupError, ValueError, json.JSONDecodeError) as e:
         print(
             f"Failed to find game installation directory or log files: {Color.RED(str(e))}"
