@@ -31,16 +31,20 @@ For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 <summary><b><code>allslain.exe --help</code></b></summary>
 
 ```
-usage: allslain.exe [-h] [-d] [-r] [-q] [-v] [file]
+usage: allslain.exe [-h] [-d] [-r] [-q] [-u] [-v] [--version] [file]
+
 positional arguments:
   file
 
 options:
-  -h, --help         show this help message and exit
+  -h, --help            show this help message and exit
   -d, --debug
-  -r, --replay       replays the log as if running live
-  -q, --quit-on-eof  quit when end of log is reached
+  -r, --replay          replays the log as if running live
+  -q, --quit-on-eof     quit when end of log is reached
+  -u, --check-for-updates
+                        check for updates and exit
   -v, --verbose
+  --version             show program's version number and exit
 ```
 </details>
 

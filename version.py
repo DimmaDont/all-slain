@@ -47,6 +47,7 @@ class UpdateCheck(argparse.Action):
             option_strings=option_strings,
             dest=dest,
             nargs=0,
+            help=help,
         )
 
     def __call__(self, parser, namespace, values, option_string=None):
