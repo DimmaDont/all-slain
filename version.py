@@ -1,6 +1,7 @@
 import argparse
+from platform import python_version
 
-from requests import get
+from requests import RequestException, get
 from semver import Version
 
 from colorize import Color
@@ -13,7 +14,7 @@ def check_for_updates() -> str:
     try:
         local_version = Version.parse(__version__)
     except ValueError:
-        return "Not supported in dev releases, sorry."
+        return "Not available in development releases, sorry."
 
     try:
         latest_release = get(
@@ -28,20 +29,22 @@ def check_for_updates() -> str:
             return Color.RED("No releases found.")
 
         remote_version = Version.parse(latest_release["tag_name"])
+        remote_version_text = f"Latest version: {Color.CYAN(str(remote_version))}"
 
         if remote_version > local_version:
-            return f"{Color.GREEN(f'Update available: {__version__} -> {remote_version}')}\n{Color.BLUE(latest_release['html_url'], bold=True)}"
-
-        return Color.CYAN(
-            f"Latest version: {remote_version}\nall-slain is up to date ({__version__})"
-        )
-    except ValueError:
-        return Color.RED("Update check failed.")
+            return f"{remote_version_text}\n{Color.GREEN(f'Update available: {local_version} -> {remote_version}')}\n{Color.BLUE(latest_release['html_url'], bold=True)}"
+        return f"{remote_version_text}\nall-slain is up to date ({get_version_text()})"
+    except (RequestException, ValueError) as e:
+        return Color.RED(f"Update check failed: {str(e)}")
 
 
-class UpdateCheck(argparse.Action):
+def get_version_text() -> str:
+    return f"{Color.CYAN(__version__)} on Python {python_version()}"
+
+
+class UpdateCheckAction(argparse.Action):
     def __init__(
-        self, option_strings, dest, help=None
+        self, option_strings, dest, help="check for updates and exit"
     ):  # pylint: disable=redefined-builtin
         super().__init__(
             option_strings=option_strings,

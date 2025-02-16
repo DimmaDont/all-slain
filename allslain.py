@@ -8,7 +8,7 @@ from typing import Any
 from colorize import Color
 from launcher_store import get_log
 from log_parser import LogParser
-from version import UpdateCheck, __version__
+from version import UpdateCheckAction, __version__, get_version_text
 
 
 class AllSlain:
@@ -48,14 +48,10 @@ class AllSlain:
             action="store_true",
             help="quit when end of log is reached",
         )
-        parser.add_argument(
-            "-u",
-            "--check-for-updates",
-            action=UpdateCheck,
-            help="check for updates and exit",
-        )
+        parser.register("action", "update_check", UpdateCheckAction)
+        parser.add_argument("-u", "--update", action="update_check")
         parser.add_argument("-v", "--verbose", action="count")
-        parser.add_argument("--version", action="version", version=__version__)
+        parser.add_argument("--version", action="version", version=get_version_text())
         self.args = parser.parse_args()
 
         if self.args.debug:
