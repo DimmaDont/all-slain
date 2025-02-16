@@ -33,6 +33,9 @@ For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 ```
 usage: allslain.exe [-h] [-d] [-r] [-q] [-u] [-v] [--version] [file]
 
+all-slain: Star Citizen Game Log Reader
+https://github.com/DimmaDont/all-slain
+
 positional arguments:
   file
 

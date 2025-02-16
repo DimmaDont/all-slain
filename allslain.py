@@ -1,6 +1,6 @@
 import logging
 import time
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from collections.abc import Generator
 from io import TextIOWrapper
 from typing import Any
@@ -27,7 +27,13 @@ class AllSlain:
                     time.sleep(1)
 
     def __init__(self):
-        parser = ArgumentParser()
+        parser = ArgumentParser(
+            formatter_class=RawDescriptionHelpFormatter,
+            description=(
+                "all-slain: Star Citizen Game Log Reader\n"
+                + Color.BLUE("https://github.com/DimmaDont/all-slain", bold=True)
+            ),
+        )
         parser.add_argument("file", nargs="?")
         parser.add_argument("-d", "--debug", action="store_true")
         parser.add_argument(
@@ -58,12 +64,11 @@ class AllSlain:
 
     def run(self) -> None:
         # Set window title and cursor shape
-        print("\x1b]0;all-slain\x07\x1b[2\x20q", end="")
-        print(f"{Color.WHITE('all-slain', bold=True)}: Star Citizen Game Log Reader")
-        print(f"{Color.BLUE('https://github.com/DimmaDont/all-slain', bold=True)}\n")
+        print("\x1b]0;all-slain\x07\x1b[2\x20q", end="", flush=True)
 
         if filename := self.args.file if self.args.file else get_log():
-            print(f'Reading "{Color.CYAN(filename)}"\n')
+            if self.args.verbose:
+                print(f'Reading "{Color.CYAN(filename)}"\n')
         else:
             print(Color.RED("No log files found."))
             print(
