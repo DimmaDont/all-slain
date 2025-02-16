@@ -2,13 +2,14 @@ import unittest
 
 from allslain import AllSlain
 from functions import RE_VEHICLE_NAME, clean_location, clean_name, get_vehicle, strip_id
+from launcher_store import get_log
 
 
-@unittest.skipUnless(AllSlain.get_log(), "No game logs are available.")
+@unittest.skipUnless(get_log(), "No game logs are available.")
 class TestLogReading(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.log = AllSlain.get_log()
+        cls.log = get_log()
 
     def test_log_decode(self):
         with open(
