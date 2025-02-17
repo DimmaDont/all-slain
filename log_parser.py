@@ -70,7 +70,11 @@ class LogParser:
             ).total_seconds()
             logging.debug("%s %s pausing for %f", self.prev, self.now, self.delay)
             self.prev = self.now
-            time.sleep(self.delay)
+            time.sleep(
+                self.delay
+                if self.state.args.replay is True
+                else min(self.state.args.replay, self.delay)
+            )
 
         self.state.handlers[event_type](match)
 

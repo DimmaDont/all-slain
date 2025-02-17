@@ -31,7 +31,7 @@ For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 <summary><b><code>allslain.exe --help</code></b></summary>
 
 ```
-usage: allslain.exe [-h] [-d] [-r] [-q] [-u] [-v] [--version] [file]
+usage: allslain.exe [-h] [-d] [-q] [-r [REPLAY]] [-u] [-v] [--version] [file]
 
 all-slain: Star Citizen Game Log Reader
 https://github.com/DimmaDont/all-slain
@@ -40,13 +40,14 @@ positional arguments:
   file
 
 options:
-  -h, --help         show this help message and exit
+  -h, --help            show this help message and exit
   -d, --debug
-  -r, --replay       replays the log as if running live
-  -q, --quit-on-eof  quit when end of log is reached
-  -u, --update       check for updates and exit
+  -q, --quit-on-eof     quit when end of log is reached
+  -r [REPLAY], --replay [REPLAY]
+                        replays the log as if running live. optionally, specify the maximum number of seconds to wait between each line
+  -u, --update          check for updates and exit
   -v, --verbose
-  --version          show program's version number and exit
+  --version             show program's version number and exit
 ```
 </details>
 

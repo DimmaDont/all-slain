@@ -37,16 +37,18 @@ class AllSlain:
         parser.add_argument("file", nargs="?")
         parser.add_argument("-d", "--debug", action="store_true")
         parser.add_argument(
-            "-r",
-            "--replay",
-            action="store_true",
-            help="replays the log as if running live",
-        )
-        parser.add_argument(
             "-q",
             "--quit-on-eof",
             action="store_true",
             help="quit when end of log is reached",
+        )
+        parser.add_argument(
+            "-r",
+            "--replay",
+            const=True,
+            type=int,
+            nargs="?",
+            help="replays the log as if running live. optionally, specify the maximum number of seconds to wait between each line",
         )
         parser.register("action", "update_check", UpdateCheckAction)
         parser.add_argument("-u", "--update", action="update_check")
