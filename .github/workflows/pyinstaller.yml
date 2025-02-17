@@ -86,3 +86,4 @@ jobs:
           body: This is the latest build of ${{ github.ref_name }}. Built from commit ${{ steps.vars.outputs.sha_short }}
           files: ${{ inputs.output }}
           tag_name: ${{ inputs.tag_name }}
+          prerelease: true
