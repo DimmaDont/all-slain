@@ -24,6 +24,8 @@ This program monitors the Star Citizen `Game.log` file in real-time, reporting p
 The program can also be run with the game log file as the first parameter in a terminal.\
 For example: `E:\allslain.exe E:\StarCitizen\PTU\Game.log`
 
+To run the script instead of the exe, see [Running the script](#running-the-script).
+
 > [!TIP]
 > Previous log files can be found in the `logbackups` folder.
 
@@ -75,7 +77,13 @@ Mostly compatible with `3.24.X`.
 ## Known Issues
 * Antimalware False Positive\
 See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).\
-Workaround: Install [Python](https://www.python.org/downloads/) manually, download a copy of the repo, install dependencies, and run `allslain.py`.
+Workaround: See [Running the script](#running-the-script)
+
+## Running the script
+1. Install [Python](https://www.python.org/downloads/)
+2. [Download a copy](https://github.com/DimmaDont/all-slain/archive/refs/heads/master.zip) of the project, and unzip it.
+3. Open a terminal in the project folder, and install dependencies with `pip install -r requirements.txt --user`
+4. Run `allslain.py`
 
 ## Supported Python Versions
 * 3.10+
