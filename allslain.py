@@ -11,6 +11,10 @@ from log_parser import LogParser
 from version import UpdateCheckAction, __version__, get_version_text
 
 
+logging.basicConfig(format=logging.BASIC_FORMAT)
+logger = logging.getLogger("allslain")
+
+
 class AllSlain:
     LOG_ENCODING = "latin-1"
     LOG_NEWLINE = "\r\n"
@@ -57,7 +61,7 @@ class AllSlain:
         self.args = parser.parse_args()
 
         if self.args.debug:
-            logging.getLogger().setLevel(logging.DEBUG)
+            logger.setLevel(logging.DEBUG)
             self.args.verbose = 1
 
     def run(self) -> None:

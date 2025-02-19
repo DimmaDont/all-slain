@@ -1,5 +1,4 @@
 import datetime
-import logging
 import time
 from argparse import Namespace
 
@@ -38,7 +37,6 @@ class LogParser:
             self.delay = (
                 self.now - (self.prev if self.prev else self.now)
             ).total_seconds()
-            logging.debug("%s %s pausing for %f", self.prev, self.now, self.delay)
             self.prev = self.now
             time.sleep(
                 self.delay
