@@ -3,7 +3,7 @@ import re
 from data import ACTORS, LOCATIONS, SHIPS, VEHICLE_TYPES, WEAPONS_FPS, WEAPONS_SHIP
 
 
-RE_ASTEROID = re.compile(r"OscillationSimple-\d{3}")
+RE_ASTEROID = re.compile(r"(?:Rotation|Oscillation)Simple-\d{3}")
 
 
 PATTERN_ID = re.compile(r"([\w-]+)_\d{12,}")
@@ -117,6 +117,12 @@ def clean_name(name: str) -> tuple[str, int]:
 
     if RE_DEBRIS.match(name):
         return ("Debris", 1)
+
+    if name == "Hazard_hangar_medfrnt_dungeon_exec_rund":
+        return ("Executive Hangar Door Hazard", 1)
+
+    if name == "GameRules":
+        return ("GameRules", 1)
 
     return (name, 0)
 
