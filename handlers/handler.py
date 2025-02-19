@@ -20,6 +20,10 @@ class Handler(ABC):
         print(f"{when}{self.header_text}: {self.format(data)}")
         self.after(data)
 
+    @classmethod
+    def name(cls):
+        return cls.__name__.upper()
+
     @abstractmethod
     def format(self, data: Match[str]) -> str: ...
 

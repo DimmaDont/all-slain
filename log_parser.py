@@ -3,23 +3,7 @@ import logging
 import time
 from argparse import Namespace
 
-from handlers import (
-    Branch,
-    Cet,
-    Connected,
-    Connecting,
-    EndSession,
-    Incap,
-    Jump,
-    KillP,
-    KillV,
-    Loaded,
-    Loading,
-    Quantum,
-    Quit,
-    Respawn,
-    Spawn,
-)
+from handlers import DEFAULT as HANDLERS
 from handlers.handler import Handler
 from state import State
 
@@ -28,21 +12,7 @@ class LogParser:
     def __init__(self, args: Namespace | None = None) -> None:
         self.state = State(args) if args else State()
         self.handlers: dict[str, Handler] = {
-            "BRANCH": Branch(self.state),
-            "CET": Cet(self.state),
-            "KILLP": KillP(self.state),
-            "KILLV": KillV(self.state),
-            "RESPAWN": Respawn(self.state),
-            "INCAP": Incap(self.state),
-            "ENDSESSION": EndSession(self.state),
-            "SPAWN": Spawn(self.state),
-            "JUMP": Jump(self.state),
-            "CONNECTED": Connected(self.state),
-            "CONNECTING": Connecting(self.state),
-            "LOADED": Loaded(self.state),
-            "LOADING": Loading(self.state),
-            "QUIT": Quit(self.state),
-            "QUANTUM": Quantum(self.state),
+            handler.name(): handler(self.state) for handler in HANDLERS
         }
         self.state.handlers = self.handlers
         self.state.count = {p[0]: 0 for p in self.handlers.items()}
