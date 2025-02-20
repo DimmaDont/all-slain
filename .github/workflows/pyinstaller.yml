@@ -54,7 +54,7 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
       - name: Install PyInstaller
-        run: pip install "https://yt-dlp.github.io/Pyinstaller-Builds/x86_64/pyinstaller-6.11.1-py3-none-any.whl"
+        run: pip install "https://dimmadont.github.io/Pyinstaller-Builds/x86_64/pyinstaller-6.11.1-py3-none-any.whl"
       - name: Set version number
         if: ${{ inputs.release && !inputs.tag_name }}
         run: sed -i 's/VERSION_HERE/${{ github.ref_name }}/' version.py
