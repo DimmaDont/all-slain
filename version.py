@@ -1,8 +1,7 @@
 import argparse
-from importlib import import_module
 from platform import python_version
-from typing import TYPE_CHECKING
 
+from requests import RequestException, get
 from semver import Version
 
 from colorize import Color
@@ -17,13 +16,8 @@ def check_for_updates() -> str:
     except ValueError:
         return "Not available in development releases, sorry."
 
-    # https://github.com/psf/requests/issues/6790
-    if TYPE_CHECKING:
-        import requests  # pylint: disable=C0415
-    else:
-        requests = import_module("requests")
     try:
-        latest_release = requests.get(
+        latest_release = get(
             "https://api.github.com/repos/Dimmadont/all-slain/releases/latest",
             headers={
                 "Accept": "application/vnd.github+json",
@@ -40,7 +34,7 @@ def check_for_updates() -> str:
         if remote_version > local_version:
             return f"{remote_version_text}\n{Color.GREEN(f'Update available: {local_version} -> {remote_version}')}\n{Color.BLUE(latest_release['html_url'], bold=True)}"
         return f"{remote_version_text}\nall-slain is up to date ({get_version_text()})"
-    except (requests.RequestException, ValueError) as e:
+    except (RequestException, ValueError) as e:
         return Color.RED(f"Update check failed: {str(e)}")
 
 
