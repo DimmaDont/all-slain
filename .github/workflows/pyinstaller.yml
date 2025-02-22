@@ -30,7 +30,7 @@ on:
       tag_name:
         required: false
         type: string
-        default: null
+        default: ''
 jobs:
   build:
     name: PyInstaller
