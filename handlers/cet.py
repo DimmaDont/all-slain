@@ -32,7 +32,7 @@ class Cet(Handler):
         taskname = data[3]
         step = data[4]
 
-        running_time = int(float(data[6]))
+        running_time = round(float(data[6]))
         if running_time > 300:
             running_time_color = "RED"
         elif running_time > 150:
@@ -43,11 +43,13 @@ class Cet(Handler):
             str(timedelta(seconds=running_time))
         )
 
-        # Replace the previous line if it was a CET and verbose is disabled
+        # Replace the previous line if it was a CET, verbose is disabled,
+        # and previous CET took less than 5s
         if (
             self.state.prev_event
             and self.state.prev_event[0] == "CET"
             and not self.state.args.verbose
+            and float(self.state.prev_event[1][6]) < 5
         ):
             # Move cursor up one line and clear it
             print("\x1b[1A\x1b[2K", end="")
