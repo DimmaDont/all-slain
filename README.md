@@ -82,8 +82,7 @@ Workaround: See [Running the script](#running-the-script)
 ## Running the script
 1. Install [Python](https://www.python.org/downloads/)
 2. [Download a copy](https://github.com/DimmaDont/all-slain/archive/refs/heads/master.zip) of the project, and unzip it.
-3. Open a terminal in the project folder, and install dependencies with `pip install -r requirements.txt --user`
-4. Run `allslain.py`
+3. Run `run.bat`
 
 ## Supported Python Versions
 * 3.10+
