@@ -60,8 +60,9 @@ jobs:
         if: ${{ inputs.release && !inputs.tag_name }}
         run: sed -i 's/VERSION_HERE/${{ github.ref_name }}/' version.py
       - name: Package Application
-        run: pyinstaller --onefile ${{ inputs.file }} --icon ${{ inputs.icon }}
+        run: pyinstaller --onefile ${{ inputs.file }} --icon ${{ inputs.icon }} --noupx --debug noarchive
       - name: Attest
+        id: attest
         uses: actions/attest-build-provenance@v2
         if: ${{ inputs.attest }}
         with:
@@ -75,16 +76,27 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: ${{ inputs.release && !inputs.tag_name }}
         with:
+          append_body: true
+          body: "[Attestation](${{ steps.attest.outputs.attestation-url }})"
           files: ${{ inputs.output }}
+
       - name: Get commit hash
         id: vars
         if: ${{ inputs.release && inputs.tag_name }}
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: ${{ inputs.release && inputs.tag_name }}
+        if: ${{ inputs.release && inputs.tag_name && inputs.attest }}
         with:
-          body: This is the latest build of ${{ github.ref_name }}. Built from commit ${{ steps.vars.outputs.sha_short }}
+          body: This is the latest build of ${{ github.ref_name }}, [built](${{ steps.attest.outputs.attestation-url }}) from commit ${{ steps.vars.outputs.sha_short }}.
+          files: ${{ inputs.output }}
+          tag_name: ${{ inputs.tag_name }}
+          prerelease: true
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ inputs.release && inputs.tag_name && !inputs.attest}}
+        with:
+          body: This is the latest build of ${{ github.ref_name }}, built from commit ${{ steps.vars.outputs.sha_short }}.
           files: ${{ inputs.output }}
           tag_name: ${{ inputs.tag_name }}
           prerelease: true
