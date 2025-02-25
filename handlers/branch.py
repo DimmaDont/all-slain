@@ -18,9 +18,9 @@ class Branch(Handler):
 
         version = data[2].rsplit("-", maxsplit=1)[-1]
 
-        # Quantum is only available for 4.0.0
+        # ClientQuantum is only available for 4.0.0
         if version != "4.0.0":
-            del self.state.handlers["QUANTUM"]
+            del self.state.handlers["CLIENTQUANTUM"]
 
         if version == "4.0.2":
             # 4.0.2 added a ReadyToReplicate step

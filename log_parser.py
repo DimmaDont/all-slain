@@ -3,16 +3,13 @@ import time
 from argparse import Namespace
 
 from handlers import DEFAULT as HANDLERS
-from handlers.handler import Handler
 from state import State
 
 
 class LogParser:
     def __init__(self, args: Namespace | None = None) -> None:
         self.state = State(args) if args else State()
-        self.handlers: dict[str, Handler] = {
-            handler.name(): handler(self.state) for handler in HANDLERS
-        }
+        self.handlers = {handler.name(): handler(self.state) for handler in HANDLERS}
         self.state.handlers = self.handlers
         self.state.count = {p[0]: 0 for p in self.handlers.items()}
 

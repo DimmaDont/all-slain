@@ -10,7 +10,7 @@ from .killp import KillP
 from .killv import KillV
 from .loaded import Loaded
 from .loading import Loading
-from .quantum import Quantum
+from .quantum import ClientQuantum, Quantum
 from .quit import Quit
 from .respawn import Respawn
 from .spawn import Spawn
@@ -21,6 +21,8 @@ DEFAULT: list[type[Handler]] = [
     Cet,
     KillP,
     KillV,
+    Quantum,
+    ClientQuantum,
     Respawn,
     Incap,
     EndSession,
@@ -31,7 +33,6 @@ DEFAULT: list[type[Handler]] = [
     Loaded,
     Loading,
     Quit,
-    Quantum,
 ]
 
 
@@ -39,6 +40,7 @@ __all__ = [
     "DEFAULT",
     "Branch",
     "Cet",
+    "ClientQuantum",
     "Connected",
     "Connecting",
     "EndSession",

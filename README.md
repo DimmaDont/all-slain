@@ -63,13 +63,15 @@ Mostly compatible with `3.24.X`.
 * Ship/vehicle destruction
 * Player respawns
 * Game load progress[^1]
-* Quantum travel events[^1][^3], including inter-system jumps[^1]
+* Quantum travel events with destination[^1][^3], including inter-system jumps[^1]
+* Quantum travel events[^4]
 * Quit to menu/desktop[^1]
 * Incapacitation events[^2]
 
 [^1]: Local client only
 [^2]: Excludes incaps from combat
 [^3]: Only available for `4.0_PREVIEW`
+[^4]: Excludes local player
 
 ## Fun Fact
 * Kills weren't logged until `3.24`

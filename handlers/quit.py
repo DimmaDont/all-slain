@@ -20,4 +20,4 @@ class Quit(Handler):
                 sorted(self.state.count.items(), key=lambda item: item[1])
             )
             for k, v in self.state.count.items():
-                print(f"{k.ljust(12)}: {v}")
+                print(f"{k.ljust(13)}: {v}")
