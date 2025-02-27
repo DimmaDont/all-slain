@@ -2,6 +2,7 @@ import re
 
 from colorize import Color
 
+from .cet import Cet
 from .handler import Handler
 
 
@@ -11,9 +12,9 @@ class EndSession(Handler):
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <CDisciplineServiceExternal::EndSession> Ending session .*"
     )
 
-    def format(self, data):
+    def format(self, _) -> str:
         return "Ending game session"
 
     def after(self, _):
-        # Move CET to beginning
-        self.state.handlers = {"CET": None} | self.state.handlers
+        # Add CET to beginning
+        self.state.handlers = {"CET": Cet(self.state)} | self.state.handlers

@@ -56,11 +56,11 @@ class Cet(Handler):
         return f"{which[0]}: {step_num.rjust(2)}/{self.state.cet_steps} {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time_text}"
 
     def after(self, data):
-        # Move CET to end once game is loaded.
-        # Moved back to beginning by EndSession.after
+        # Remove CET once game is loaded.
+        # Restored by EndSession.after
         if (
             data[4] == "InGame"
             and data[3] == "InitView.ClientPlayer"
             and data[7] == "SC_Default"  # is SC_Frontend when loading back into menu
         ):
-            self.state.handlers["CET"] = self.state.handlers.pop("CET")
+            self.state.handlers.pop("CET")
