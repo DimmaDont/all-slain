@@ -7,7 +7,7 @@ from state import State
 
 
 class LogParser:
-    def __init__(self, args: Namespace | None = None) -> None:
+    def __init__(self, args: Namespace) -> None:
         self.state = State(args) if args else State()
         self.handlers = {handler.name(): handler(self.state) for handler in HANDLERS}
         self.state.handlers = self.handlers

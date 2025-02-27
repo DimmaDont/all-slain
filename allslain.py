@@ -1,9 +1,8 @@
 import logging
 import time
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
-from collections.abc import Generator
 from io import TextIOWrapper
-from typing import Any
+from typing import Any, Generator
 
 from colorize import Color
 from launcher_store import get_log

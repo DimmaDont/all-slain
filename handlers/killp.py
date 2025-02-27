@@ -9,7 +9,7 @@ from .handler import Handler
 class KillP(Handler):
     header = ("KILL", Color.RED, False)
     pattern = re.compile(
-        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([\w-]+)' \[\d+\] in zone '([\w-]+)' killed by '([\w-]+)' \[\d+\] using '[\w-]+' \[Class ([\w-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]"
+        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([\w-]+)' \[\d+\] in zone '([\w-]+)' killed by '([\w-]+)' \[\d+\] using '([\w-]+)' \[Class ([\w-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]"
     )
 
     def format(self, data) -> str:
@@ -17,7 +17,7 @@ class KillP(Handler):
         lp, location, location_type = clean_location(data[3])
         is_ship = location_type == "ship"
         killer, is_killer_npc = clean_name(data[4])
-        cause = clean_tool(data[5], data[4], data[2], data[6])
+        cause = clean_tool(data[6], data[4], data[2], data[7])
         if cause.startswith("suicide"):
             return f"{Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
         if is_killer_npc and is_killed_npc:

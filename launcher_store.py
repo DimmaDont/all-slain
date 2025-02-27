@@ -10,10 +10,7 @@ from colorize import Color
 KEY = b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4="
 
 
-def get_log() -> str | None:
-    """
-    Returns: Path of the latest game log.
-    """
+def read_launcher_store():
     try:
         with open(
             f"{os.getenv('APPDATA')}\\rsilauncher\\launcher store.json", "rb"
@@ -22,7 +19,21 @@ def get_log() -> str | None:
 
         crypt = CryptSindresorhusConf(KEY, encrypted_data[:16])
         decrypted = crypt.decrypt(encrypted_data)
-        data = json.loads(decrypted)
+        return json.loads(decrypted)
+    except (OSError, json.JSONDecodeError):
+        print(Color.RED("Failed to find game installation directory:"))
+        print(traceback.format_exc())
+        return None
+
+
+def get_log() -> str | None:
+    """
+    Returns: Path of the latest game log.
+    """
+    try:
+        data = read_launcher_store()
+        if not data:
+            return None
 
         library_available = data["library"]["available"]
         if not library_available:
@@ -39,6 +50,7 @@ def get_log() -> str | None:
 
         library = data["library"]["installed"]
         if not library:
+            # You don't have any games on your phone!
             return None
 
         # `installed` channel dicts are not guaranteed to have an "installDir" key, hence `install_dirs`
@@ -71,7 +83,7 @@ def get_log() -> str | None:
             except OSError:
                 pass
         return max(files, key=files.__getitem__) if files else None
-    except (OSError, LookupError, ValueError, json.JSONDecodeError):
-        print(Color.RED("Failed to find game installation directory or log files:"))
+    except (LookupError, ValueError):
+        print(Color.RED("Failed to find log files:"))
         print(traceback.format_exc())
     return None

@@ -40,7 +40,7 @@ LOCATIONS_STARTSWITH = {
 def clean_location(name: str) -> tuple[str, str, str]:
     try:
         # todo not all are "at"
-        return ("at", LOCATIONS[name.replace("@", "")], "loc")
+        return ("at", LOCATIONS[name.replace("@", "", 1)], "loc")
     except KeyError:
         pass
 
@@ -127,11 +127,11 @@ def clean_name(name: str) -> tuple[str, int]:
     return (name, 0)
 
 
-def clean_tool(name: str, killer: str, killed: str, damage_type: str) -> str:
-    if name == "Player":
+def clean_tool(item_class: str, killer: str, killed: str, damage_type: str) -> str:
+    if item_class == "Player":
         return "suicide"
 
-    if name == "unknown":
+    if item_class == "unknown":
         # Ship collision
         if killer == killed:
             return f"suicide by {damage_type}"
@@ -142,16 +142,16 @@ def clean_tool(name: str, killer: str, killed: str, damage_type: str) -> str:
         return damage_type
 
     try:
-        return WEAPONS_FPS[name]
+        return WEAPONS_FPS[item_class]
     except KeyError:
         pass
 
     try:
-        return WEAPONS_SHIP[name]
+        return WEAPONS_SHIP[item_class]
     except KeyError:
         pass
 
-    return name
+    return item_class
 
 
 def get_vehicle_type(name: str) -> str:
