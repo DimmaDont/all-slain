@@ -67,6 +67,12 @@ jobs:
         if: ${{ inputs.attest }}
         with:
           subject-path: ${{ github.workspace }}/dist
+      - name: Get file hash
+        shell: pwsh
+        id: hash
+        if: ${{ inputs.release && !inputs.tag_name }}
+        run: |
+          "file_hash=$((Get-FileHash ${{ inputs.output }}).Hash.ToLower())" >> $env:GITHUB_OUTPUT
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -77,7 +83,9 @@ jobs:
         if: ${{ inputs.release && !inputs.tag_name }}
         with:
           append_body: true
-          body: "**Attestation**: [`${{ steps.attest.outputs.attestation-id }}`](${{ steps.attest.outputs.attestation-url }})"
+          body: |
+            **Attestation**: [`${{ steps.attest.outputs.attestation-id }}`](${{ steps.attest.outputs.attestation-url }})
+            **VirusTotal**: [`${{ steps.hash.outputs.file_hash }}`](https://www.virustotal.com/gui/file/${{ steps.hash.outputs.file_hash }})
           files: ${{ inputs.output }}
 
       - name: Get commit hash
