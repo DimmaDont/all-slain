@@ -1,0 +1,2 @@
+# Custom PyInstaller built with https://github.com/DimmaDont/Pyinstaller-Builds
+pyinstaller @ https://github.com/DimmaDont/Pyinstaller-Builds/raw/8bafce381619e690c399bc016386b76ff49bc7f6/x86_64/pyinstaller-6.12.0-py3-none-any.whl
