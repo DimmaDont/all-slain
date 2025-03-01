@@ -45,7 +45,7 @@ options:
   -h, --help            show this help message and exit
   -d, --debug
   -q, --quit-on-eof     quit when end of log is reached
-  -r [REPLAY], --replay [REPLAY]
+  -r, --replay [REPLAY]
                         replays the log as if running live. optionally, specify the maximum number of seconds to wait between each line
   -u, --update          check for updates and exit
   -v, --verbose
@@ -75,11 +75,6 @@ Mostly compatible with `3.24.X`.
 
 ## Fun Fact
 * Kills weren't logged until `3.24`
-
-## Known Issues
-* Antimalware False Positive\
-See [pyinstaller's antivirus issue template](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).\
-Workaround: See [Running the script](#running-the-script)
 
 ## Running the script
 1. Install [Python](https://www.python.org/downloads/)
