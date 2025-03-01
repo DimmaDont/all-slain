@@ -1,4 +1,4 @@
-crypt_sindresorhus_conf @ git+https://github.com/DimmaDont/py-crypt-sindresorhus-conf@4b269d7253458cc9f63659e2f1eae5304a2bbe54
+crypt_sindresorhus_conf[cryptography] @ git+https://github.com/DimmaDont/py-crypt-sindresorhus-conf@f54d26b244106fbe3a1171660ad3bff789f67a3f
 requests
 semver
 typing_extensions; python_version < "3.11"
