@@ -1,6 +1,6 @@
 import unittest
 
-from handlers.incap import Incap, LOG_INCAP_CAUSE
+from handlers.incap import LOG_INCAP_CAUSE, Incap
 from state import State
 
 
