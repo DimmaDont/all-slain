@@ -1,6 +1,6 @@
 import unittest
 
-from handlers import Cet
+from handlers.cet import Cet
 from state import State
 
 

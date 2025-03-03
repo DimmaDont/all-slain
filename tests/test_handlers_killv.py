@@ -1,6 +1,6 @@
 import unittest
 
-from handlers import KillV
+from handlers.killv import KillV
 from state import State
 
 

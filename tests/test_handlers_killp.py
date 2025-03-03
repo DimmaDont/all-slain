@@ -1,6 +1,6 @@
 import unittest
 
-from handlers import KillP
+from handlers.killp import KillP
 from state import State
 
 

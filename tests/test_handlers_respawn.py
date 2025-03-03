@@ -1,6 +1,6 @@
 import unittest
 
-from handlers import Respawn
+from handlers.corpse import CorpseHospitalLocation
 from state import State
 
 
@@ -8,7 +8,7 @@ class TestRespawn(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         state = State()
-        cls.respawn = Respawn(state)
+        cls.respawn = CorpseHospitalLocation(state)
 
     def test_respawn(self):
         match = self.respawn.pattern.match(
