@@ -13,9 +13,6 @@ class Branch(Handler):
         return Color.CYAN(data[2])
 
     def after(self, data):
-        # Remove from handlers after use -- appears only once per log file
-        del self.state.handlers["BRANCH"]
-
         version = data[2].rsplit("-", maxsplit=1)[-1]
 
         # ClientQuantum is only available for 4.0.0
@@ -27,3 +24,8 @@ class Branch(Handler):
             self.state.cet_steps = 16
         else:
             self.state.cet_steps = 15
+
+        self.state.count = {p[0]: 0 for p in self.state.handlers.items()}
+
+        # Remove from handlers after use -- appears only once per log file
+        del self.state.handlers["BRANCH"]

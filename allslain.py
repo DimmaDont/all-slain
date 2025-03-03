@@ -90,6 +90,7 @@ class AllSlain:
             print(Color.RED(f'Log file "{filename}" not found.'))
         except OSError as e:
             print(Color.RED(f'Failed to read "{filename}": {str(e)}'))
+        log_parser.quit()
 
 
 def main():

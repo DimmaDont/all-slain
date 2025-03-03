@@ -13,11 +13,3 @@ class Quit(Handler):
 
     def format(self, _) -> str:
         return "Game quit."
-
-    def after(self, _):
-        if self.state.args.debug:
-            self.state.count = dict(
-                sorted(self.state.count.items(), key=lambda item: item[1])
-            )
-            for k, v in self.state.count.items():
-                print(f"{k.ljust(13)}: {v}")
