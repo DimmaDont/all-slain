@@ -3,7 +3,7 @@ import unittest
 from colorize import Color
 
 
-class TestNameFunctions(unittest.TestCase):
+class TestColorFunctions(unittest.TestCase):
 
     def test_fg(self):
         result = f"{Color.BLUE('hello')} there"
@@ -30,16 +30,12 @@ class TestNameFunctions(unittest.TestCase):
         self.assertEqual(result, "\x1b[38;2;1;2;3mhello\x1b[0m there")
 
     def test_rgb_bold(self):
-        result = f"{Color.rgb( bg = [1, 2, 3 ], text = 'hello')} there"
-        self.assertEqual(result, "\x1b[48;2;1;2;3mhello\x1b[0m there")
+        result = f"{Color.rgb( bg = [1, 2, 3 ], bold=True, text = 'hello')} there"
+        self.assertEqual(result, "\x1b[48;2;1;2;3;1mhello\x1b[0m there")
 
     def test_inline(self):
         result = f"{Color.BLUE.set(fg = True)}hello{Color.reset()}"
         self.assertEqual(result, Color.BLUE("hello"))
-
-    def test_call(self):
-        result = f'{Color.BLUE("hello")} there'
-        self.assertEqual(result, "\x1b[34mhello\x1b[0m there")
 
     def test_parse(self):
         test_strings = [
