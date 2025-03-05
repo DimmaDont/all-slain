@@ -5,6 +5,7 @@ from io import TextIOWrapper
 from typing import Any, Generator
 
 from colorize import Color
+from config import load_config
 from launcher_store import get_log
 from log_parser import LogParser
 from version import UpdateCheckAction, __version__, get_version_text
@@ -57,7 +58,7 @@ class AllSlain:
         parser.add_argument("-u", "--update", action="update_check")
         parser.add_argument("-v", "--verbose", action="count")
         parser.add_argument("--version", action="version", version=get_version_text())
-        self.args = parser.parse_args()
+        self.args = parser.parse_args(namespace=load_config())
 
         if self.args.debug:
             logger.setLevel(logging.DEBUG)
