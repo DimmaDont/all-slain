@@ -5,3 +5,4 @@ build/
 allslain.spec
 tools/*.json
 venv/
+allslain.conf.toml

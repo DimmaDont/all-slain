@@ -50,19 +50,20 @@ class AllSlain:
             "-r",
             "--replay",
             const=True,
+            default=False,
             type=int,
             nargs="?",
             help="replays the log as if running live. optionally, specify the maximum number of seconds to wait between each line",
         )
         parser.register("action", "update_check", UpdateCheckAction)
         parser.add_argument("-u", "--update", action="update_check")
-        parser.add_argument("-v", "--verbose", action="count")
+        parser.add_argument("-v", "--verbose", action="count", default=0)
         parser.add_argument("--version", action="version", version=get_version_text())
         self.args = parser.parse_args(namespace=load_config())
 
         if self.args.debug:
             logger.setLevel(logging.DEBUG)
-            self.args.verbose = 1
+            self.args.verbose = self.args.verbose or 1
 
     def run(self) -> None:
         # Set window title and cursor shape

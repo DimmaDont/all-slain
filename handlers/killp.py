@@ -15,16 +15,15 @@ class KillP(Handler):
     def format(self, data) -> str:
         killed, is_killed_npc = clean_name(data[2])
         lp, location, location_type = clean_location(data[3])
-        is_ship = location_type == "ship"
         killer, is_killer_npc = clean_name(data[4])
         cause = clean_tool(data[6], data[4], data[2], data[7])
         if cause.startswith("suicide"):
             return f"{Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
         if is_killer_npc and is_killed_npc:
-            if is_ship:
+            if location_type == "ship":
                 return f"{Color.BLACK(killer, bold = True)} killed {Color.BLACK(killed, bold = True)} {lp} {Color.YELLOW(location)} with a {Color.CYAN(cause)}"
             return f"{Color.BLACK(killer, bold = True)} killed {Color.BLACK(killed, bold = True)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
-        if is_ship:
+        if location_type == "ship":
             return f"{Color.GREEN(killer)} killed {Color.GREEN(killed)} {lp} {Color.YELLOW(location)} with a {Color.CYAN(cause)}"
         return f"{Color.GREEN(killer)} killed {Color.GREEN(killed)} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
 

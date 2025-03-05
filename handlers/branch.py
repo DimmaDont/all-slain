@@ -91,9 +91,10 @@ class Branch(Handler):
 
             # ClientQuantum is only available for 4.0.0
             if version != Version(4, 0, 0):
-                del self.state.handlers["CLIENTQUANTUM"]
+                del self.state.handlers[ClientQuantum.name()]
 
-        self.state.count = {p[0]: 0 for p in self.state.handlers.items()}
+        if self.state.args.debug:
+            self.state.count = {p[0]: 0 for p in self.state.handlers.items()}
 
         # Remove from handlers after use -- appears only once per log file
-        del self.state.handlers["BRANCH"]
+        del self.state.handlers[self.name()]

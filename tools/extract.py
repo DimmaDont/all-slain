@@ -6,7 +6,7 @@ def get_item_name(labels: dict[str, str], item_name_ref: str):
     if name:
         if "PLACEHOLDER" in name:
             raise KeyError()
-        return name.replace("\xA0", " ").strip()
+        return name.replace("\xa0", " ").strip()
     raise KeyError()
 
 
@@ -19,7 +19,7 @@ def get_item_name_ship_weapon(labels: dict[str, str], item_name_ref: str):
             raise KeyError()
         return (
             name.strip()
-            .replace("\xA0", " ")
+            .replace("\xa0", " ")
             .replace("\u201c", '"')
             .replace("\u201d", '"')
             .replace("\u2019", "'")
@@ -70,7 +70,7 @@ def get_locations(labels: dict[str, str]) -> dict:
             ]
         ):
             continue
-        locations[k] = v.replace("\xA0", "").strip()
+        locations[k] = v.replace("\xa0", "").strip()
     return locations
 
 

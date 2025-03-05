@@ -36,9 +36,10 @@ class TOMLFile:
         with open(self._path, encoding="utf-8") as f:
             return loads(f.read())
 
-    def write(self, data: TOMLDocument) -> None:
-        with open(self._path, "w", encoding="utf-8") as f:
-            f.write(data.as_string())
+    def write_if_modified(self, data: TOMLDocument, compare: TOMLDocument) -> None:
+        if (config := data.as_string()) != compare.as_string():
+            with open(self._path, "w", encoding="utf-8") as f:
+                f.write(config)
 
 
 def mergeattr(src: dict, dest: object):
@@ -62,9 +63,7 @@ def load_config(namespace: Namespace | None = None) -> Namespace:
     else:
         _config = document()
 
-    # Write back if contents differ
-    if config.as_string() != _config.as_string():
-        TOMLFile(CONFIG_NAME).write(config)
+    TOMLFile(CONFIG_NAME).write_if_modified(config, _config)
 
     if not namespace:
         namespace = Namespace()

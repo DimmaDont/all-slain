@@ -17,4 +17,4 @@ class EndSession(Handler):
 
     def after(self, _):
         # Add CET to beginning
-        self.state.handlers = {"CET": Cet(self.state)} | self.state.handlers
+        self.state.handlers = {Cet.name(): Cet(self.state)} | self.state.handlers

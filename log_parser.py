@@ -8,13 +8,11 @@ from state import State
 
 class LogParser:
     def __init__(self, args: Namespace) -> None:
-        self.state = State(args) if args else State()
+        self.state = State(args)
         # Initialize with just the Branch handler
         # Handlers are added when the game log version is determined
         self.state.handlers = {Branch.name(): Branch(self.state)}
 
-        self.delay: float = 0
-        self.now: datetime.datetime | None = None
         self.prev: datetime.datetime | None = None
 
     def find_match(self, line: str):
@@ -29,15 +27,13 @@ class LogParser:
             return
 
         if self.state.args.replay:
-            self.now = datetime.datetime.fromisoformat(match[1])
-            self.delay = (
-                self.now - (self.prev if self.prev else self.now)
-            ).total_seconds()
-            self.prev = self.now
+            now = datetime.datetime.fromisoformat(match[1])
+            delay = (now - (self.prev if self.prev else now)).total_seconds()
+            self.prev = now
             time.sleep(
-                self.delay
+                delay
                 if self.state.args.replay is True
-                else min(self.state.args.replay, self.delay)
+                else min(self.state.args.replay, delay)
             )
 
         self.state.handlers[event_type](match)
