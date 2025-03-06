@@ -1,5 +1,6 @@
 import os
 from argparse import Namespace
+from typing import cast
 
 from tomlkit import TOMLDocument, document, loads, table
 
@@ -53,7 +54,7 @@ def mergeattr(src: dict, dest: object):
             setattr(dest, key, value)
 
 
-def load_config(namespace: Namespace | None = None) -> Namespace:
+def load_config(namespace: Namespace | None = None) -> Config:
     # Load defaults and config file
     config = create_default_config()
     if os.path.exists(CONFIG_NAME):
@@ -66,7 +67,8 @@ def load_config(namespace: Namespace | None = None) -> Namespace:
     TOMLFile(CONFIG_NAME).write_if_modified(config, _config)
 
     if not namespace:
-        namespace = Namespace()
+        namespace = Config()
     mergeattr(config.pop("main"), namespace)
     mergeattr(config, namespace)
-    return namespace
+
+    return cast(Config, namespace)

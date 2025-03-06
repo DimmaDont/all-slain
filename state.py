@@ -1,7 +1,8 @@
-from argparse import Namespace
 from dataclasses import dataclass, field
 from re import Match
 from typing import TYPE_CHECKING
+
+from args import Args
 
 
 if TYPE_CHECKING:
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class State:
-    args: Namespace = field(default_factory=Namespace)
+    args: Args = field(default_factory=Args)
     cet_steps: int = 0
     count: dict[str, int] = field(default_factory=dict)
     handlers: dict[str, "Handler"] = field(default_factory=dict)

@@ -1,13 +1,13 @@
 import datetime
 import time
-from argparse import Namespace
 
+from args import Args
 from handlers.branch import Branch
 from state import State
 
 
 class LogParser:
-    def __init__(self, args: Namespace) -> None:
+    def __init__(self, args: Args) -> None:
         self.state = State(args)
         # Initialize with just the Branch handler
         # Handlers are added when the game log version is determined
