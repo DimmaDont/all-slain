@@ -9,8 +9,6 @@ from .connected import Connected
 from .connecting import Connecting
 from .corpse import (
     Corpse402Corpsify,
-    Corpse402Dead,
-    Corpse402EntityId,
     Corpse402HospitalLocation,
     Corpse402IsCorpseEnabled,
     CorpseHospitalLocation,
@@ -35,8 +33,6 @@ HANDLERS_402 = [
     Corpse402HospitalLocation,
     Corpse402Corpsify,
     Corpse402IsCorpseEnabled,
-    Corpse402Dead,
-    Corpse402EntityId,
     Incap,
     EndSession,
     Spawn,
