@@ -1,10 +1,18 @@
 import unittest
 
 from allslain import AllSlain
-from launcher_store import get_log
+from launcher_store import LauncherStoreException, get_log
 
 
-@unittest.skipUnless(get_log(), "No game logs are available.")
+def check_launcher_store():
+    try:
+        get_log()
+        return True
+    except LauncherStoreException:
+        return False
+
+
+@unittest.skipUnless(check_launcher_store(), "No game logs are available.")
 class TestLogReading(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

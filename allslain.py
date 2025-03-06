@@ -6,7 +6,7 @@ from typing import Any, Generator
 
 from colorize import Color
 from config import load_config
-from launcher_store import get_log
+from launcher_store import LauncherStoreException, get_log
 from log_parser import LogParser
 from version import UpdateCheckAction, __version__, get_version_text
 
@@ -69,29 +69,38 @@ class AllSlain:
         # Set window title and cursor shape
         print("\x1b]0;all-slain\x07\x1b[2\x20q", end="", flush=True)
 
-        if filename := self.args.file if self.args.file else get_log():
+        if self.args.file:
             if self.args.verbose:
-                print(f'Reading "{Color.CYAN(filename)}"\n')
+                print(f'Reading "{Color.CYAN(self.args.file)}"\n')
         else:
-            print(Color.RED("No log files found."))
-            print(
-                "Run this again after starting the game, or specify a game log to read."
-            )
-            return
+            try:
+                self.args.file = get_log()
+            except LauncherStoreException as e:
+                print(Color.RED(str(e)))
+
+            if not self.args.file:
+                print(Color.RED("No log files found."))
+                print(
+                    "Run this again after starting the game, or specify a game log to read."
+                )
+                return
 
         log_parser = LogParser(self.args)
         try:
             with open(
-                filename, "r", encoding=self.LOG_ENCODING, newline=self.LOG_NEWLINE
+                self.args.file,
+                "r",
+                encoding=self.LOG_ENCODING,
+                newline=self.LOG_NEWLINE,
             ) as f:
                 for line in self.follow(f):
                     log_parser.process(line)
         except KeyboardInterrupt:
             pass
         except FileNotFoundError:
-            print(Color.RED(f'Log file "{filename}" not found.'))
+            print(Color.RED(f'Log file "{self.args.file}" not found.'))
         except OSError as e:
-            print(Color.RED(f'Failed to read "{filename}": {str(e)}'))
+            print(Color.RED(f'Failed to read "{self.args.file}": {str(e)}'))
         log_parser.quit()
 
 

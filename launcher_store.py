@@ -1,13 +1,14 @@
 import json
 import os
-import traceback
 
 from crypt_sindresorhus_conf import CryptSindresorhusConf
 
-from colorize import Color
-
 
 KEY = b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4="
+
+
+class LauncherStoreException(Exception):
+    pass
 
 
 def read_launcher_store():
@@ -21,14 +22,14 @@ def read_launcher_store():
         decrypted = crypt.decrypt(encrypted_data)
         return json.loads(decrypted)
     except (OSError, json.JSONDecodeError):
-        print(Color.RED("Failed to find game installation directory:"))
-        print(traceback.format_exc())
-        return None
+        raise LauncherStoreException("Failed to find or read launcher store") from None
 
 
 def get_log() -> str | None:
     """
     Returns: Path of the latest game log.
+
+    Raises: :exc:`LauncherStoreException`
     """
     try:
         data = read_launcher_store()
@@ -83,7 +84,7 @@ def get_log() -> str | None:
             except OSError:
                 pass
         return max(files, key=files.__getitem__) if files else None
-    except (LookupError, ValueError):
-        print(Color.RED("Failed to find log files:"))
-        print(traceback.format_exc())
-    return None
+    except (LookupError, ValueError) as e:
+        raise LauncherStoreException(
+            "Failed to find game installation directories"
+        ) from e
