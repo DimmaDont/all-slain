@@ -52,26 +52,30 @@ class TestGetVehicleNameFunction(unittest.TestCase):
     def test_get_vehicle_salvage(self):
         result = get_vehicle("ANVL_Arrow_Unmanned_Salvage_123456789012")
         self.assertEqual(result[0], "Anvil Arrow (Salvage)")
-        self.assertEqual(result[1], True)
+        self.assertIsNone(result[1])
+        self.assertEqual(result[2], True)
 
     def test_get_vehicle_debris(self):
         result = get_vehicle(
             "SCItem_Debris_123456789012_RSI_Constellation_Andromeda_123456789012"
         )
         self.assertEqual(result[0], "RSI Constellation Andromeda (Debris)")
-        self.assertEqual(result[1], True)
+        self.assertIsNone(result[1])
+        self.assertEqual(result[2], True)
 
     def test_get_vehicle_with_type_debris(self):
         result = get_vehicle(
             "SCItem_Debris_123456789012_RSI_Scorpius_Antares_PU_AI_CRIM_1234567890123"
         )
-        self.assertEqual(result[0], "Criminal RSI Scorpius Antares (Debris)")
-        self.assertEqual(result[1], True)
+        self.assertEqual(result[0], "RSI Scorpius Antares (Debris)")
+        self.assertEqual(result[1], "Criminal")
+        self.assertEqual(result[2], True)
 
     def test_get_non_vehicle(self):
         result = get_vehicle("invalidvehicle_123456789012")
         self.assertEqual(result[0], "invalidvehicle_123456789012")
-        self.assertEqual(result[1], False)
+        self.assertIsNone(result[1])
+        self.assertEqual(result[2], False)
 
 
 class TestGetLocationName(unittest.TestCase):
@@ -95,17 +99,17 @@ class TestGetHazardNames(unittest.TestCase):
     def test_radiation_hazard(self):
         result = clean_name("Radiation_Hazard")
         self.assertEqual(result[0], "Radiation Hazard")
-        self.assertEqual(result[1], 1)
+        self.assertEqual(result[1], True)
 
     def test_water_hazard(self):
         result = clean_name("Water_Hazard")
         self.assertEqual(result[0], "Water Hazard")
-        self.assertEqual(result[1], 1)
+        self.assertEqual(result[1], True)
 
     def test_numbered_hazard(self):
         result = clean_name("Hazard-003")
         self.assertEqual(result[0], "Environmental Hazard")
-        self.assertEqual(result[1], 1)
+        self.assertEqual(result[1], True)
 
 
 if __name__ == "__main__":

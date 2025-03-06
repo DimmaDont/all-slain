@@ -48,9 +48,13 @@ def clean_location(name: str) -> tuple[str, str, str]:
         pass
 
     # Location can also be a ship id
-    vehicle_name, found = get_vehicle(name)
+    vehicle_name, vehicle_type, found = get_vehicle(name)
     if found:
-        return ("in a", vehicle_name, "ship")
+        return (
+            "in a",
+            (vehicle_type + " " if vehicle_type else "") + vehicle_name,
+            "ship",
+        )
 
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
@@ -71,7 +75,7 @@ RE_HAZARD_NUM = re.compile(r"Hazard-\d{3}")
 # there's also a "Hazard_Area18" at Area 18
 
 
-def clean_name(name: str) -> tuple[str, int]:
+def clean_name(name: str) -> tuple[str, bool]:
     """
     Returns:
         A tuple (name, npc), where:
@@ -79,31 +83,31 @@ def clean_name(name: str) -> tuple[str, int]:
         - npc: whether the entity is an npc (if name matched a pattern below)
     """
     if name == "unknown":
-        return (name, 1)
+        return (name, True)
 
     try:
         actor_name = strip_actor_variant(strip_id(name))
-        return (ACTORS[actor_name], 1)
+        return (ACTORS[actor_name], True)
     except KeyError:
         pass
 
     if hazard := RE_HAZARD.match(name):
-        return (f"{hazard[1]} Hazard", 1)
+        return (f"{hazard[1]} Hazard", True)
     if RE_HAZARD_NUM.match(name):
-        return ("Environmental Hazard", 1)
+        return ("Environmental Hazard", True)
 
     if name == "Nova-01":
-        return ("Nova", 1)
+        return ("Nova", True)
 
     # fun fact, kill messages aren't logged for maroks. birds aren't real
 
     if RE_ASTEROID.match(name):
-        return ("Asteroid", 1)
+        return ("Asteroid", True)
 
     # or vehicles
-    vehicle_name, found = get_vehicle(name)
+    vehicle_name, vehicle_type, found = get_vehicle(name)
     if found:
-        return (vehicle_name, 1)
+        return ((vehicle_type + " " if vehicle_type else "") + vehicle_name, True)
 
     # killer can be weapons
     # KILL: behr_gren_frag_01_123456789012 killed Contestedzones_sniper with a unknown at
@@ -113,20 +117,20 @@ def clean_name(name: str) -> tuple[str, int]:
     # there are a lot of items, and this only happens rarely.
     try:
         if (fps_name := strip_id(name)) != name:
-            return (WEAPONS_FPS[fps_name], 1)
+            return (WEAPONS_FPS[fps_name], True)
     except KeyError:
         pass
 
     if RE_DEBRIS.match(name):
-        return ("Debris", 1)
+        return ("Debris", True)
 
     if name == "Hazard_hangar_medfrnt_dungeon_exec_rund":
-        return ("Executive Hangar Door Hazard", 1)
+        return ("Executive Hangar Door Hazard", True)
 
     if name == "GameRules":
-        return ("GameRules", 1)
+        return ("GameRules", True)
 
-    return (name, 0)
+    return (name, False)
 
 
 def clean_tool(item_class: str, killer: str, killed: str, damage_type: str) -> str:
@@ -163,11 +167,12 @@ def get_vehicle_type(name: str) -> str:
 RE_VEHICLE_NAME = re.compile(r"_?(.*?)_?((?:PU|EA)_AI_.*)?_(\d{12,})")
 
 
-def get_vehicle(name: str) -> tuple[str, bool]:
+def get_vehicle(name: str) -> tuple[str, str | None, bool]:
     """
     Returns:
         A tuple (name, found) where:
         - name: the name of the ship if found
+        - vtype: the type of ship if any if found
         - found: whether the vehicle was found
     """
     matches = RE_VEHICLE_NAME.findall(name)
@@ -175,27 +180,25 @@ def get_vehicle(name: str) -> tuple[str, bool]:
         # Is it a moving asteroid?...
         asteroid = RE_ASTEROID.match(name)
         if asteroid:
-            return ("Asteroid", True)
-        return (name, False)
+            return ("Asteroid", None, True)
+        return (name, None, False)
 
     if len(matches) == 2:
         # Is it debris?
         debris = matches[0][0] == "SCItem_Debris"
         if debris:
-            vehicle_type = (
-                get_vehicle_type(matches[1][1]) + " " if matches[1][1] else ""
-            )
+            vehicle_type = get_vehicle_type(matches[1][1]) if matches[1][1] else None
             try:
-                return (vehicle_type + SHIPS[matches[1][0]] + " (Debris)", True)
+                return (SHIPS[matches[1][0]] + " (Debris)", vehicle_type, True)
             except KeyError:
                 pass
 
     vehicle_name = matches[0][0]
-    vehicle_type = get_vehicle_type(matches[0][1]) + " " if matches[0][1] else ""
+    vehicle_type = get_vehicle_type(matches[0][1]) if matches[0][1] else None
 
     try:
-        return (vehicle_type + SHIPS[vehicle_name], True)
+        return (SHIPS[vehicle_name], vehicle_type, True)
     except KeyError:
         pass
 
-    return (name, False)
+    return (name, None, False)
