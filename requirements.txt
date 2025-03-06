@@ -1,3 +1,4 @@
+bs4
 crypt_sindresorhus_conf[cryptography] @ git+https://github.com/DimmaDont/py-crypt-sindresorhus-conf@f54d26b244106fbe3a1171660ad3bff789f67a3f
 requests
 semver

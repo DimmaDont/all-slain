@@ -1,4 +1,5 @@
 import datetime
+import importlib
 import time
 
 from args import Args
@@ -12,6 +13,11 @@ class LogParser:
         # Initialize with just the Branch handler
         # Handlers are added when the game log version is determined
         self.state.handlers = {Branch.name(): Branch(self.state)}
+
+        if args.player_lookup and (dp := args.data_provider.provider):
+            self.state.data_provider = importlib.import_module(
+                f"data_providers.{dp}"
+            ).Provider(self.state)
 
         self.prev: datetime.datetime | None = None
 

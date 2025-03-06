@@ -5,6 +5,7 @@ from semver import Version
 from colorize import Color
 
 from .cet import Cet
+from .character import Character
 from .connected import Connected
 from .connecting import Connecting
 from .corpse import (
@@ -28,6 +29,7 @@ from .spawn import Spawn
 
 HANDLERS_402 = [
     Cet,
+    Character,
     KillP402,
     KillV,
     Corpse402HospitalLocation,
@@ -46,6 +48,7 @@ HANDLERS_402 = [
 
 HANDLERS_400 = [
     Cet,
+    Character,
     KillP,
     KillV,
     Quantum,
@@ -94,3 +97,6 @@ class Branch(Handler):
 
         # Remove from handlers after use -- appears only once per log file
         del self.state.handlers[self.name()]
+
+        if not self.state.data_provider:
+            del self.state.handlers[Character.name()]

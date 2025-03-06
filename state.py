@@ -6,6 +6,7 @@ from args import Args
 
 
 if TYPE_CHECKING:
+    from data_providers.provider import BaseProvider
     from handlers.handler import Handler
 
 
@@ -14,6 +15,7 @@ class State:
     args: Args = field(default_factory=Args)
     cet_steps: int = 0
     count: dict[str, int] = field(default_factory=dict)
+    data_provider: "BaseProvider | None" = None
     handlers: dict[str, "Handler"] = field(default_factory=dict)
     header_width = 9
     prev_event: tuple[str, Match[str]] | None = None

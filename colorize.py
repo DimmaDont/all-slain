@@ -152,8 +152,8 @@ class Color(IntEnum):
 
     @staticmethod
     def rgb(
-        fg: list[int | None] | None = None,
-        bg: list[int | None] | None = None,
+        fg: tuple[int, int, int] | None = None,
+        bg: tuple[int, int, int] | None = None,
         bold: bool = False,
         text: str = "",
     ) -> str:
@@ -161,9 +161,9 @@ class Color(IntEnum):
         Colorizes the given text using RGB color values.
 
         Args:
-            fg: A list containing the red, green, and blue components of the foreground color.
+            fg: A tuple containing the red, green, and blue components of the foreground color.
                 If None, no foreground color is set.
-            bg: A list containing the red, green, and blue components of the background color.
+            bg: A tuple containing the red, green, and blue components of the background color.
                 If None, no background color is set.
             bold: Whether to make the text bold. Defaults to False.
             text: The text to be colorized. Defaults to an empty string.
@@ -175,30 +175,24 @@ class Color(IntEnum):
             The colorized text string using RGB color values.
         """
         if not any([fg, bg]):
-            raise ValueError("rgb() called without specifying either fg or bg")
+            raise ValueError("Either fg or bg must be specified.")
         color_codes = []
-        if fg is not None:
-            if not (
-                fg == [None, None, None]
-                or (all(isinstance(x, int) for x in fg) and len(fg) == 3)
-            ):
-                raise ValueError(f"fg must be a list of 3 integers.  {fg=}")
-            if fg != [None, None, None]:
-                color_codes.append(f"38;2;{fg[0]};{fg[1]};{fg[2]}")
-        if bg is not None:
-            if not (
-                bg == [None, None, None]
-                or (all(isinstance(x, int) for x in bg) and len(bg) == 3)
-            ):
-                raise ValueError(f"bg must be a list of 3 integers.  {bg=}")
-            if bg != [None, None, None]:
-                color_codes.append(f"48;2;{bg[0]};{bg[1]};{bg[2]}")
+        if fg:
+            color_codes.append(f"38;2;{fg[0]};{fg[1]};{fg[2]}")
+        if bg:
+            color_codes.append(f"48;2;{bg[0]};{bg[1]};{bg[2]}")
         if bold:
             color_codes.append("1")
 
-        if color_codes:
-            return f'\x1b[{";".join(color_codes)}m{text}\x1b[0m'
-        return text
+        return f"\x1b[{';'.join(color_codes)}m{text}\x1b[0m"
+
+    @staticmethod
+    def fromhex(hexstr: str) -> tuple[int, int, int] | None:
+        try:
+            _bytes = bytearray.fromhex(hexstr)
+            return (_bytes[0], _bytes[1], _bytes[2])
+        except (IndexError, ValueError):
+            return None
 
 
 # vim: set expandtab ts=4 sw=4

@@ -58,10 +58,15 @@ Compatible with `LIVE` (`4.0.2`).\
 Originally developed for `4.0_PREVIEW`.\
 Mostly compatible with `3.24.X`.
 
+## Additional Features
+* Player organization lookup
+
+See the `allslain.conf.toml` file after first run.
+
 ## Supported Events
 * Player/NPC deaths[^5]
 * Ship/vehicle destruction
-* Player respawns/corpse collection[^7]
+* Player respawns/corpse collection
 * Game load progress[^1]
 * Quit to menu/desktop[^1]
 * Inter-system jumps[^1]
@@ -75,7 +80,6 @@ Mostly compatible with `3.24.X`.
 [^4]: Excludes local player
 [^5]: Available from `3.24` to `4.0.1`. In `4.0.2`+, only events involving the client player are logged.
 [^6]: Only available up to and including `4.0.1`
-[^7]: Inconsistent since `4.0.2`
 
 ## Running the script
 1. Install [Python](https://www.python.org/downloads/)

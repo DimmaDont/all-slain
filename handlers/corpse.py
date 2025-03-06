@@ -3,10 +3,10 @@ import re
 from colorize import Color
 from functions import clean_location
 
-from .handler import Handler
+from .handler import PlayerLookupHandler
 
 
-class CorpseHospitalLocation(Handler):
+class CorpseHospitalLocation(PlayerLookupHandler):
     header = ("RESPAWN", Color.CYAN, False)
     pattern = re.compile(
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Corpse> Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
@@ -14,9 +14,9 @@ class CorpseHospitalLocation(Handler):
 
     def format(self, data) -> str:
         # datetime, player, location
-        whom = Color.GREEN(data[2])
+        player_text = self.format_player(data[2], False)
         _, where, _ = clean_location(data[3])
-        return f"{whom} from {Color.YELLOW(where)}"
+        return f"{player_text} from {Color.YELLOW(where)}"
 
 
 class Corpse402HospitalLocation(CorpseHospitalLocation):
@@ -25,14 +25,14 @@ class Corpse402HospitalLocation(CorpseHospitalLocation):
     )
 
 
-class Corpse402Corpsify(Handler):
+class Corpse402Corpsify(PlayerLookupHandler):
     header = ("CORPSE", Color.RED, True)
     pattern = re.compile(
         r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <\[ActorState\] Corpse> \[ACTOR STATE\]\[SSCActorStateCVars::LogCorpse\] Player '([\w-]+)' <(?:remote|local) client>: Running corpsify for corpse\. \[Team_ActorTech\]\[Actor\]"
     )
 
     def format(self, data) -> str:
-        return f"Corpsify: {Color.GREEN(data[2])}"
+        return f"{self.format_player(data[2], False)} {Color.BLACK('(corpsify)', True)}"
 
 
 class Corpse402IsCorpseEnabled(Corpse402Corpsify):
@@ -41,4 +41,4 @@ class Corpse402IsCorpseEnabled(Corpse402Corpsify):
     )
 
     def format(self, data) -> str:
-        return f"Corpse? {Color.GREEN(data[2])}"
+        return self.format_player(data[2], False)

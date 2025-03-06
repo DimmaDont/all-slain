@@ -2,10 +2,29 @@ import os
 from argparse import Namespace
 from typing import cast
 
-from tomlkit import TOMLDocument, document, loads, table
+from tomlkit import TOMLDocument, comment, document, loads, nl, table
+
+from data_providers.starcitizen_api import Mode
 
 
 CONFIG_NAME = "allslain.conf.toml"
+
+
+class StarCitizenApi(Namespace):
+    api_key: str
+    mode: Mode
+
+
+class DataProvider(Namespace):
+    provider: str
+    use_org_theme: bool
+
+    starcitizen_api: StarCitizenApi
+
+
+class Config(Namespace):
+    player_lookup: bool
+    data_provider: DataProvider
 
 
 # fmt: off
@@ -13,7 +32,42 @@ def create_default_config():
     doc = document()
 
     main = table()
+    main.add(nl())
+    main.add(comment("Whether to perform player org lookups. If set to true, select a data provider below."))
+    main.add(comment('Default: false'))
+    main.add("player_lookup", False)
     doc.add("main", main)
+
+    data_provider = table()
+    data_provider.add(comment("Available data providers:"))
+    data_provider.add(comment("rsi:"))
+    data_provider.add(comment("    https://robertsspaceindustries.com/"))
+    data_provider.add(comment("starcitizen_api:"))
+    data_provider.add(comment("    Unofficial Star Citizen API. Requires an API key!"))
+    data_provider.add(comment("    https://starcitizen-api.com/"))
+    data_provider.add(comment("wks_navcom:"))
+    data_provider.add(comment("    Wild Knight Squadron's NAVCOM API."))
+    data_provider.add(comment("    https://sentry.wildknightsquadron.com"))
+    data_provider.add(comment('Default: ""'))
+    data_provider.add("provider", "")
+    data_provider.add(nl())
+    data_provider.add(comment("Whether to pull and display the org's Spectrum theme color when displaying an org."))
+    data_provider.add(comment('Currently only available with the "rsi" data provider.'))
+    data_provider.add(comment('Default: true'))
+    data_provider.add("use_org_theme", True)
+    data_provider.add(nl())
+
+    starcitizen_api = table()
+    starcitizen_api.add(comment('Default: ""'))
+    starcitizen_api.add("api_key", "")
+    starcitizen_api.add(nl())
+    starcitizen_api.add(comment("One of: live, cache, auto, eager"))
+    starcitizen_api.add(comment('Default: "auto"'))
+    starcitizen_api.add("mode", "auto")
+
+    data_provider.add("starcitizen_api", starcitizen_api)
+
+    doc.add("data_provider", data_provider)
 
     return doc
 # fmt: on
