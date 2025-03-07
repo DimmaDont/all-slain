@@ -66,19 +66,19 @@ See the `allslain.conf.toml` file after first run.
 ## Supported Events
 * Player/NPC deaths[^5]
 * Ship/vehicle destruction
-* Player respawns/corpse collection
+* Player respawns/corpse activity
 * Game load progress[^1]
 * Quit to menu/desktop[^1]
-* Inter-system jumps[^1]
-* Quantum travel events with destination[^1][^3],
 * Incapacitation events[^2]
-* Quantum travel events[^4][6]
+* Inter-system jumps[^1]
+* Quantum travel events with destination[^1][^3]
+* Quantum travel events[^4][^6]
 
 [^1]: Local client only
 [^2]: Excludes incaps from combat
 [^3]: Only available for `4.0_PREVIEW`
 [^4]: Excludes local player
-[^5]: Available from `3.24` to `4.0.1`. In `4.0.2`+, only events involving the client player are logged.
+[^5]: Available from `3.24` to `4.0.1`. Since `4.0.2`, only events involving the client player are logged.
 [^6]: Only available up to and including `4.0.1`
 
 ## Running the script
