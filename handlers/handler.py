@@ -42,11 +42,11 @@ class PlayerLookupHandler(Handler):
         if self.state.args.player_lookup and self.state.data_provider:
             player = self.state.data_provider.lookup_player(handle)
             if not player.main_org:
-                return Color.GREEN(handle)
+                return Color.GREEN(player)
             main_org = (
                 self.state.data_provider.lookup_org(player.main_org)
                 if self.state.args.data_provider.use_org_theme
                 else player.main_org
             )
-            return f"{Color.GREEN(handle)} {Color.BLACK('(', True)}{main_org}{Color.BLACK(')', True)}"
+            return f"{Color.GREEN(player)} {Color.BLACK('(', True)}{main_org}{Color.BLACK(')', True)}"
         return Color.GREEN(handle)

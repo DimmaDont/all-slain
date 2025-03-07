@@ -50,6 +50,9 @@ class Player:
     # fluency: list[str]
     # orgs: list[Org] | None
 
+    def __str__(self) -> str:
+        return self.handle
+
 
 class BaseProvider(ABC):
     def __init__(self, state: "State"):

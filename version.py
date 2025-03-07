@@ -19,7 +19,7 @@ def check_for_updates() -> str:
 
     # https://github.com/psf/requests/issues/6790
     if TYPE_CHECKING:
-        import requests  # pylint: disable=C0415
+        import requests  # pylint: disable=import-outside-toplevel
     else:
         requests = import_module("requests")
     try:

@@ -54,7 +54,7 @@ class Color(IntEnum):
 
     def __call__(
         self,
-        text: str,
+        text: object,
         bold: bool = False,
         bg: Self | None = None,
         bg_bold: bool = False,

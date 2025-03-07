@@ -2,7 +2,6 @@ import logging
 import time
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from io import TextIOWrapper
-from typing import Any, Generator
 
 from colorize import Color
 from config import load_config
@@ -19,7 +18,7 @@ class AllSlain:
     LOG_ENCODING = "latin-1"
     LOG_NEWLINE = "\r\n"
 
-    def follow(self, f: TextIOWrapper) -> Generator[str, Any, None]:
+    def follow(self, f: TextIOWrapper):
         if self.args.quit_on_eof:
             while line := f.readline():
                 yield line.rstrip(self.LOG_NEWLINE)
