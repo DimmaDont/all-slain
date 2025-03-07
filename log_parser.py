@@ -1,10 +1,20 @@
 import datetime
 import importlib
 import time
+from typing import TYPE_CHECKING
 
 from args import Args
 from handlers.branch import Branch
 from state import State
+
+
+if TYPE_CHECKING:
+    # For PyInstaller dependency discovery. Also see `hook-log_parser.py`
+
+    from data_providers.dummy import Provider as Dummy
+    from data_providers.rsi import Provider as Rsi
+    from data_providers.starcitizen_api import Provider as ScApi
+    from data_providers.wks_navcom import Provider as WksNavCom
 
 
 class LogParser:

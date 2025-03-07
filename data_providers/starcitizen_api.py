@@ -1,8 +1,12 @@
 from enum import Enum
-
-import requests
+from importlib import import_module
+from typing import TYPE_CHECKING
 
 from .provider import BaseProvider, Org, Player
+
+
+if TYPE_CHECKING:
+    import requests
 
 
 class Mode(Enum):
@@ -21,6 +25,10 @@ class Provider(BaseProvider):
             raise ValueError("API key missing")
 
         self.mode = self.state.args.data_provider.starcitizen_api.mode
+
+        # https://github.com/psf/requests/issues/6790
+        global requests  # pylint: disable=global-statement
+        requests = import_module("requests")
 
     def _lookup_player(self, handle: str) -> Player:
         try:
