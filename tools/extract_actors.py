@@ -70,6 +70,7 @@ def main(game_xml: str, outfile):
                 .replace("soldier", "Soldier")
                 .replace("techie", "Techie")
                 .replace("pyro outlaw", "Outlaw")
+                .replace("Grunt Grunt", "Grunt")
                 .strip()
             )
             actors[classname] = name

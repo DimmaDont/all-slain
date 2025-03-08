@@ -152,7 +152,7 @@ ACTORS = {
     "PU_Human-NineTails-SuperBoss-Male-MendoRen": "NineTails SuperBoss MendoRen",
     "PU_Human-NineTails-SuperBoss-Male-NolanAcker": "NineTails SuperBoss NolanAcker",
     "PU_Human-NineTails-SuperBoss-Male-RemyKettle": "NineTails SuperBoss RemyKettle",
-    "PU_Human-NineTails-Grunt-Male-Grunt": "NineTails Grunt Grunt",
+    "PU_Human-NineTails-Grunt-Male-Grunt": "NineTails Grunt",
     "PU_Human-NineTails-Grunt-Male-Heavy": "NineTails Grunt Heavy",
     "PU_Human-NineTails-Grunt-Male-Light": "NineTails Grunt Light",
     "PU_Human-NineTails-Grunt-Male-Medium": "NineTails Grunt Medium",
