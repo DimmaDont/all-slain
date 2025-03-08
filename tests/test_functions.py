@@ -28,24 +28,31 @@ class TestVehicleNameRegex(unittest.TestCase):
         result = RE_VEHICLE_NAME.match(
             "CNOU_Mustang_Delta_PU_AI_NineTails_123456789012"
         )
-        self.assertEqual(len(result.groups()), 3)
+        self.assertEqual(len(result.groups()), 2)
         self.assertEqual(result[1], "CNOU_Mustang_Delta")
         self.assertEqual(result[2], "PU_AI_NineTails")
-        self.assertEqual(result[3], "123456789012")
 
     def test_regular(self):
         result = RE_VEHICLE_NAME.match("CNOU_Mustang_Delta_123456789012")
-        self.assertEqual(len(result.groups()), 3)
+        self.assertEqual(len(result.groups()), 2)
         self.assertEqual(result[1], "CNOU_Mustang_Delta")
         self.assertIsNone(result[2])
-        self.assertEqual(result[3], "123456789012")
 
     def test_id_len_13(self):
         result = RE_VEHICLE_NAME.match("MISC_Freelancer_MAX_PU_AI_CRIM_1234567890123")
-        self.assertEqual(len(result.groups()), 3)
+        self.assertEqual(len(result.groups()), 2)
         self.assertEqual(result[1], "MISC_Freelancer_MAX")
         self.assertEqual(result[2], "PU_AI_CRIM")
-        self.assertEqual(result[3], "1234567890123")
+
+    def test_ship_debris(self):
+        result = RE_VEHICLE_NAME.findall(
+            "SCItem_Debris_1234567890123_ANVL_Hornet_F7CR_PU_AI_CRIM_1234567890123"
+        )
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0][0], "SCItem_Debris")
+        self.assertEqual(result[0][1], "")
+        self.assertEqual(result[1][0], "ANVL_Hornet_F7CR")
+        self.assertEqual(result[1][1], "PU_AI_CRIM")
 
 
 class TestGetVehicleNameFunction(unittest.TestCase):
@@ -62,6 +69,14 @@ class TestGetVehicleNameFunction(unittest.TestCase):
         self.assertEqual(result[0], "RSI Constellation Andromeda (Debris)")
         self.assertIsNone(result[1])
         self.assertEqual(result[2], True)
+
+    def test_get_unknown_vehicle_debris(self):
+        result = get_vehicle(
+            "SCItem_Debris_123456789012_MFG_UnknownShip_123456789012"
+        )
+        self.assertEqual(result[0], "MFG_UnknownShip (Debris)")
+        self.assertIsNone(result[1])
+        self.assertEqual(result[2], False)
 
     def test_get_vehicle_with_type_debris(self):
         result = get_vehicle(
