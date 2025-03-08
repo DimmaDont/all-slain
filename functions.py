@@ -191,7 +191,6 @@ def get_vehicle(name: str) -> tuple[str, str | None, bool]:
         except KeyError:
             return (matches[1][0] + " (Debris)", vehicle_type, False)
 
-
     vehicle_name = matches[0][0]
     vehicle_type = get_vehicle_type(matches[0][1]) if matches[0][1] else None
 

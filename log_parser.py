@@ -1,5 +1,6 @@
 import datetime
 import importlib
+import re
 import time
 from typing import TYPE_CHECKING
 
@@ -15,6 +16,10 @@ if TYPE_CHECKING:
     from data_providers.rsi import Provider as Rsi
     from data_providers.starcitizen_api import Provider as ScApi
     from data_providers.wks_navcom import Provider as WksNavCom
+
+
+# TODO drop python3.10 and match Z
+RE_TIME = re.compile(r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3})Z> (.*)")
 
 
 class LogParser:
@@ -38,12 +43,16 @@ class LogParser:
         return (False, None)
 
     def process(self, line: str):
-        event_type, match = self.find_match(line)
+        logtime = RE_TIME.match(line)
+        if not logtime:
+            return
+
+        event_type, match = self.find_match(logtime[2])
         if not event_type:
             return
 
         if self.state.args.replay:
-            now = datetime.datetime.fromisoformat(match[1])
+            now = datetime.datetime.fromisoformat(logtime[1])
             delay = (now - (self.prev if self.prev else now)).total_seconds()
             self.prev = now
             time.sleep(
@@ -52,9 +61,11 @@ class LogParser:
                 else min(self.state.args.replay, delay)
             )
 
+        self.state.curr_event_timestr = logtime[1].replace("T", " ")[:-4]
+
         self.state.handlers[event_type](match)
 
-        self.state.prev_event = (event_type, match)
+        self.state.prev_event = (logtime[1], event_type, match)
 
         if self.state.args.debug:
             self.state.count[event_type] += 1

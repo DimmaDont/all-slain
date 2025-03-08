@@ -10,34 +10,34 @@ from .handler import Handler
 class Enter(Handler):
     header = ("ENTER", Color.GREEN, False)
     pattern = re.compile(
-        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> (?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntityEnterZone> \[InstancedInterior\] OnEntityEnterZone - InstancedInterior \[(.*)\] \[\d{12,}\] -> Entity \[(\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]\[\d{12,}\], m_isPersistent\[\d\] .*"
+        r"(?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntityEnterZone> \[InstancedInterior\] OnEntityEnterZone - InstancedInterior \[(.*)\] \[\d{12,}\] -> Entity \[(\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]\[\d{12,}\], m_isPersistent\[\d\] .*"
     )
 
     def format(self, data) -> str:
-        where = Color.CYAN("a hangar" if "_hangar_" in data[2] else data[2])
+        where = Color.CYAN("a hangar" if "_hangar_" in data[1] else data[1])
         what = (
             Color.BLACK("Elevator", True)
-            if "_elev_" in data[3]
-            else Color.GREEN(get_vehicle(data[3])[0])
+            if "_elev_" in data[2]
+            else Color.GREEN(get_vehicle(data[2])[0])
         )
-        whom = Color.GREEN(data[4])
+        whom = Color.GREEN(data[3])
         return f"{what} has entered {where} owned by {whom}"
 
 
 class Leave(Handler):
     header = ("LEAVE", Color.GREEN, False)
     pattern = re.compile(
-        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> (?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntityLeaveZone> \[InstancedInterior\] OnEntityLeaveZone - InstancedInterior \[(.*)\] \[\d{12,}\] -> Entity \[(\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]\[\d{12,}\], m_isPersistent\[\d\] .*"
+        r"(?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntityLeaveZone> \[InstancedInterior\] OnEntityLeaveZone - InstancedInterior \[(.*)\] \[\d{12,}\] -> Entity \[(\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]\[\d{12,}\], m_isPersistent\[\d\] .*"
     )
 
     def format(self, data) -> str:
-        where = Color.CYAN("a hangar" if "_hangar_" in data[2] else data[2])
+        where = Color.CYAN("a hangar" if "_hangar_" in data[1] else data[1])
         what = (
             Color.BLACK("Elevator", True)
-            if "_elev_" in data[3]
-            else Color.GREEN(get_vehicle(data[3])[0])
+            if "_elev_" in data[2]
+            else Color.GREEN(get_vehicle(data[2])[0])
         )
-        whom = Color.GREEN(data[4])
+        whom = Color.GREEN(data[3])
         return f"{what} has exited {where} owned by {whom}"
 
 
@@ -56,7 +56,7 @@ HANGAR_LOCATIONS = {
 class VehicleEnterLeave(Handler):
     header = ("ENTER", Color.CYAN, False)
     pattern = re.compile(
-        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> (?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntity(Enter|Leave)Zone> \[InstancedInterior\] OnEntity(?:Enter|Leave)Zone - InstancedInterior \[StreamingSOC_hangar_\w+_\d+_(.*?)\] \[\d{12,}\] -> Entity \[((?:SCItem_Debris_\d+_)?(?:AEGS|ANVL|ARGO|BANU|CNOU|CRUS|DRAK|ESPR|GAMA|GRIN|KRIG|MISC|MRAI|ORIG|RSI|TMBL|VNCL|XIAN|XNAA)_\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]"
+        r"(?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntity(Enter|Leave)Zone> \[InstancedInterior\] OnEntity(?:Enter|Leave)Zone - InstancedInterior \[StreamingSOC_hangar_\w+_\d+_(.*?)\] \[\d{12,}\] -> Entity \[((?:SCItem_Debris_\d+_)?(?:AEGS|ANVL|ARGO|BANU|CNOU|CRUS|DRAK|ESPR|GAMA|GRIN|KRIG|MISC|MRAI|ORIG|RSI|TMBL|VNCL|XIAN|XNAA)_\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]"
     )
     # isPersistent hangar persistence?
 
@@ -65,30 +65,30 @@ class VehicleEnterLeave(Handler):
         self.prev: tuple[str | None, str | None, datetime.datetime] | None = None
 
     def format(self, data):
-        is_enter = data[2] == "Enter"
+        is_enter = data[1] == "Enter"
         self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, not is_enter)
 
         # Enter/spawned or exited/despawned
         action = ("entered" if is_enter else "left", not is_enter)
 
-        where = HANGAR_LOCATIONS.get(data[3], data[3].title())
+        where = HANGAR_LOCATIONS.get(data[2], data[2].title())
 
         # Ships and ship debris
-        vehicle, vehicle_type, found = get_vehicle(data[4])
+        vehicle, vehicle_type, found = get_vehicle(data[3])
 
         if found:
             what = (
                 Color.GREEN(vehicle_type, True) if vehicle_type else ""
             ) + Color.GREEN(vehicle)
         else:
-            what = Color.GREEN(data[4])
+            what = Color.GREEN(data[3])
 
-        whom = data[5] if data[5] != "unknown" else None
+        whom = data[4] if data[4] != "unknown" else None
 
         # region Ship debounce
         # ships entering or leaving a hangar may log entering and leaving multiple times.
-        # If the same player+ship enter/leaves within 2s of the previous event, don't print it.
-        now = datetime.datetime.fromisoformat(data[1])
+        # If the same player+ship enter/leaves within 2s of the previous vehicle enter leave event, don't print it.
+        now = datetime.datetime.fromisoformat(self.state.curr_event_timestr)
         this = (whom, what, now)
         if (
             self.prev

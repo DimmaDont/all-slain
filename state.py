@@ -18,4 +18,5 @@ class State:
     data_provider: "BaseProvider | None" = None
     handlers: dict[str, "Handler"] = field(default_factory=dict)
     header_width = 9
-    prev_event: tuple[str, Match[str]] | None = None
+    prev_event: tuple[str, str, Match[str]] | None = None
+    curr_event_timestr: str = ""

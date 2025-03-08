@@ -9,14 +9,14 @@ from .handler import PlayerLookupHandler
 class KillP(PlayerLookupHandler):
     header = ("KILL", Color.RED, False)
     pattern = re.compile(
-        r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[Notice\] <Actor Death> CActor::Kill: '([\w-]+)' \[\d+\] in zone '([\w-]+)' killed by '([\w-]+)' \[\d+\] using '([\w-]+)' \[Class ([\w-]+)\] with damage type '([A-Za-z]+)' from direction (.*) \[Team_ActorTech\]\[Actor\]"
+        r"\[Notice\] <Actor Death> CActor::Kill: '([\w-]+)' \[\d+\] in zone '([\w-]+)' killed by '([\w-]+)' \[\d+\] using '([\w-]+)' \[Class ([\w-]+)\] with damage type '([A-Za-z]+)' "
     )
 
     def format(self, data) -> str:
-        killed, is_killed_npc = clean_name(data[2])
-        lp, location, location_type = clean_location(data[3])
-        killer, is_killer_npc = clean_name(data[4])
-        cause = clean_tool(data[6], data[4], data[2], data[7])
+        killed, is_killed_npc = clean_name(data[1])
+        lp, location, location_type = clean_location(data[2])
+        killer, is_killer_npc = clean_name(data[3])
+        cause = clean_tool(data[5], data[3], data[1], data[6])
 
         if cause.startswith("suicide"):
             return f"{Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
@@ -37,10 +37,10 @@ class KillP(PlayerLookupHandler):
 class KillP402(KillP):
     # 4.0.2 no longer reports kills that don't involve the client player.
     def format(self, data) -> str:
-        killed, is_killed_npc = clean_name(data[2])
-        lp, location, location_type = clean_location(data[3])
-        killer, is_killer_npc = clean_name(data[4])
-        cause = clean_tool(data[6], data[4], data[2], data[7])
+        killed, is_killed_npc = clean_name(data[1])
+        lp, location, location_type = clean_location(data[2])
+        killer, is_killer_npc = clean_name(data[3])
+        cause = clean_tool(data[5], data[3], data[1], data[6])
 
         if cause.startswith("suicide"):
             return f"{Color.GREEN(killer)} committed {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"

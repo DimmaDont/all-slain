@@ -71,13 +71,13 @@ HANDLERS_400 = [
 
 class Branch(Handler):
     header = ("BRANCH", Color.WHITE, False)
-    pattern = re.compile(r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> Branch: (.+)")
+    pattern = re.compile(r"Branch: (.+)")
 
     def format(self, data):
-        return Color.CYAN(data[2])
+        return Color.CYAN(data[1])
 
     def after(self, data):
-        version = Version.parse(data[2].split("-")[2], True)
+        version = Version.parse(data[1].split("-")[2], True)
         if version >= Version(4, 0, 2):
             # 4.0.2 added a ReadyToReplicate step
             self.state.cet_steps = 16

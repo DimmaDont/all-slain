@@ -71,9 +71,7 @@ class TestGetVehicleNameFunction(unittest.TestCase):
         self.assertEqual(result[2], True)
 
     def test_get_unknown_vehicle_debris(self):
-        result = get_vehicle(
-            "SCItem_Debris_123456789012_MFG_UnknownShip_123456789012"
-        )
+        result = get_vehicle("SCItem_Debris_123456789012_MFG_UnknownShip_123456789012")
         self.assertEqual(result[0], "MFG_UnknownShip (Debris)")
         self.assertIsNone(result[1])
         self.assertEqual(result[2], False)

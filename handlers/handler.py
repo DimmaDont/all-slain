@@ -22,8 +22,7 @@ class Handler(ABC):
 
     def __call__(self, data: Match[str]) -> None:
         if text := self.format(data):
-            when = data[1].replace("T", " ")
-            print(f"{when}{self.header_text}: {text}")
+            print(f"{self.state.curr_event_timestr}{self.header_text}: {text}")
         self.after(data)
 
     @classmethod
