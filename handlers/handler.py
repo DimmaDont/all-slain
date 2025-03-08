@@ -15,13 +15,15 @@ class Handler(ABC):
 
     def __init__(self, state: "State"):
         self.state = state
-        self.header_text = self.header[1](
-            self.header[0].rjust(self.state.header_width), bold=self.header[2]
-        )
+        self.set_header_text(self.header[0], self.header[1], self.header[2])
+
+    def set_header_text(self, text: str, color: Color, bold: bool):
+        self.header_text = color(text.rjust(self.state.header_width), bold=bold)
 
     def __call__(self, data: Match[str]) -> None:
-        when = data[1].replace("T", " ")
-        print(f"{when}{self.header_text}: {self.format(data)}")
+        if text := self.format(data):
+            when = data[1].replace("T", " ")
+            print(f"{when}{self.header_text}: {text}")
         self.after(data)
 
     @classmethod

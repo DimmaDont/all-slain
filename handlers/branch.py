@@ -15,6 +15,7 @@ from .corpse import (
     CorpseHospitalLocation,
 )
 from .endsession import EndSession
+from .enter_leave import VehicleEnterLeave
 from .handler import Handler
 from .incap import Incap
 from .jump import Jump
@@ -30,6 +31,7 @@ from .spawn import Spawn
 HANDLERS_402 = [
     Cet,
     Character,
+    VehicleEnterLeave,
     KillP402,
     KillV,
     Corpse402HospitalLocation,
@@ -49,6 +51,7 @@ HANDLERS_402 = [
 HANDLERS_400 = [
     Cet,
     Character,
+    VehicleEnterLeave,
     KillP,
     KillV,
     Quantum,
@@ -100,3 +103,6 @@ class Branch(Handler):
 
         if not self.state.data_provider:
             del self.state.handlers[Character.name()]
+
+        if not self.state.args.planespotting:
+            del self.state.handlers[VehicleEnterLeave.name()]

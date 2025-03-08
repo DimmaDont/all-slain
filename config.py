@@ -25,6 +25,7 @@ class DataProvider(Namespace):
 class Config(Namespace):
     player_lookup: bool
     data_provider: DataProvider
+    planespotting: bool = False
 
 
 # fmt: off
@@ -36,6 +37,11 @@ def create_default_config():
     main.add(comment("Whether to perform player org lookups. If set to true, select a data provider below."))
     main.add(comment('Default: false'))
     main.add("player_lookup", False)
+    main.add(comment("Whether to display vehicles spawning/entering and despawning/leaving hangars."))
+    main.add(comment("Default: false"))
+    main.add("planespotting", Config.planespotting)
+    main.add(nl())
+
     doc.add("main", main)
 
     data_provider = table()
