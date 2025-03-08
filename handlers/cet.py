@@ -10,7 +10,7 @@ class Cet(Handler):
     header = ("LOAD", Color.WHITE, True)
     pattern = re.compile(
         # dashes in session id when establisher is CReplicationModel
-        r'<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> \[(?:Notice|Error)\] <C?ContextEstablisherTask(Finished|LongWait|Failed)> establisher="\w+" message="[\w\s]+" taskname="([\w\.]+)" state=eCVS_(\w+)\((\d+)\) status="[\w\s\d\.]+" runningTime=(\d+\.\d+) numRuns=\d+ map="megamap" gamerules="(.*?)" .*'
+        r'<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}).\d{3}Z> (?:\[SPAM \d+\])?\[(?:Notice|Error)\] <C?ContextEstablisherTask(Finished|LongWait|Failed)> establisher="\w+" message="[\w\s]+" taskname="([\w\.]+)" state=eCVS_(\w+)\((\d+)\) status="[\w\s\d\.]+" runningTime=(\d+\.\d+) numRuns=\d+ map="megamap" gamerules="(.*?)" .*'
     )
 
     def format(self, data) -> str:
