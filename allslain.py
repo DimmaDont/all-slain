@@ -3,6 +3,7 @@ import time
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from io import TextIOWrapper
 
+from args import Args
 from colorize import Color
 from config import load_config
 from launcher_store import LauncherStoreException, get_log
@@ -58,7 +59,7 @@ class AllSlain:
         parser.add_argument("-u", "--update", action="update_check")
         parser.add_argument("-v", "--verbose", action="count", default=0)
         parser.add_argument("--version", action="version", version=get_version_text())
-        self.args = parser.parse_args(namespace=load_config())
+        self.args: Args = parser.parse_args(namespace=load_config())
 
         if self.args.debug:
             logger.setLevel(logging.DEBUG)

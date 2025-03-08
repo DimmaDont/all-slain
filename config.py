@@ -2,7 +2,17 @@ import os
 from argparse import Namespace
 from typing import cast
 
-from tomlkit import TOMLDocument, comment, document, loads, nl, table
+from tomlkit import (
+    TOMLDocument,
+    comment,
+    document,
+    loads,
+    nl,
+    register_encoder,
+    string,
+    table,
+)
+from tomlkit.exceptions import ConvertError
 
 from data_providers.starcitizen_api import Mode
 
@@ -10,22 +20,33 @@ from data_providers.starcitizen_api import Mode
 CONFIG_NAME = "allslain.conf.toml"
 
 
+# TODO drop python3.10 and use StrEnum
+def mode_encoder(e):
+    if isinstance(e, Mode):
+        return string(e.value)
+    raise ConvertError()
+
+
+register_encoder(mode_encoder)
+
+
 class StarCitizenApi(Namespace):
-    api_key: str
-    mode: Mode
+    api_key: str = ""
+    mode: Mode = Mode.AUTO
 
 
 class DataProvider(Namespace):
-    provider: str
-    use_org_theme: bool
+    provider: str = ""
+    use_org_theme: bool = True
 
-    starcitizen_api: StarCitizenApi
+    starcitizen_api: StarCitizenApi = StarCitizenApi()
 
 
 class Config(Namespace):
-    player_lookup: bool
-    data_provider: DataProvider
+    player_lookup: bool = False
     planespotting: bool = False
+
+    data_provider: DataProvider = DataProvider()
 
 
 # fmt: off
@@ -33,10 +54,12 @@ def create_default_config():
     doc = document()
 
     main = table()
-    main.add(nl())
+
     main.add(comment("Whether to perform player org lookups. If set to true, select a data provider below."))
-    main.add(comment('Default: false'))
-    main.add("player_lookup", False)
+    main.add(comment("Default: false"))
+    main.add("player_lookup", Config.player_lookup)
+    main.add(nl())
+
     main.add(comment("Whether to display vehicles spawning/entering and despawning/leaving hangars."))
     main.add(comment("Default: false"))
     main.add("planespotting", Config.planespotting)
@@ -55,21 +78,20 @@ def create_default_config():
     data_provider.add(comment("    Wild Knight Squadron's NAVCOM API."))
     data_provider.add(comment("    https://sentry.wildknightsquadron.com"))
     data_provider.add(comment('Default: ""'))
-    data_provider.add("provider", "")
+    data_provider.add("provider", Config.data_provider.provider)
     data_provider.add(nl())
     data_provider.add(comment("Whether to pull and display the org's Spectrum theme color when displaying an org."))
     data_provider.add(comment('Currently only available with the "rsi" data provider.'))
-    data_provider.add(comment('Default: true'))
-    data_provider.add("use_org_theme", True)
-    data_provider.add(nl())
+    data_provider.add(comment("Default: true"))
+    data_provider.add("use_org_theme", Config.data_provider.use_org_theme)
 
     starcitizen_api = table()
     starcitizen_api.add(comment('Default: ""'))
-    starcitizen_api.add("api_key", "")
+    starcitizen_api.add("api_key", Config.data_provider.starcitizen_api.api_key)
     starcitizen_api.add(nl())
     starcitizen_api.add(comment("One of: live, cache, auto, eager"))
     starcitizen_api.add(comment('Default: "auto"'))
-    starcitizen_api.add("mode", "auto")
+    starcitizen_api.add("mode", Config.data_provider.starcitizen_api.mode)
 
     data_provider.add("starcitizen_api", starcitizen_api)
 
