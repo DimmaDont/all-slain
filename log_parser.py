@@ -70,7 +70,11 @@ class LogParser:
         if self.state.args.debug:
             self.state.count[event_type] += 1
 
-    def quit(self):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
         if self.state.args.debug:
-            for i in sorted(self.state.count.items(), key=lambda item: item[1]):
-                print(f"{i[1]:>3} {i[0]}")
+            for i in self.state.count.items():
+                print(f"{i[1]:>5} {i[0]}")
+        return False

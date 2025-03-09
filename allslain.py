@@ -85,7 +85,6 @@ class AllSlain:
                 )
                 return
 
-        log_parser = LogParser(self.args)
         try:
             with open(
                 self.args.file,
@@ -93,15 +92,15 @@ class AllSlain:
                 encoding=self.LOG_ENCODING,
                 newline=self.LOG_NEWLINE,
             ) as f:
-                for line in self.follow(f):
-                    log_parser.process(line)
+                with LogParser(self.args) as log_parser:
+                    for line in self.follow(f):
+                        log_parser.process(line)
         except KeyboardInterrupt:
             pass
         except FileNotFoundError:
             print(Color.RED(f'Log file "{self.args.file}" not found.'))
         except OSError as e:
             print(Color.RED(f'Failed to read "{self.args.file}": {str(e)}'))
-        log_parser.quit()
 
 
 def main():

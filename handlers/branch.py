@@ -28,7 +28,7 @@ from .quit import Quit
 from .spawn import Spawn
 
 
-HANDLERS_402 = [
+HANDLERS_402: list[Handler] = [
     Cet,
     Character,
     VehicleEnterLeave,
@@ -48,7 +48,7 @@ HANDLERS_402 = [
     Quit,
 ]
 
-HANDLERS_400 = [
+HANDLERS_400: list[Handler] = [
     Cet,
     Character,
     VehicleEnterLeave,
@@ -69,6 +69,9 @@ HANDLERS_400 = [
 ]
 
 
+RE_SC_VERSION = re.compile(r"sc-alpha-(\d\.\d+(?:\.\d+)?)-?\w?")
+
+
 class Branch(Handler):
     header = ("BRANCH", Color.WHITE, False)
     pattern = re.compile(r"Branch: (.+)")
@@ -77,7 +80,7 @@ class Branch(Handler):
         return Color.CYAN(data[1])
 
     def after(self, data):
-        version = Version.parse(data[1].split("-")[2], True)
+        version = Version.parse(RE_SC_VERSION.match(data[1])[1], True)
         if version >= Version(4, 0, 2):
             # 4.0.2 added a ReadyToReplicate step
             self.state.cet_steps = 16
@@ -95,14 +98,14 @@ class Branch(Handler):
             if version != Version(4, 0, 0):
                 del self.state.handlers[ClientQuantum.name()]
 
+        if not self.state.args.player_lookup:
+            del self.state.handlers[Character.name()]
+
+        if not self.state.args.planespotting:
+            del self.state.handlers[VehicleEnterLeave.name()]
+
         if self.state.args.debug:
             self.state.count = {p[0]: 0 for p in self.state.handlers.items()}
 
         # Remove from handlers after use -- appears only once per log file
         del self.state.handlers[self.name()]
-
-        if not self.state.data_provider:
-            del self.state.handlers[Character.name()]
-
-        if not self.state.args.planespotting:
-            del self.state.handlers[VehicleEnterLeave.name()]

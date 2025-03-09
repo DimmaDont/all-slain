@@ -44,9 +44,9 @@ class Leave(Handler):
 HANGAR_LOCATIONS = {
     "a18": "Area 18",
     "dc": "Distro Center",
-    "gh": "GrimHEX",
+    "gh": "Grim HEX",
     "lorville": "Lorville",
-    "newbab": "New Laggage",
+    "newbab": "New Babbage",
     "orison": "Orison",
     "rest_rund": "Pyro Rest Stop",
     "rest_occu": "Rest Stop",
@@ -72,6 +72,7 @@ class VehicleEnterLeave(Handler):
         action = ("entered" if is_enter else "left", not is_enter)
 
         where = HANGAR_LOCATIONS.get(data[2], data[2].title())
+        where_a = "a " if data[2].startswith("r") else ""
 
         # Ships and ship debris
         vehicle, vehicle_type, found = get_vehicle(data[3])
@@ -101,4 +102,4 @@ class VehicleEnterLeave(Handler):
         self.prev = this
         # endregion
 
-        return f"{what} {Color.CYAN(*action)} {Color.GREEN(whom)}'s hangar at {Color.YELLOW(where)}"
+        return f"{what} {Color.CYAN(*action)} {Color.GREEN(whom)}'s hangar at {where_a}{Color.YELLOW(where)}"
