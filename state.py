@@ -18,5 +18,6 @@ class State:
     data_provider: "BaseProvider | None" = None
     handlers: dict[str, "Handler"] = field(default_factory=dict)
     header_width = 9
+    player_name: str = ""
     prev_event: tuple[str, str, Match[str]] | None = None
     curr_event_timestr: str = ""

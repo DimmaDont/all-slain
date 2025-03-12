@@ -15,7 +15,7 @@ class Character(Handler):
         return Color.CYAN(data[1])
 
     def after(self, data):
-        self.state.data_provider.player_name = data[1]
+        self.state.player_name = data[1]
 
         # Remove from handlers after use -- appears only once per log file
         del self.state.handlers[self.name()]

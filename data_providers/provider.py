@@ -61,15 +61,12 @@ class BaseProvider(ABC):
         self.org_info: dict[str, "Org"] = {}
         self.player_info: dict[str, "Player"] = {}
 
-        # Set by Character handler
-        self.player_name: str = ""
-
     @abstractmethod
     def _lookup_player(self, handle: str) -> Player: ...
 
     @final
     def lookup_player(self, handle: str) -> Player:
-        if self.player_name == handle:
+        if self.state.player_name == handle:
             return Player(handle)
         player = self.player_info.get(handle)
         if not player:
