@@ -2,6 +2,7 @@ import logging
 import time
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from io import TextIOWrapper
+from typing import cast
 
 from args import Args
 from colorize import Color
@@ -30,7 +31,7 @@ class AllSlain:
                 else:
                     time.sleep(1)
 
-    def __init__(self):
+    def __init__(self) -> None:
         parser = ArgumentParser(
             formatter_class=RawDescriptionHelpFormatter,
             description=(
@@ -59,7 +60,8 @@ class AllSlain:
         parser.add_argument("-u", "--update", action="update_check")
         parser.add_argument("-v", "--verbose", action="count", default=0)
         parser.add_argument("--version", action="version", version=get_version_text())
-        self.args: Args = parser.parse_args(namespace=load_config())
+
+        self.args = cast(Args, parser.parse_args(namespace=load_config()))
 
         if self.args.debug:
             logger.setLevel(logging.DEBUG)

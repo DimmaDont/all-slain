@@ -28,7 +28,7 @@ from .quit import Quit
 from .spawn import Spawn
 
 
-HANDLERS_402: list[Handler] = [
+HANDLERS_402: list[type[Handler]] = [
     Cet,
     Character,
     VehicleEnterLeave,
@@ -48,7 +48,7 @@ HANDLERS_402: list[Handler] = [
     Quit,
 ]
 
-HANDLERS_400: list[Handler] = [
+HANDLERS_400: list[type[Handler]] = [
     Cet,
     Character,
     VehicleEnterLeave,
