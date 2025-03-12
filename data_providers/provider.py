@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
+from functools import cache
 from typing import TYPE_CHECKING, final
 
 from colorize import Color
@@ -58,29 +59,20 @@ class BaseProvider(ABC):
     def __init__(self, state: "State"):
         self.state = state
 
-        self.org_info: dict[str, "Org"] = {}
-        self.player_info: dict[str, "Player"] = {}
-
     @abstractmethod
     def _lookup_player(self, handle: str) -> Player: ...
 
     @final
+    @cache
     def lookup_player(self, handle: str) -> Player:
         if self.state.player_name == handle:
             return Player(handle)
-        player = self.player_info.get(handle)
-        if not player:
-            player = self._lookup_player(handle)
-            self.player_info[handle] = player
-        return player
+        return self._lookup_player(handle)
 
     @abstractmethod
     def _lookup_org(self, spectrum_id: str) -> Org: ...
 
     @final
+    @cache
     def lookup_org(self, spectrum_id: str) -> Org:
-        org = self.org_info.get(spectrum_id)
-        if not org:
-            org = self._lookup_org(spectrum_id)
-            self.org_info[spectrum_id] = org
-        return org
+        return self._lookup_org(spectrum_id)
