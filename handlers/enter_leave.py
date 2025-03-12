@@ -66,10 +66,6 @@ class VehicleEnterLeave(Handler):
 
     def format(self, data):
         is_enter = data[1] == "Enter"
-        self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, not is_enter)
-
-        # Enter/spawned or exited/despawned
-        action = ("entered" if is_enter else "left", not is_enter)
 
         where = HANGAR_LOCATIONS.get(data[2], data[2].title())
         where_a = "a " if data[2].startswith("r") else ""
@@ -85,21 +81,36 @@ class VehicleEnterLeave(Handler):
             what = Color.GREEN(data[3])
 
         whom = data[4] if data[4] != "unknown" else None
+        if whom == self.state.player_name:
+            # Enter/exits for the client player don't bounce.
+            action = ("entered/spawned in" if is_enter else "despawned in/left", True)
+            self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, True)
+            return f"{what} {Color.CYAN(*action)} {Color.GREEN(whom) + '\'s' if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"
+        else:
+            # Assume spawn and despawn
+            action = ("spawned" if is_enter else "despawned", True)
+            self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, True)
 
-        # region Ship debounce
-        # ships entering or leaving a hangar may log entering and leaving multiple times.
+        # Ships entering or leaving a hangar will log entering and leaving multiple times. Ships spawning/despawning don't?
         # If the same player+ship enter/leaves within 2s of the previous vehicle enter leave event, don't print it.
         now = datetime.datetime.fromisoformat(self.state.curr_event_timestr)
-        this = (whom, what, now)
+        this = (whom, what, now, is_enter, False)
         if (
             self.prev
             and self.prev[0] == whom
             and self.prev[1] == what
             and now - self.prev[2] < datetime.timedelta(seconds=2)
         ):
-            self.prev = this
-            return None
+            # Skip event if already printed
+            if self.prev[4]:
+                return
+            # Use the first event's action
+            self.prev = (this[0], this[1], this[2], self.prev[3], True)
+            action = ("entered" if self.prev[3] else "left", False)
+            self.set_header_text("ENTER" if self.prev[3] else "LEAVE", Color.CYAN, False)
+            # Overwrite the previous spawn/despawn line with the fixed enter/leave line
+            print("\x1b[1A\x1b[2K", end="")
+            return f"{what} {Color.CYAN(*action)} {Color.GREEN(whom) + '\'s' if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"
         self.prev = this
-        # endregion
 
-        return f"{what} {Color.CYAN(*action)} {Color.GREEN(whom)}'s hangar at {where_a}{Color.YELLOW(where)}"
+        return f"{what} {Color.CYAN(*action)} in {Color.GREEN(whom) + '\'s' if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"

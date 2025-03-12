@@ -98,7 +98,7 @@ class Branch(Handler):
             if version != Version(4, 0, 0):
                 del self.state.handlers[ClientQuantum.name()]
 
-        if not self.state.args.player_lookup:
+        if not self.state.args.player_lookup and not self.state.args.planespotting:
             del self.state.handlers[Character.name()]
 
         if not self.state.args.planespotting:
