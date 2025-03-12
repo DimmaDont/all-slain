@@ -71,21 +71,21 @@ class AllSlain:
         # Set window title and cursor shape
         print("\x1b]0;all-slain\x07\x1b[2\x20q", end="", flush=True)
 
-        if self.args.file:
-            if self.args.verbose:
-                print(f'Reading "{Color.CYAN(self.args.file)}"\n')
-        else:
+        if not self.args.file:
             try:
                 self.args.file = get_log()
             except LauncherStoreException as e:
                 print(Color.RED(str(e)))
 
-            if not self.args.file:
-                print(Color.RED("No log files found."))
-                print(
-                    "Run this again after starting the game, or specify a game log to read."
-                )
-                return
+        if not self.args.file:
+            print(Color.RED("No log files found."))
+            print(
+                "Run this again after starting the game, or specify a game log to read."
+            )
+            return
+
+        if self.args.verbose:
+            print(f'Reading "{Color.CYAN(self.args.file)}"\n')
 
         try:
             with open(
