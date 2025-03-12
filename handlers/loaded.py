@@ -16,7 +16,7 @@ LOADED_ITEM = {
 class Loaded(Handler):
     header = ("LOAD", Color.WHITE, True)
     pattern = re.compile(
-        r"Loading screen for (\w+) : SC_Frontend closed after (\d+.\d+) seconds"
+        r"Loading screen for (\w+) : \w+ closed after (\d+.\d+) seconds"
     )
 
     def format(self, data) -> str:
