@@ -85,7 +85,7 @@ class VehicleEnterLeave(Handler):
             # Enter/exits for the client player don't bounce.
             action = ("entered/spawned in" if is_enter else "despawned in/left", True)
             self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, True)
-            return f"{what} {Color.CYAN(*action)} {Color.GREEN(whom) + '\'s' if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"
+            return f"""{what} {Color.CYAN(*action)} {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
         else:
             # Assume spawn and despawn
             action = ("spawned" if is_enter else "despawned", True)
@@ -110,7 +110,7 @@ class VehicleEnterLeave(Handler):
             self.set_header_text("ENTER" if self.prev[3] else "LEAVE", Color.CYAN, False)
             # Overwrite the previous spawn/despawn line with the fixed enter/leave line
             print("\x1b[1A\x1b[2K", end="")
-            return f"{what} {Color.CYAN(*action)} {Color.GREEN(whom) + '\'s' if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"
+            return f"""{what} {Color.CYAN(*action)} {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
         self.prev = this
 
-        return f"{what} {Color.CYAN(*action)} in {Color.GREEN(whom) + '\'s' if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"
+        return f"""{what} {Color.CYAN(*action)} in {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
