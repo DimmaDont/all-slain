@@ -107,7 +107,9 @@ class VehicleEnterLeave(Handler):
             # Use the first event's action
             self.prev = (this[0], this[1], this[2], self.prev[3], True)
             action = ("entered" if self.prev[3] else "left", False)
-            self.set_header_text("ENTER" if self.prev[3] else "LEAVE", Color.CYAN, False)
+            self.set_header_text(
+                "ENTER" if self.prev[3] else "LEAVE", Color.CYAN, False
+            )
             # Overwrite the previous spawn/despawn line with the fixed enter/leave line
             print("\x1b[1A\x1b[2K", end="")
             return f"""{what} {Color.CYAN(*action)} {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
