@@ -60,6 +60,7 @@ Mostly compatible with `3.24.X`.
 
 ## Additional Features
 * Player organization lookup
+* Planespotting
 
 See the `allslain.conf.toml` file after first run.
 
