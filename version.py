@@ -13,7 +13,9 @@ __version__ = "VERSION_HERE"
 
 def check_for_updates() -> str:
     try:
-        local_version = Version.parse(__version__)
+        local_version = Version.parse(
+            __version__[1:] if __version__.startswith("v") else __version__
+        )
     except ValueError:
         return "Not available in development releases, sorry."
 
