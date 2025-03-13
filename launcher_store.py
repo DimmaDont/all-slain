@@ -1,8 +1,6 @@
 import json
 import os
 
-from crypt_sindresorhus_conf import CryptSindresorhusConf
-
 
 KEY = b"OjPs60LNS7LbbroAuPXDkwLRipgfH6hIFA6wvuBxkg4="
 
@@ -12,6 +10,7 @@ class LauncherStoreException(Exception):
 
 
 def read_launcher_store():
+    from crypt_sindresorhus_conf import CryptSindresorhusConf
     try:
         with open(
             f"{os.getenv('APPDATA')}\\rsilauncher\\launcher store.json", "rb"
