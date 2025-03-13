@@ -61,6 +61,7 @@ def create_default_config():
     main.add(nl())
 
     main.add(comment("Whether to display vehicles spawning/entering and despawning/leaving hangars."))
+    main.add(comment("Not 100% accurate -- ship spawning is still buggy."))
     main.add(comment("Default: false"))
     main.add("planespotting", Config.planespotting)
     main.add(nl())
