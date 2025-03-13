@@ -78,7 +78,7 @@ class VehicleEnterLeave(Handler):
                 Color.GREEN(vehicle_type, True) if vehicle_type else ""
             ) + Color.GREEN(vehicle)
         else:
-            what = Color.GREEN(data[3])
+            return
 
         whom = data[4] if data[4] != "unknown" else None
         if whom == self.state.player_name:
