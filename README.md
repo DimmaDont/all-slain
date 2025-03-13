@@ -58,12 +58,6 @@ Compatible with `LIVE` (`4.0.2`).\
 Originally developed for `4.0_PREVIEW`.\
 Mostly compatible with `3.24.X`.
 
-## Additional Features
-* Player organization lookup
-* Planespotting
-
-See the `allslain.conf.toml` file after first run.
-
 ## Supported Events
 * Player/NPC deaths[^5]
 * Ship/vehicle destruction
@@ -74,6 +68,12 @@ See the `allslain.conf.toml` file after first run.
 * Inter-system jumps[^1]
 * Quantum travel events with destination[^1][^3]
 * Quantum travel events[^4][^6]
+
+## Additional Features
+* Player organization lookup
+* Planespotting
+
+See the `allslain.conf.toml` file after first run.
 
 [^1]: Local client only
 [^2]: Excludes incaps from combat
