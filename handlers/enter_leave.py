@@ -62,7 +62,7 @@ class VehicleEnterLeave(Handler):
 
     def __init__(self, state) -> None:
         super().__init__(state)
-        self.prev: tuple[str | None, str | None, datetime.datetime] | None = None
+        self.prev: tuple[str | None, str, datetime.datetime] | None = None
 
     def format(self, data):
         is_enter = data[1] == "Enter"
@@ -110,8 +110,13 @@ class VehicleEnterLeave(Handler):
             self.set_header_text(
                 "ENTER" if self.prev[3] else "LEAVE", Color.CYAN, False
             )
-            # Overwrite the previous spawn/despawn line with the fixed enter/leave line
-            print("\x1b[1A\x1b[2K", end="")
+            if (
+                not self.state.args.verbose
+                and self.state.prev_event
+                and self.state.prev_event[1] == self.name()
+            ):
+                # Overwrite the previous spawn/despawn line with the fixed enter/leave line
+                print("\x1b[1A\x1b[2K", end="")
             return f"""{what} {Color.CYAN(*action)} {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
         self.prev = this
 

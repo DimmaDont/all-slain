@@ -46,9 +46,9 @@ class Cet(Handler):
         # Replace the previous line if it was a CET, verbose is disabled,
         # and previous CET took less than 5s
         if (
-            self.state.prev_event
-            and self.state.prev_event[1] == "CET"
-            and not self.state.args.verbose
+            not self.state.args.verbose
+            and self.state.prev_event
+            and self.state.prev_event[1] == self.name()
             and float(self.state.prev_event[2][5]) < 5
         ):
             # Move cursor up one line and clear it
