@@ -1,6 +1,6 @@
 import os
 from argparse import Namespace
-from typing import cast
+from typing import Any, cast
 
 from tomlkit import (
     TOMLDocument,
@@ -13,6 +13,7 @@ from tomlkit import (
     table,
 )
 from tomlkit.exceptions import ConvertError
+from tomlkit.items import Item
 
 from data_providers.starcitizen_api import Mode
 
@@ -21,7 +22,7 @@ CONFIG_NAME = "allslain.conf.toml"
 
 
 # TODO drop python3.10 and use StrEnum
-def mode_encoder(e):
+def mode_encoder(e: Any) -> Item:
     if isinstance(e, Mode):
         return string(e.value)
     raise ConvertError()
@@ -50,7 +51,7 @@ class Config(Namespace):
 
 
 # fmt: off
-def create_default_config():
+def create_default_config() -> TOMLDocument:
     doc = document()
 
     main = table()
@@ -103,7 +104,7 @@ def create_default_config():
 # fmt: on
 
 
-def merge(src: dict, dest: dict):
+def merge(src: dict[str, Any], dest: dict[Any, Any]) -> None:
     for key, value in src.items():
         if isinstance(value, dict):
             node = dest.setdefault(key, {})
@@ -114,7 +115,7 @@ def merge(src: dict, dest: dict):
 
 # See https://github.com/python-poetry/tomlkit/pull/402
 class TOMLFile:
-    def __init__(self, path: str | os.PathLike) -> None:
+    def __init__(self, path: str | os.PathLike[str]) -> None:
         self._path = path
 
     def read(self) -> TOMLDocument:
@@ -127,7 +128,7 @@ class TOMLFile:
                 f.write(config)
 
 
-def mergeattr(src: dict, dest: object):
+def mergeattr(src: dict[str, Any], dest: object) -> None:
     for key, value in src.items():
         if isinstance(value, dict):
             if not hasattr(dest, key):

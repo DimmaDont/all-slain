@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 
 class Handler(ABC):
     header: tuple[str, Color, bool]
-    pattern: Pattern
+    pattern: Pattern[str]
 
     def __init__(self, state: "State"):
         self.state = state
         self.set_header_text(self.header[0], self.header[1], self.header[2])
 
-    def set_header_text(self, text: str, color: Color, bold: bool):
+    def set_header_text(self, text: str, color: Color, bold: bool) -> None:
         self.header_text = color(text.rjust(self.state.header_width), bold=bold)
 
     def __call__(self, data: Match[str]) -> None:
@@ -26,11 +26,11 @@ class Handler(ABC):
         self.after(data)
 
     @classmethod
-    def name(cls):
+    def name(cls) -> str:
         return cls.__name__.upper()
 
     @abstractmethod
-    def format(self, data: Match[str]) -> str: ...
+    def format(self, data: Match[str]) -> str | None: ...
 
     # pylint: disable=unused-argument
     def after(self, data: Match[str]) -> None: ...

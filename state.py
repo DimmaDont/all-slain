@@ -19,5 +19,8 @@ class State:
     handlers: dict[str, "Handler"] = field(default_factory=dict)
     header_width = 9
     player_name: str = ""
+
     prev_event: tuple[str, str, Match[str]] | None = None
+    """log time str, event type, match"""
+
     curr_event_timestr: str = ""

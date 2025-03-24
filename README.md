@@ -70,11 +70,12 @@ Mostly compatible with `3.24.X`.
 * Quantum travel events[^4][^6]
 * Medical bed limb healing[^1]
 
-## Additional Features
+## Optional Additional Features
 * Player organization lookup
 * Planespotting[^7]
 
-See the `allslain.conf.toml` file after first run.
+See the `allslain.conf.toml` config file after first run.\
+It can be opened with Notepad, but an editor with syntax highlighting such as [Notepad++](https://notepad-plus-plus.org/) is recommended.
 
 [^1]: Local client only
 [^2]: Excludes incaps from combat
