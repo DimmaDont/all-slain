@@ -77,11 +77,20 @@ class Branch(Handler):
     pattern = re.compile(r"Branch: (.+)")
 
     def format(self, data):
-        return Color.CYAN(data[1])
+        self.version = Version.parse(RE_SC_VERSION.match(data[1])[1], True)
+        return Color.CYAN(self.version)
 
     def after(self, data):
-        version = Version.parse(RE_SC_VERSION.match(data[1])[1], True)
-        if version >= Version(4, 0, 2):
+        if self.version >= Version(4, 1, 0):
+            self.state.cet_steps = 16
+
+            for handler in HANDLERS_402:
+                self.state.handlers[handler.name()] = handler(self.state)
+
+            # Planespotting removed from 4.1.0
+            del self.state.handlers[VehicleEnterLeave.name()]
+
+        elif self.version >= Version(4, 0, 2):
             # 4.0.2 added a ReadyToReplicate step
             self.state.cet_steps = 16
 
@@ -95,13 +104,17 @@ class Branch(Handler):
                 self.state.handlers[handler.name()] = handler(self.state)
 
             # ClientQuantum is only available for 4.0.0
-            if version != Version(4, 0, 0):
+            if self.version != Version(4, 0, 0):
                 del self.state.handlers[ClientQuantum.name()]
 
         if not self.state.args.player_lookup and not self.state.args.planespotting:
             del self.state.handlers[Character.name()]
 
-        if not self.state.args.planespotting:
+        if (
+            not self.state.args.planespotting
+            # May have been removed already
+            and VehicleEnterLeave.name() in self.state.handlers
+        ):
             del self.state.handlers[VehicleEnterLeave.name()]
 
         if self.state.args.debug:

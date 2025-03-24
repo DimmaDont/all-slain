@@ -61,7 +61,8 @@ def create_default_config():
     main.add(nl())
 
     main.add(comment("Whether to display vehicles spawning/entering and despawning/leaving hangars."))
-    main.add(comment("Not 100% accurate -- ship spawning is still buggy."))
+    main.add(comment("Not 100% accurate -- ship spawning is buggy."))
+    main.add(comment("Unavailable after Alpha 4.0.2, starting with Alpha 4.1.0"))
     main.add(comment("Default: false"))
     main.add("planespotting", Config.planespotting)
     main.add(nl())

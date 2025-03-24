@@ -71,7 +71,7 @@ Mostly compatible with `3.24.X`.
 
 ## Additional Features
 * Player organization lookup
-* Planespotting
+* Planespotting[^7]
 
 See the `allslain.conf.toml` file after first run.
 
@@ -81,6 +81,7 @@ See the `allslain.conf.toml` file after first run.
 [^4]: Excludes local player
 [^5]: Available from `3.24` to `4.0.1`. Since `4.0.2`, only events involving the client player are logged.
 [^6]: Only available up to and including `4.0.1`
+[^7]: Only available up to and including `4.0.2`. No longer available in `4.1.0`.
 
 ## Running the script
 1. Install [Python](https://www.python.org/downloads/)
