@@ -68,6 +68,7 @@ Mostly compatible with `3.24.X`.
 * Inter-system jumps[^1]
 * Quantum travel events with destination[^1][^3]
 * Quantum travel events[^4][^6]
+* Medical bed limb healing[^1]
 
 ## Additional Features
 * Player organization lookup

@@ -23,6 +23,7 @@ from .killp import KillP, KillP402
 from .killv import KillV
 from .loaded import Loaded
 from .loading import Loading
+from .med_bed_heal import MedBedHeal
 from .quantum import ClientQuantum, Quantum
 from .quit import Quit
 from .spawn import Spawn
@@ -45,6 +46,7 @@ HANDLERS_402: list[type[Handler]] = [
     Connecting,
     Loaded,
     Loading,
+    MedBedHeal,
     Quit,
 ]
 
@@ -65,6 +67,7 @@ HANDLERS_400: list[type[Handler]] = [
     Connecting,
     Loaded,
     Loading,
+    MedBedHeal,
     Quit,
 ]
 
