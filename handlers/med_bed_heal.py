@@ -41,7 +41,6 @@ SHIPS = {
 }
 
 
-
 class MedBedHeal(Handler):
     header = ("MED BED", Color.RED, False)
     pattern = re.compile(
@@ -70,8 +69,10 @@ class MedBedHeal(Handler):
         if not parts_healed:
             parts_healed_str = ""
         elif len(parts_healed) < 3:
-            parts_healed_str = ' and '.join(parts_healed) + " "
+            parts_healed_str = " and ".join(parts_healed) + " "
         else:
-            parts_healed_str = ', '.join(parts_healed[:-1]) + ', and ' + parts_healed[-1] + " "
+            parts_healed_str = (
+                ", ".join(parts_healed[:-1]) + ", and " + parts_healed[-1] + " "
+            )
 
         return f"Healed {parts_healed_str}in a {Color.YELLOW(med_bed_name)}{vehicle}"

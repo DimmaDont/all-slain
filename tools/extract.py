@@ -79,7 +79,10 @@ def get_locations(labels: dict[str, str]) -> dict:
 def dump_to_file(data: dict, filename: str):
     with open(filename, "w", encoding="utf-8") as f:
         f.write(
-            "X = " + json.dumps(dict(sorted(data.items(), key=lambda x: x[0].lower())), indent=4)
+            "X = "
+            + json.dumps(
+                dict(sorted(data.items(), key=lambda x: x[0].lower())), indent=4
+            )
         )
 
 
