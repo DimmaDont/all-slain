@@ -72,7 +72,11 @@ HANDLERS_400: list[type[Handler]] = [
 ]
 
 
-RE_SC_VERSION = re.compile(r"sc-alpha-(\d\.\d+(?:\.\d+)?)-?\w?")
+RE_SC_VERSION = re.compile(r"sc-alpha-(\d\.\d+(?:\.\d+)?(?:-\w+)?)(\w+)?")
+
+
+class UnsupportedVersionException(Exception):
+    pass
 
 
 class Branch(Handler):
@@ -80,10 +84,14 @@ class Branch(Handler):
     pattern = re.compile(r"Branch: (.+)")
 
     def format(self, data):
-        self.version = Version.parse(RE_SC_VERSION.match(data[1])[1], True)
-        return Color.CYAN(self.version)
+        return Color.CYAN(data[1])
 
     def after(self, data):
+        match = RE_SC_VERSION.match(data[1])
+        if not match:
+            raise UnsupportedVersionException(data[1])
+        self.version = Version.parse(match[1], True)
+
         if self.version >= Version(4, 1, 0):
             self.state.cet_steps = 16
 
