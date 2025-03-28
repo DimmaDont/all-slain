@@ -34,6 +34,8 @@ def get_ships(data: dict) -> dict:
         ship_name = ship["Name"].strip()
         if ship_class_name.endswith("_Temp"):
             continue
+        if ship_class_name.endswith("_Indestructible"):
+            continue
         if ship_class_name.endswith("_NineTails"):
             ships[ship_class_name] = ship_name + " (NineTails)"
         elif ship_class_name.endswith("_Unmanned_Salvage"):
@@ -77,7 +79,7 @@ def get_locations(labels: dict[str, str]) -> dict:
 def dump_to_file(data: dict, filename: str):
     with open(filename, "w", encoding="utf-8") as f:
         f.write(
-            json.dumps(dict(sorted(data.items(), key=lambda x: x[0].lower())), indent=4)
+            "X = " + json.dumps(dict(sorted(data.items(), key=lambda x: x[0].lower())), indent=4)
         )
 
 
@@ -113,7 +115,6 @@ def main(directory: str):
                 if any(
                     [
                         item["className"].startswith("Carryable_"),
-                        item["className"].startswith("crlf_medgun_"),
                         item["className"].startswith("grin_multitool_"),
                         item["className"].startswith("sasu_pistol_toy_"),
                         "_test_" in item["className"],
@@ -140,6 +141,8 @@ def main(directory: str):
                     [
                         item["className"].endswith("_LowPoly"),
                         item["className"].endswith("_Turret"),
+                        "Tractor" in item["className"],
+                        item["className"].endswith("_reference"),
                     ]
                 ):
                     continue
@@ -150,10 +153,10 @@ def main(directory: str):
                 except KeyError:
                     print(f'Could not find item with name "{item["name"]}"')
 
-    dump_to_file(ships, "tools\\ships.json")
-    dump_to_file(weapons_fps, "tools\\weapons_fps.json")
-    dump_to_file(weapons_ship, "tools\\weapons_ship.json")
-    dump_to_file(locations, "tools\\locations.json")
+    dump_to_file(ships, "data\\ships.py")
+    dump_to_file(weapons_fps, "data\\weapons_fps.py")
+    dump_to_file(weapons_ship, "data\\weapons_ship.py")
+    dump_to_file(locations, "data\\locations.py")
 
 
 if __name__ == "__main__":

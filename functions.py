@@ -3,6 +3,7 @@ import re
 from data import ACTORS, LOCATIONS, SHIPS, VEHICLE_TYPES, WEAPONS_FPS, WEAPONS_SHIP
 
 
+# TODO confirm
 RE_ASTEROID = re.compile(r"(?:Rotation|Oscillation)Simple-\d{3}")
 
 
