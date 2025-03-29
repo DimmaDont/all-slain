@@ -1,11 +1,12 @@
 import re
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
 
-class Spawn(Handler):
+class Spawn(CompatibleAll, Handler):
     header = ("LOAD", Color.WHITE, True)
     pattern = re.compile(r"\[CSessionManager::OnClientSpawned\] Spawned!")
 

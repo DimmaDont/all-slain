@@ -2,6 +2,7 @@ import re
 from datetime import timedelta
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
@@ -13,7 +14,7 @@ LOADED_ITEM = {
 }
 
 
-class Loaded(Handler):
+class Loaded(CompatibleAll, Handler):
     header = ("LOAD", Color.WHITE, True)
     pattern = re.compile(
         r"Loading screen for (\w+) : \w+ closed after (\d+.\d+) seconds"

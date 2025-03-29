@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from re import Match
 from typing import TYPE_CHECKING
 
+from semver import Version
+
 from args import Args
 
 
@@ -24,3 +26,6 @@ class State:
     """log time str, event type, match"""
 
     curr_event_timestr: str = ""
+
+    version: Version | None = None
+    build: int = 0

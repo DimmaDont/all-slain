@@ -1,11 +1,12 @@
 import re
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
 
-class Session(Handler):
+class Session(CompatibleAll, Handler):
     header = ("SESSION", Color.CYAN, False)
     pattern = re.compile(r"\[Trace\] @session:\s+'([\w-]+)'")
 

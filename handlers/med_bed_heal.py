@@ -2,6 +2,7 @@ import re
 
 from colorize import Color
 from functions import strip_id
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
@@ -41,7 +42,7 @@ SHIPS = {
 }
 
 
-class MedBedHeal(Handler):
+class MedBedHeal(CompatibleAll, Handler):
     header = ("MED BED", Color.RED, False)
     pattern = re.compile(
         r"\[Notice\] <MED BED HEAL> Actor: [\w-]+ \(Non-Authoritative CLIENT: [\w-]+\) \| \[CEntityComponentMedBed::HandleComponentEvent:\d+\] \| -> Perform surgery event \w+(?#Success), med bed name: ([\w-]+), vehicle name: ([@\w-]+), head: (true|false) torso: (true|false) leftArm: (true|false) rightArm: (true|false) leftLeg: (true|false) rightLeg: (true|false) \[Team_ActorFeatures\]\[Actor\]"

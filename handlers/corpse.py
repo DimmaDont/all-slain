@@ -3,10 +3,11 @@ import re
 from colorize import Color
 from functions import clean_location
 
+from .compatibility import SinceV402, V401AndBelow
 from .handler import PlayerLookupHandler
 
 
-class CorpseHospitalLocation(PlayerLookupHandler):
+class CorpseHospitalLocation(V401AndBelow, PlayerLookupHandler):
     header = ("RESPAWN", Color.CYAN, False)
     pattern = re.compile(
         r"\[Notice\] <Corpse> Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
@@ -19,13 +20,13 @@ class CorpseHospitalLocation(PlayerLookupHandler):
         return f"{player_text} from {Color.YELLOW(where)}"
 
 
-class Corpse402HospitalLocation(CorpseHospitalLocation):
+class Corpse402HospitalLocation(SinceV402, CorpseHospitalLocation):
     pattern = re.compile(
         r"\[Notice\] <\[ActorState\] Corpse> \[ACTOR STATE\]\[SSCActorStateCVars::LogCorpse\] Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital\. \[Team_ActorTech\]\[Actor\]"
     )
 
 
-class Corpse402Corpsify(PlayerLookupHandler):
+class Corpse402Corpsify(SinceV402, PlayerLookupHandler):
     header = ("CORPSE", Color.RED, True)
     pattern = re.compile(
         r"\[Notice\] <\[ActorState\] Corpse> \[ACTOR STATE\]\[SSCActorStateCVars::LogCorpse\] Player '([\w-]+)' <(?:remote|local) client>: Running corpsify for corpse\. \[Team_ActorTech\]\[Actor\]"

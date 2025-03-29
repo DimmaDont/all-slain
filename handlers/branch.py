@@ -1,75 +1,13 @@
 import re
+from typing import cast
 
 from semver import Version
 
 from colorize import Color
 
-from .cet import Cet
-from .character import Character
-from .connected import Connected
-from .connecting import Connecting
-from .corpse import (
-    Corpse402Corpsify,
-    Corpse402HospitalLocation,
-    Corpse402IsCorpseEnabled,
-    CorpseHospitalLocation,
-)
-from .endsession import EndSession
-from .enter_leave import VehicleEnterLeave
+from .build import Build
+from .compatibility import CompatibleAll
 from .handler import Handler
-from .incap import Incap
-from .jump import Jump
-from .killp import KillP, KillP402
-from .killv import KillV
-from .loaded import Loaded
-from .loading import Loading
-from .med_bed_heal import MedBedHeal
-from .quantum import ClientQuantum, Quantum
-from .quit import Quit
-from .spawn import Spawn
-
-
-HANDLERS_402: list[type[Handler]] = [
-    Cet,
-    Character,
-    VehicleEnterLeave,
-    KillP402,
-    KillV,
-    Corpse402HospitalLocation,
-    Corpse402Corpsify,
-    Corpse402IsCorpseEnabled,
-    Incap,
-    EndSession,
-    Spawn,
-    Jump,
-    Connected,
-    Connecting,
-    Loaded,
-    Loading,
-    MedBedHeal,
-    Quit,
-]
-
-HANDLERS_400: list[type[Handler]] = [
-    Cet,
-    Character,
-    VehicleEnterLeave,
-    KillP,
-    KillV,
-    Quantum,
-    ClientQuantum,
-    CorpseHospitalLocation,
-    Incap,
-    EndSession,
-    Spawn,
-    Jump,
-    Connected,
-    Connecting,
-    Loaded,
-    Loading,
-    MedBedHeal,
-    Quit,
-]
 
 
 RE_SC_VERSION = re.compile(r"sc-alpha-(\d\.\d+(?:\.\d+)?(?:-\w+)?)(\w+)?")
@@ -79,57 +17,33 @@ class UnsupportedVersionException(Exception):
     pass
 
 
-class Branch(Handler):
+class Branch(CompatibleAll, Handler):
     header = ("BRANCH", Color.WHITE, False)
     pattern = re.compile(r"Branch: (.+)")
 
-    def format(self, data):
-        return Color.CYAN(data[1])
+    def format(self, data) -> None:
+        pass
 
-    def after(self, data):
+    def after(self, data) -> None:
         match = RE_SC_VERSION.match(data[1])
-        if not match:
+        if match is None:
             raise UnsupportedVersionException(data[1])
-        self.version = Version.parse(match[1], True)
 
-        if self.version >= Version(4, 1, 0):
-            self.state.cet_steps = 16
+        self.state.version = Version.parse(match[1], True)
+        if match[2] is not None:
+            # "a" to "a.1"
+            self.state.version.bump_prerelease(match[2])
 
-            for handler in HANDLERS_402:
-                self.state.handlers[handler.name()] = handler(self.state)
+        # For printing by Build
+        build = cast(Build, self.state.handlers[Build.name()])
+        build.branch = data[1]
 
-            # Planespotting removed from 4.1.0
-            del self.state.handlers[VehicleEnterLeave.name()]
-
-        elif self.version >= Version(4, 0, 2):
+        if self.state.version >= Version(4, 0, 2):
             # 4.0.2 added a ReadyToReplicate step
             self.state.cet_steps = 16
-
-            for handler in HANDLERS_402:
-                self.state.handlers[handler.name()] = handler(self.state)
         else:
             # 4.0.1 and below
             self.state.cet_steps = 15
-
-            for handler in HANDLERS_400:
-                self.state.handlers[handler.name()] = handler(self.state)
-
-            # ClientQuantum is only available for 4.0.0
-            if self.version != Version(4, 0, 0):
-                del self.state.handlers[ClientQuantum.name()]
-
-        if not self.state.args.player_lookup and not self.state.args.planespotting:
-            del self.state.handlers[Character.name()]
-
-        if (
-            not self.state.args.planespotting
-            # May have been removed already
-            and VehicleEnterLeave.name() in self.state.handlers
-        ):
-            del self.state.handlers[VehicleEnterLeave.name()]
-
-        if self.state.args.debug:
-            self.state.count = {p[0]: 0 for p in self.state.handlers.items()}
 
         # Remove from handlers after use -- appears only once per log file
         del self.state.handlers[self.name()]

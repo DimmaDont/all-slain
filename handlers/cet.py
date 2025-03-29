@@ -2,11 +2,12 @@ import re
 from datetime import timedelta
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
 
-class Cet(Handler):
+class Cet(CompatibleAll, Handler):
     header = ("LOAD", Color.WHITE, True)
     pattern = re.compile(
         # dashes in session id when establisher is CReplicationModel
@@ -63,4 +64,4 @@ class Cet(Handler):
             and data[2] == "InitView.ClientPlayer"
             and data[6] == "SC_Default"  # is SC_Frontend when loading back into menu
         ):
-            self.state.handlers.pop("CET")
+            self.state.handlers.pop(self.name())

@@ -1,11 +1,12 @@
 import re
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
 
-class Jump(Handler):
+class Jump(CompatibleAll, Handler):
     header = ("JUMP", Color.GREEN, False)
     pattern = re.compile(
         r"\[Notice\] <Changing Solar System>.* Client entity ([\w-]*) .* changing system from (\w+) to (\w+) "

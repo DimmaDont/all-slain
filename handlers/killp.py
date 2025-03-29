@@ -2,11 +2,12 @@ import re
 
 from colorize import Color
 from functions import clean_location, clean_name, clean_tool
+from handlers.compatibility import SinceV402, V401AndBelow
 
 from .handler import PlayerLookupHandler
 
 
-class KillP(PlayerLookupHandler):
+class KillP(V401AndBelow, PlayerLookupHandler):
     header = ("KILL", Color.RED, False)
     pattern = re.compile(
         r"\[Notice\] <Actor Death> CActor::Kill: '([\w-]+)' \[\d+\] in zone '([\w-]+)' killed by '([\w-]+)' \[\d+\] using '([\w-]+)' \[Class ([\w-]+)\] with damage type '([A-Za-z]+)' "
@@ -34,7 +35,7 @@ class KillP(PlayerLookupHandler):
         return f"{killer_text} killed {killed_text} with a {Color.CYAN(cause)} {lp} {Color.YELLOW(location)}"
 
 
-class KillP402(KillP):
+class KillP402(SinceV402, KillP):
     # 4.0.2 no longer reports kills that don't involve the client player.
     def format(self, data: re.Match[str]) -> str:
         killed, is_killed_npc = clean_name(data[1])

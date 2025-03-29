@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from args import Args
 from handlers.branch import Branch
+from handlers.build import Build
 from state import State
 
 
@@ -25,9 +26,17 @@ RE_TIME = re.compile(r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3})Z> (.*)")
 class LogParser:
     def __init__(self, args: Args) -> None:
         self.state = State(args)
-        # Initialize with just the Branch handler
-        # Handlers are added when the game log version is determined
-        self.state.handlers = {Branch.name(): Branch(self.state)}
+        # Initialize with just the Branch and Build handlers
+        # Handlers are added by the Build handler once game log version and build are determined
+        self.state.handlers = {
+            Branch.name(): Branch(self.state),
+            Build.name(): Build(self.state),
+        }
+        if self.state.args.debug:
+            self.state.count = {
+                Branch.name(): 0,
+                Build.name(): 0,
+            }
 
         if args.player_lookup and (dp := args.data_provider.provider):
             self.state.data_provider = importlib.import_module(

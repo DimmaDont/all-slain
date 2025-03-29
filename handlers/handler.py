@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from re import Match, Pattern
 from typing import TYPE_CHECKING
 
+from semver import Version
+
 from colorize import Color
 
 
@@ -31,6 +33,10 @@ class Handler(ABC):
 
     @abstractmethod
     def format(self, data: Match[str]) -> str | None: ...
+
+    @classmethod
+    @abstractmethod
+    def is_compatible(cls, version: Version, build: int) -> bool: ...
 
     # pylint: disable=unused-argument
     def after(self, data: Match[str]) -> None: ...

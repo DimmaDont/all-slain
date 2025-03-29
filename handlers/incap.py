@@ -1,6 +1,7 @@
 import re
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
@@ -8,7 +9,7 @@ from .handler import Handler
 LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
 
 
-class Incap(Handler):
+class Incap(CompatibleAll, Handler):
     header = ("INCAP", Color.YELLOW, False)
     pattern = re.compile(r"Logged an incap\.! nickname: ([\w-]+), causes: \[(.+)\]")
 

@@ -3,11 +3,12 @@ import re
 
 from colorize import Color
 from functions import get_vehicle
+from handlers.compatibility import V402AndBelow
 
 from .handler import Handler
 
 
-class Enter(Handler):
+class Enter(V402AndBelow, Handler):
     header = ("ENTER", Color.GREEN, False)
     pattern = re.compile(
         r"(?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntityEnterZone> \[InstancedInterior\] OnEntityEnterZone - InstancedInterior \[(.*)\] \[\d{12,}\] -> Entity \[(\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]\[\d{12,}\], m_isPersistent\[\d\] .*"
@@ -24,7 +25,7 @@ class Enter(Handler):
         return f"{what} has entered {where} owned by {whom}"
 
 
-class Leave(Handler):
+class Leave(V402AndBelow, Handler):
     header = ("LEAVE", Color.GREEN, False)
     pattern = re.compile(
         r"(?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntityLeaveZone> \[InstancedInterior\] OnEntityLeaveZone - InstancedInterior \[(.*)\] \[\d{12,}\] -> Entity \[(\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]\[\d{12,}\], m_isPersistent\[\d\] .*"
@@ -53,7 +54,7 @@ HANGAR_LOCATIONS = {
 }
 
 
-class VehicleEnterLeave(Handler):
+class VehicleEnterLeave(V402AndBelow, Handler):
     header = ("ENTER", Color.CYAN, False)
     pattern = re.compile(
         r"(?:\[SPAM \d+\])?\[Notice\] <CEntityComponentInstancedInterior::OnEntity(Enter|Leave)Zone> \[InstancedInterior\] OnEntity(?:Enter|Leave)Zone - InstancedInterior \[StreamingSOC_hangar_\w+_\d+_(.*?)\] \[\d{12,}\] -> Entity \[((?:SCItem_Debris_\d+_)?(?:AEGS|ANVL|ARGO|BANU|CNOU|CRUS|DRAK|ESPR|GAMA|GRIN|KRIG|MISC|MRAI|ORIG|RSI|TMBL|VNCL|XIAN|XNAA)_\w+)\] \[\d{12,}\] -- m_openDoors\[\d\], m_managerGEID\[\d{12,}\], m_ownerGEID\[([\w-]+)\]"

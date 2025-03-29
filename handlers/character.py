@@ -1,11 +1,12 @@
 import re
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
 
 
-class Character(Handler):
+class Character(CompatibleAll, Handler):
     header = ("LOGIN", Color.WHITE, False)
     pattern = re.compile(
         r"\[Notice\] <AccountLoginCharacterStatus_Character> Character: createdAt \d+ - updatedAt \d+ - geid \d+ - accountId \d+ - name ([\w-]+) - state STATE_(CURRENT|UNSPECIFIED) "

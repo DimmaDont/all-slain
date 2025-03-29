@@ -1,12 +1,13 @@
 import re
 
 from colorize import Color
+from handlers.compatibility import CompatibleAll
 
 from .cet import Cet
 from .handler import Handler
 
 
-class EndSession(Handler):
+class EndSession(CompatibleAll, Handler):
     header = ("QUIT", Color.CYAN, False)
     pattern = re.compile(
         r"\[Notice\] <CDisciplineServiceExternal::EndSession> Ending session "

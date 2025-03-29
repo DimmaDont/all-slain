@@ -2,6 +2,7 @@ import re
 
 from colorize import Color
 from functions import clean_location, clean_name, get_vehicle
+from handlers.compatibility import CompatibleAll
 
 from .handler import PlayerLookupHandler
 
@@ -10,7 +11,7 @@ def format_vehicle(vehicle_name: str, vehicle_type: str | None):
     return f"{Color.CYAN(vehicle_type, True) + ' ' if vehicle_type else ''}{Color.GREEN(vehicle_name)}"
 
 
-class KillV(PlayerLookupHandler):
+class KillV(CompatibleAll, PlayerLookupHandler):
     header = ("VKILL", Color.RED, False)
     pattern = re.compile(
         r"\[Notice\] <Vehicle Destruction> CVehicle::OnAdvanceDestroyLevel: Vehicle '([\w-]+)' \[\d+\] in zone '([\w-]+)' \[pos.*\] driven by '([\w-]+)' \[\d+\] advanced from destroy level \d to (\d) caused by '([\w-]+)' \[[0-9_]+\] with '([A-Za-z]+)' "
