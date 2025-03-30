@@ -58,7 +58,7 @@ Compatible with `LIVE` (`4.1.0`).\
 Originally developed for `4.0_PREVIEW`.\
 Mostly compatible with `3.24.X`.
 
-## Supported Events
+## Supported Events in LIVE
 * Player/NPC deaths[^5]
 * Ship/vehicle destruction
 * Player respawns/corpse activity
@@ -66,9 +66,11 @@ Mostly compatible with `3.24.X`.
 * Quit to menu/desktop[^1]
 * Incapacitation events[^2]
 * Inter-system jumps[^1]
+* Medical bed limb healing[^1]
+
+## Supported Events from Previous Patches
 * Quantum travel events with destination[^1][^3]
 * Quantum travel events[^4][^6]
-* Medical bed limb healing[^1]
 
 ## Optional Additional Features
 * Player organization lookup
