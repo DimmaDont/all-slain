@@ -25,34 +25,35 @@ class TestRemoveIdFunction(unittest.TestCase):
 
 class TestVehicleNameRegex(unittest.TestCase):
     def test_pu_ai(self):
-        result = RE_VEHICLE_NAME.match(
-            "CNOU_Mustang_Delta_PU_AI_NineTails_123456789012"
-        )
-        self.assertEqual(len(result.groups()), 2)
-        self.assertEqual(result[1], "CNOU_Mustang_Delta")
-        self.assertEqual(result[2], "PU_AI_NineTails")
+        match = RE_VEHICLE_NAME.match("CNOU_Mustang_Delta_PU_AI_NineTails_123456789012")
+        assert match
+        self.assertEqual(len(match.groups()), 2)
+        self.assertEqual(match[1], "CNOU_Mustang_Delta")
+        self.assertEqual(match[2], "PU_AI_NineTails")
 
     def test_regular(self):
-        result = RE_VEHICLE_NAME.match("CNOU_Mustang_Delta_123456789012")
-        self.assertEqual(len(result.groups()), 2)
-        self.assertEqual(result[1], "CNOU_Mustang_Delta")
-        self.assertIsNone(result[2])
+        match = RE_VEHICLE_NAME.match("CNOU_Mustang_Delta_123456789012")
+        assert match
+        self.assertEqual(len(match.groups()), 2)
+        self.assertEqual(match[1], "CNOU_Mustang_Delta")
+        self.assertIsNone(match[2])
 
     def test_id_len_13(self):
-        result = RE_VEHICLE_NAME.match("MISC_Freelancer_MAX_PU_AI_CRIM_1234567890123")
-        self.assertEqual(len(result.groups()), 2)
-        self.assertEqual(result[1], "MISC_Freelancer_MAX")
-        self.assertEqual(result[2], "PU_AI_CRIM")
+        match = RE_VEHICLE_NAME.match("MISC_Freelancer_MAX_PU_AI_CRIM_1234567890123")
+        assert match
+        self.assertEqual(len(match.groups()), 2)
+        self.assertEqual(match[1], "MISC_Freelancer_MAX")
+        self.assertEqual(match[2], "PU_AI_CRIM")
 
     def test_ship_debris(self):
-        result = RE_VEHICLE_NAME.findall(
+        match = RE_VEHICLE_NAME.findall(
             "SCItem_Debris_1234567890123_ANVL_Hornet_F7CR_PU_AI_CRIM_1234567890123"
         )
-        self.assertEqual(len(result), 2)
-        self.assertEqual(result[0][0], "SCItem_Debris")
-        self.assertEqual(result[0][1], "")
-        self.assertEqual(result[1][0], "ANVL_Hornet_F7CR")
-        self.assertEqual(result[1][1], "PU_AI_CRIM")
+        self.assertEqual(len(match), 2)
+        self.assertEqual(match[0][0], "SCItem_Debris")
+        self.assertEqual(match[0][1], "")
+        self.assertEqual(match[1][0], "ANVL_Hornet_F7CR")
+        self.assertEqual(match[1][1], "PU_AI_CRIM")
 
 
 class TestGetVehicleNameFunction(unittest.TestCase):

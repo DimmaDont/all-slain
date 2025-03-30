@@ -14,11 +14,14 @@ def check_launcher_store():
 
 @unittest.skipUnless(check_launcher_store(), "No game logs are available.")
 class TestLogReading(unittest.TestCase):
+    log: str | None
+
     @classmethod
     def setUpClass(cls):
         cls.log = get_log()
 
     def test_log_decode(self):
+        assert self.log
         with open(
             self.log, "r", encoding=AllSlain.LOG_ENCODING, newline=AllSlain.LOG_NEWLINE
         ) as f:

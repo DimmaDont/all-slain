@@ -5,6 +5,8 @@ from state import State
 
 
 class TestLogIncapRegexSingleCause(unittest.TestCase):
+    incap: Incap
+
     @classmethod
     def setUpClass(cls):
         state = State()
@@ -15,9 +17,11 @@ class TestLogIncapRegexSingleCause(unittest.TestCase):
             "Logged an incap.! nickname: Player-123_Name, causes: [Bleed (0.350000 damage)]"
         )
         self.assertIsNotNone(self.match)
+        assert self.match
         self.cause = LOG_INCAP_CAUSE.findall(self.match[2])
 
     def test_incap(self):
+        assert self.match
         self.assertEqual(len(self.match.groups()), 2)
         self.assertEqual(self.match[1], "Player-123_Name")
         self.assertEqual(self.match[2], "Bleed (0.350000 damage)")
@@ -28,6 +32,8 @@ class TestLogIncapRegexSingleCause(unittest.TestCase):
 
 
 class TestLogIncapRegexMultipleCause(unittest.TestCase):
+    incap: Incap
+
     @classmethod
     def setUpClass(cls):
         state = State()
@@ -38,9 +44,11 @@ class TestLogIncapRegexMultipleCause(unittest.TestCase):
             "Logged an incap.! nickname: Player-123_Name, causes: [DepressurizationDamage (3.999999 damage), SuffocationDamage (1.999999 damage)]"
         )
         self.assertIsNotNone(self.match)
+        assert self.match
         self.cause = LOG_INCAP_CAUSE.findall(self.match[2])
 
     def test_incap(self):
+        assert self.match
         self.assertEqual(len(self.match.groups()), 2)
         self.assertEqual(self.match[1], "Player-123_Name")
         self.assertEqual(

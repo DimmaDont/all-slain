@@ -63,7 +63,7 @@ class VehicleEnterLeave(V402AndBelow, Handler):
 
     def __init__(self, state) -> None:
         super().__init__(state)
-        self.prev: tuple[str | None, str, datetime.datetime] | None = None
+        self.prev: tuple[str | None, str, datetime.datetime, bool, bool] | None = None
 
     def format(self, data):
         is_enter = data[1] == "Enter"

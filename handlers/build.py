@@ -64,6 +64,7 @@ class Build(CompatibleAll, Handler):
 
     def after(self, data):
         build = int(data[1])
+        assert self.state.version
 
         for handler in HANDLERS:
             if handler.is_compatible(self.state.version, build):
