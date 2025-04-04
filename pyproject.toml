@@ -27,3 +27,16 @@ profile = "black"
 
 [tool.mypy]
 check_untyped_defs = true
+
+[tool.pylint]
+ignore-paths = "venv"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "import-outside-toplevel",
+    "line-too-long",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "too-few-public-methods",
+]

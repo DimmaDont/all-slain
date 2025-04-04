@@ -28,9 +28,9 @@ MEDICAL_BED_NAMES = {
 
 
 def get_bed_name(med_bed_name: str) -> str:
-    for k in MEDICAL_BED_NAMES:
+    for k, v in MEDICAL_BED_NAMES.items():
         if k in med_bed_name:
-            return MEDICAL_BED_NAMES[k]
+            return v
     return med_bed_name
 
 

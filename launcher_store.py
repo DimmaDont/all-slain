@@ -73,7 +73,7 @@ def get_log() -> str | None:
         # Option is saved immediately after selection in launcher, but check modification times anyway.
         # channel_id = [i["channelId"] for i in data["library"]["defaults"] if i["gameId"] == "SC"][0]
 
-        files = {}
+        files: dict[str, float] = {}
         for channel_id in available:
             logger.debug("Available: %s", channel_id)
             # Just because it's available doesn't mean it's installed

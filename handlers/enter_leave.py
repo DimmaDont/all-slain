@@ -79,7 +79,7 @@ class VehicleEnterLeave(V402AndBelow, Handler):
                 Color.GREEN(vehicle_type, True) if vehicle_type else ""
             ) + Color.GREEN(vehicle)
         else:
-            return
+            return None
 
         whom = data[4] if data[4] != "unknown" else None
         if whom == self.state.player_name:
@@ -87,10 +87,10 @@ class VehicleEnterLeave(V402AndBelow, Handler):
             action = ("entered/spawned in" if is_enter else "despawned in/left", True)
             self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, True)
             return f"""{what} {Color.CYAN(*action)} {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
-        else:
-            # Assume spawn and despawn
-            action = ("spawned" if is_enter else "despawned", True)
-            self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, True)
+
+        # Assume spawn and despawn
+        action = ("spawned" if is_enter else "despawned", True)
+        self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, True)
 
         # Ships entering or leaving a hangar will log entering and leaving multiple times. Ships spawning/despawning don't?
         # If the same player+ship enter/leaves within 2s of the previous vehicle enter leave event, don't print it.
@@ -104,7 +104,7 @@ class VehicleEnterLeave(V402AndBelow, Handler):
         ):
             # Skip event if already printed
             if self.prev[4]:
-                return
+                return None
             # Use the first event's action
             self.prev = (this[0], this[1], this[2], self.prev[3], True)
             action = ("entered" if self.prev[3] else "left", False)
