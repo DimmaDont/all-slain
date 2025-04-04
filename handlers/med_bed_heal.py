@@ -49,8 +49,7 @@ class MedBedHeal(CompatibleAll, Handler):
     )
 
     def format(self, data):
-        med_bed_name = data[1]
-        # med_bed_name = get_bed_name(data[1])
+        med_bed_name = get_bed_name(data[1])
         if data[2] == "none":
             vehicle = ""
         else:
