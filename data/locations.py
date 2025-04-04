@@ -1,4 +1,4 @@
-LOCATIONS = {
+LOCATIONS: dict[str, str | tuple[str, str]] = {
     "A18_HospitalInt_OC": "Empire Health Services, Area18, ArcCorp, Stanton",
     "ab_pyro_int_dung_001": "Contested Zone",
     "ab_pyro_int_dung_exec_002": "PYAM-EXHANG-0-1",
@@ -23,6 +23,7 @@ LOCATIONS = {
     "int_s4_dc_mite_s4ld13": "microTech Logistics Depot S4LD13",
     "int_s4_dc_sasu_goldenrod": "Sakura Sun Goldenrod Workcenter",
     "jumppoint_pyro_stanton": "Stanton Gateway, Pyro",
+    "orbtl_002_plat_001_util_a_orbital_001_occu_a_final": "Vivere OLP, Aberdeen, Hurston",
     "oc_a18_sp_int": "Riker Memorial Spaceport",
     "OOC_JumpPoint_stanton_magnus": "Magnus Gateway, Stanton",
     "OOC_JumpPoint_stanton_pyro": "Pyro Gateway, Stanton",
@@ -94,6 +95,7 @@ LOCATIONS = {
     "rs_cz_rewards_001": "CZ Rewards Area, Checkmate",
     "rs_cz_rewards_003": "CZ Rewards Area, Orbituary",
     "rs_entry_pyro-stan_jp1": "Stanton Gateway, Pyro",
+    "rs_ext_cru-leo1": ("outside", "Seraphim Station, Crusader"),
     "rs_int_p2l4": "Checkmate Station, Monox, Pyro",
     "rs_int_p3leo": "Orbituary Station, Bloom, Pyro",
     "rs_int_p6l3": "Endgame, Pyro",
@@ -101,6 +103,7 @@ LOCATIONS = {
     "rs_opendungeon_rund_002": "Contested Zone, Ruin Station",
     "rs_refinery_pyro": "Refinery",
     "stanton2c": "Yela",
+    "util_a_orbital_001_occu_a_final-001": "Attritus OLP, Daymar, Crusader",
     #
     "Pyro1": "Pyro I",
     "Pyro1_L1": "PYR1 L1",

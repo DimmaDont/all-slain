@@ -44,9 +44,13 @@ def clean_location(name: str) -> tuple[str, str, str]:
     """
     try:
         # todo not all are "at"
-        return ("at", LOCATIONS[name.replace("@", "", 1)], "loc")
+        location = LOCATIONS[name.replace("@", "", 1)]
     except KeyError:
         pass
+    else:
+        if isinstance(location, str):
+            return ("at", location, "loc")
+        return (location[0], location[1], "loc")
 
     # Location can also be a ship id
     vehicle_name, vehicle_type, found = get_vehicle(name)
