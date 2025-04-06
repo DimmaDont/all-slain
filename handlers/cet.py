@@ -40,7 +40,7 @@ class Cet(CompatibleAll, Handler):
             running_time_color = "YELLOW"
         else:
             running_time_color = "CYAN"
-        running_time_text = Color[running_time_color](
+        running_time_str = Color[running_time_color](
             str(timedelta(seconds=running_time))
         )
 
@@ -54,7 +54,7 @@ class Cet(CompatibleAll, Handler):
         ):
             # Move cursor up one line and clear it
             print("\x1b[1A\x1b[2K", end="")
-        return f"{which[0]}: {step_num.rjust(2)}/{self.state.cet_steps} {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time_text}"
+        return f"{which[0]}: {step_num.rjust(2)}/{self.state.cet_steps} {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time_str}"
 
     def after(self, data):
         # Remove CET once game is loaded.

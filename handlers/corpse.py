@@ -1,7 +1,8 @@
 import re
 
 from colorize import Color
-from functions import clean_location
+from functions import get_location
+from functions_color import color_location
 
 from .compatibility import SinceV402, V401AndBelow
 from .handler import PlayerLookupHandler
@@ -15,9 +16,10 @@ class CorpseHospitalLocation(V401AndBelow, PlayerLookupHandler):
 
     def format(self, data) -> str:
         # datetime, player, location
-        player_text = self.format_player(data[1], False)
-        _, where, _ = clean_location(data[2])
-        return f"{player_text} from {Color.YELLOW(where)}"
+        player_str = self.format_player(data[1], False)
+        _, where, location_type = get_location(data[2])
+        location_str = color_location(where, location_type)
+        return f"{player_str} from {location_str}"
 
 
 class Corpse402HospitalLocation(SinceV402, CorpseHospitalLocation):

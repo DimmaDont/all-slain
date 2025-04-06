@@ -25,5 +25,5 @@ class Loaded(CompatibleAll, Handler):
         running_time = str(timedelta(seconds=float(data[2]))).split(".")
         if len(running_time) > 1:
             running_time[1] = running_time[1].rstrip("0")
-        running_time_text = Color.GREEN(".".join(running_time))
-        return f"Loaded! {what} took {running_time_text} to load."
+        running_time_str = Color.GREEN(".".join(running_time))
+        return f"Loaded! {what} took {running_time_str} to load."

@@ -1,14 +1,11 @@
 import re
 
 from colorize import Color
-from functions import clean_location, clean_name, get_vehicle
+from functions import get_article, get_entity, get_location, get_vehicle
+from functions_color import color_location, color_vehicle, not_found
 from handlers.compatibility import CompatibleAll
 
 from .handler import PlayerLookupHandler
-
-
-def format_vehicle(vehicle_name: str, vehicle_type: str | None):
-    return f"{Color.CYAN(vehicle_type, True) + ' ' if vehicle_type else ''}{Color.GREEN(vehicle_name)}"
 
 
 class KillV(CompatibleAll, PlayerLookupHandler):
@@ -20,16 +17,16 @@ class KillV(CompatibleAll, PlayerLookupHandler):
     def format(self, data) -> str:
         # Always a vehicle
         vehicle_name, vehicle_type, found = get_vehicle(data[1])
-        if found:
-            vehicle = format_vehicle(vehicle_name, vehicle_type)
-        else:
-            # clean up the vehicle name if not in db
-            vehicle = Color.GREEN(clean_name(data[1])[0])
+        vehicle = color_vehicle(vehicle_name, vehicle_type)
+        if not found:
+            vehicle = not_found(vehicle)
 
-        lp, location, _ = clean_location(data[2])
+        lp, location, location_type = get_location(data[2])
+
+        location_str = color_location(location, location_type)
 
         # always unknown since 4.0?
-        driver, _ = clean_name(data[3])
+        driver, _ = get_entity(data[3])
         if driver == "unknown":
             driver = ""
         else:
@@ -42,18 +39,19 @@ class KillV(CompatibleAll, PlayerLookupHandler):
         # ship, player, or unknown
         vehicle_name2, vehicle_type2, found2 = get_vehicle(data[5])
         if found2:
-            killer_text = format_vehicle(vehicle_name2, vehicle_type2)
+            killer_str = color_vehicle(vehicle_name2, vehicle_type2)
         else:
-            killer_text = self.format_player(*clean_name(data[5]))
+            killer_str = self.format_player(*get_entity(data[5]))
+
+        vehicle_article = get_article(vehicle)
 
         if data[6] == "SelfDestruct":
             # SelfDestruct always destroys the vehicle
             if found2:
                 # destruction caused by ship
-                # TODO A/An
-                return f"A {vehicle} {Color.RED('self destructed')} {lp} {Color.YELLOW(location)}"
+                return f"{vehicle_article.title()} {vehicle} {Color.RED('self destructed')} {lp} {location_str}"
             # caused by player
-            return f"{killer_text} {Color.RED('self destructed')} a {vehicle} {lp} {Color.YELLOW(location)}"
+            return f"{killer_str} {Color.RED('self destructed')} a {vehicle} {lp} {location_str}"
 
         # Combat, SelfDestruct, Collision, BoundaryViolation, Ejection, Hazard, GameRules
         match data[6]:
@@ -66,4 +64,4 @@ class KillV(CompatibleAll, PlayerLookupHandler):
 
         dmgtype = Color.CYAN(data[6])
 
-        return f"{killer_text} {kill_type} a {vehicle}{driver} {dmgtypep} {dmgtype} {lp} {Color.YELLOW(location)}"
+        return f"{killer_str} {kill_type} {vehicle_article} {vehicle}{driver} {dmgtypep} {dmgtype} {lp} {location_str}"

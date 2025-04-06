@@ -1,7 +1,8 @@
 import re
 
 from colorize import Color
-from functions import clean_location
+from functions import get_location
+from functions_color import color_location, color_player_default
 from handlers.compatibility import OnlyV400, V401AndBelow
 
 from .handler import Handler
@@ -14,8 +15,8 @@ class ClientQuantum(OnlyV400, Handler):
     )
 
     def format(self, data) -> str:
-        name = Color.GREEN(data[1])
-        dest = Color.YELLOW(clean_location(data[2])[1])
+        name = color_player_default(data[1])
+        dest = color_location(*get_location(data[2])[1:])
         return f"{name} started quantum travel to {dest}"
 
 
@@ -24,5 +25,5 @@ class Quantum(V401AndBelow, Handler):
     pattern = re.compile(r"-- Entity Trying To QT: (.*)")
 
     def format(self, data) -> str:
-        name = Color.GREEN(data[1])
+        name = color_player_default(data[1])
         return f"{name} started quantum travel"

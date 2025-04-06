@@ -27,6 +27,8 @@ profile = "black"
 
 [tool.mypy]
 check_untyped_defs = true
+files = ["."]
+strict_equality = true
 
 [tool.pylint]
 ignore-paths = "venv"

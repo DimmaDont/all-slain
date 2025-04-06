@@ -1,4 +1,6 @@
 import re
+from enum import IntEnum
+from typing import NamedTuple
 
 from data import ACTORS, LOCATIONS, SHIPS, VEHICLE_TYPES, WEAPONS_FPS, WEAPONS_SHIP
 
@@ -25,22 +27,32 @@ def strip_actor_variant(name: str) -> str:
     return name
 
 
-LOCATIONS_STARTSWITH = {
-    "LocationHarvestableObjectContainer_ab_pyro_": (
-        "at a",
-        "Remote Asteroid Base, Pyro",
-        "loc",
+class LocationType(IntEnum):
+    UNKNOWN = 0
+    LOCATION = 1
+    SHIP = 2
+
+
+class Location(NamedTuple):
+    preposition: str
+    name: str
+    type_: LocationType = LocationType.LOCATION
+
+
+LOCATIONS_STARTSWITH: dict[str, Location] = {
+    "LocationHarvestableObjectContainer_ab_pyro_": Location(
+        "at a", "Remote Asteroid Base, Pyro"
     ),
-    "Hangar_": ("in a", "Hangar", "loc"),
-    "RastarInteriorGridHost_": ("in an", "Unknown Surface Facility", "loc"),
-    "SolarSystem_": ("in", "Space", "loc"),
-    "TransitCarriage_": ("in an", "Elevator", "loc"),
+    "Hangar_": Location("in a", "Hangar"),
+    "RastarInteriorGridHost_": Location("in an", "Unknown Surface Facility"),
+    "SolarSystem_": Location("in", "Space"),
+    "TransitCarriage_": Location("in an", "Elevator"),
 }
 
 
-def clean_location(name: str) -> tuple[str, str, str]:
+def get_location(name: str) -> Location:
     """
-    Returns: A tuple (preposition, location, type)
+    Returns: A `Location` tuple (preposition, location, type)
     """
     try:
         # todo not all are "at"
@@ -49,28 +61,28 @@ def clean_location(name: str) -> tuple[str, str, str]:
         pass
     else:
         if isinstance(location, str):
-            return ("at", location, "loc")
-        return (location[0], location[1], "loc")
+            return Location("at", location)
+        return Location(location[0], location[1])
 
     # Location can also be a ship id
     vehicle_name, vehicle_type, found = get_vehicle(name)
     if found:
-        return (
+        return Location(
             "in a",
             (vehicle_type + " " if vehicle_type else "") + vehicle_name,
-            "ship",
+            LocationType.SHIP,
         )
 
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
-        return ("in a", ("Drug " if name.endswith("_drugs") else "") + "Bunker", "loc")
+        return Location("in a", ("Drug " if name.endswith("_drugs") else "") + "Bunker")
 
     # Handle some special cases
-    for location, data in LOCATIONS_STARTSWITH.items():
-        if name.startswith(location):
-            return data
+    for loc_name_sw, location_data in LOCATIONS_STARTSWITH.items():
+        if name.startswith(loc_name_sw):
+            return location_data
 
-    return ("at", name, "loc")
+    return Location("at", name, LocationType.UNKNOWN)
 
 
 RE_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}")
@@ -80,7 +92,7 @@ RE_HAZARD_NUM = re.compile(r"Hazard-\d{3}")
 # there's also a "Hazard_Area18" at Area 18
 
 
-def clean_name(name: str) -> tuple[str, bool]:
+def get_entity(name: str) -> tuple[str, bool]:
     """
     Returns:
         A tuple (name, npc), where:
@@ -110,8 +122,8 @@ def clean_name(name: str) -> tuple[str, bool]:
         return ("Asteroid", True)
 
     # or vehicles
-    vehicle_name, vehicle_type, found = get_vehicle(name)
-    if found:
+    vehicle_name, vehicle_type, vehicle_found = get_vehicle(name)
+    if vehicle_found:
         return ((vehicle_type + " " if vehicle_type else "") + vehicle_name, True)
 
     # killer can be weapons
@@ -138,7 +150,7 @@ def clean_name(name: str) -> tuple[str, bool]:
     return (name, False)
 
 
-def clean_tool(item_class: str, killer: str, killed: str, damage_type: str) -> str:
+def get_item(item_class: str, killer: str, killed: str, damage_type: str) -> str:
     if item_class == "Player":
         return "suicide"
 
@@ -205,3 +217,11 @@ def get_vehicle(name: str) -> tuple[str, str | None, bool]:
         pass
 
     return (name, None, False)
+
+
+def get_article(noun: str) -> str:
+    return (
+        "an"
+        if any(noun.lower().startswith(v) for v in ["a", "e", "i", "o", "u", "r"])
+        else "a"
+    )

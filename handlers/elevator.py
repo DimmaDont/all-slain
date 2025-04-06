@@ -5,8 +5,8 @@ from semver import Version
 
 from colorize import Color
 from data.elevators import ELEVATORS
-from data.locations import LOCATIONS
-from functions import strip_id
+from functions import get_location, strip_id
+from functions_color import color_location
 
 from .compatibility import SinceV410
 from .handler import Handler
@@ -54,11 +54,10 @@ class Elevator401(Handler):
         self.prev = this
 
         elevator_name = ELEVATORS.get(manager, manager)
-        location_name = LOCATIONS.get(zone, zone)
-        if isinstance(location_name, tuple):
-            location_name = location_name[1]
         elevator_str = Color.CYAN(elevator_name)
-        location_str = Color.YELLOW(location_name)
+
+        _, location_name, location_type = get_location(zone)
+        location_str = color_location(location_name, location_type)
         location_p = "to" if action == "finished" else "from"
 
         return f"Elevator {elevator_str} {elevator_id} {action} moving {location_p} {location_str}"

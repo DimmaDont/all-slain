@@ -1,6 +1,7 @@
 import re
 
 from colorize import Color
+from functions_color import color_player_default
 from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
@@ -15,7 +16,7 @@ class Incap(CompatibleAll, Handler):
 
     def format(self, data) -> str:
         # datetime, player, causes
-        whom = Color.GREEN(data[1])
+        whom = color_player_default(data[1])
         causes = LOG_INCAP_CAUSE.findall(data[2])
         damage_types = [
             Color.YELLOW(cause[0].replace("Damage", "")) for cause in causes

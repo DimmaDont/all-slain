@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from re import Match, Pattern
 from typing import TYPE_CHECKING
@@ -5,6 +7,11 @@ from typing import TYPE_CHECKING
 from semver import Version
 
 from colorize import Color
+from functions_color import (
+    color_player_default,
+    color_player_npc,
+    color_player_with_org,
+)
 
 
 if TYPE_CHECKING:
@@ -15,7 +22,7 @@ class Handler(ABC):
     header: tuple[str, Color, bool]
     pattern: Pattern[str]
 
-    def __init__(self, state: "State"):
+    def __init__(self, state: State):
         self.state = state
         self.set_header_text(self.header[0], self.header[1], self.header[2])
 
@@ -45,15 +52,15 @@ class Handler(ABC):
 class PlayerLookupHandler(Handler):
     def format_player(self, handle: str, is_actor_npc: bool) -> str:
         if is_actor_npc:
-            return Color.BLACK(handle, True)
+            return color_player_npc(handle)
         if self.state.args.player_lookup and self.state.data_provider:
             player = self.state.data_provider.lookup_player(handle)
             if not player.main_org:
-                return Color.GREEN(player)
+                return color_player_default(player)
             main_org = (
                 self.state.data_provider.lookup_org(player.main_org)
                 if self.state.args.data_provider.use_org_theme
                 else player.main_org
             )
-            return f"{Color.GREEN(player)} {Color.BLACK('(', True)}{main_org}{Color.BLACK(')', True)}"
-        return Color.GREEN(handle)
+            return color_player_with_org(player, main_org)
+        return color_player_default(handle)

@@ -2,6 +2,7 @@ import re
 
 from colorize import Color
 from functions import strip_id
+from functions_color import color_vehicle
 from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
@@ -35,10 +36,10 @@ def get_bed_name(med_bed_name: str) -> str:
 
 
 SHIPS = {
-    "RSI_URSA_Medivac": "RSI Ursa Medivac",
-    "DRAK_Cutlass_Red": "Drake Cutlass Red",
-    "ANVL_C8R_Pisces_Rescue": "Anvil C8R Pisces Rescue",
-    "RSI_Polaris": "RSI Polaris",
+    "RSI_URSA_Medivac": ("an", "RSI Ursa Medivac"),  # ursa is uppercase here
+    "DRAK_Cutlass_Red": ("a", "Drake Cutlass Red"),
+    "ANVL_C8R_Pisces_Rescue": ("a", "Anvil C8R Pisces Rescue"),
+    "RSI_Polaris": ("an", "RSI Polaris"),
 }
 
 
@@ -51,10 +52,13 @@ class MedBedHeal(CompatibleAll, Handler):
     def format(self, data):
         med_bed_name = get_bed_name(data[1])
         if data[2] == "none":
-            vehicle = ""
+            vehicle_str = ""
         else:
             vehicle_id = strip_id(data[2]).lstrip("@vehicle_Name")
-            vehicle = " in a " + Color.YELLOW(SHIPS.get(vehicle_id, vehicle_id))
+            vehicle = SHIPS[vehicle_id]
+            vehicle_str = (
+                f" in {vehicle[0]} {color_vehicle(vehicle[1], as_location=True)}"
+            )
 
         # Event fires when a limb injury is treated or attempted to be treated.
         parts = {
@@ -75,4 +79,6 @@ class MedBedHeal(CompatibleAll, Handler):
                 ", ".join(parts_healed[:-1]) + ", and " + parts_healed[-1] + " "
             )
 
-        return f"Healed {parts_healed_str}in a {Color.YELLOW(med_bed_name)}{vehicle}"
+        return (
+            f"Healed {parts_healed_str}in a {Color.YELLOW(med_bed_name)}{vehicle_str}"
+        )

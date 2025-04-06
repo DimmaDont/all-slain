@@ -1,6 +1,7 @@
 import re
 
 from colorize import Color
+from functions_color import color_info
 from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
@@ -13,7 +14,7 @@ class Character(CompatibleAll, Handler):
     )
 
     def format(self, data):
-        return Color.CYAN(data[1])
+        return color_info(data[1])
 
     def after(self, data):
         self.state.player_name = data[1]

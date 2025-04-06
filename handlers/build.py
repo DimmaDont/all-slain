@@ -18,7 +18,7 @@ from .enter_leave import VehicleEnterLeave
 from .handler import Handler
 from .incap import Incap
 from .jump import Jump
-from .killp import KillP, KillP402
+from .killp import KillP
 from .killv import KillV
 from .loaded import Loaded
 from .loading import Loading
@@ -32,7 +32,6 @@ HANDLERS: list[type[Handler]] = [
     Cet,
     Character,
     VehicleEnterLeave,
-    KillP402,
     KillP,
     KillV,
     Quantum,

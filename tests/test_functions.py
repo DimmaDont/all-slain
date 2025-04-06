@@ -1,11 +1,11 @@
 import unittest
 
-from functions import RE_VEHICLE_NAME, clean_location, clean_name, get_vehicle, strip_id
+from functions import RE_VEHICLE_NAME, get_entity, get_location, get_vehicle, strip_id
 
 
 class TestCleanNameFunction(unittest.TestCase):
     def test_clean_name_debris(self):
-        result, _ = clean_name("SCItem_Debris_123456789012")
+        result, _ = get_entity("SCItem_Debris_123456789012")
         self.assertEqual(result, "Debris")
 
 
@@ -94,34 +94,34 @@ class TestGetVehicleNameFunction(unittest.TestCase):
 
 class TestGetLocationName(unittest.TestCase):
     def test_remove_at(self):
-        result = clean_location("@Stanton1_Transfer")
+        result = get_location("@Stanton1_Transfer")
         self.assertEqual(result[0], "at")
         self.assertEqual(result[1], "Everus Harbor")
 
     def test_bunker(self):
-        result = clean_location("ObjectContainer-ugf_lta_a_0003")
+        result = get_location("ObjectContainer-ugf_lta_a_0003")
         self.assertEqual(result[0], "in a")
         self.assertEqual(result[1], "Bunker")
 
     def test_drug_bunker(self):
-        result = clean_location("ObjectContainer-ugf_lta_a_0004_drugs")
+        result = get_location("ObjectContainer-ugf_lta_a_0004_drugs")
         self.assertEqual(result[0], "in a")
         self.assertEqual(result[1], "Drug Bunker")
 
 
 class TestGetHazardNames(unittest.TestCase):
     def test_radiation_hazard(self):
-        result = clean_name("Radiation_Hazard")
+        result = get_entity("Radiation_Hazard")
         self.assertEqual(result[0], "Radiation Hazard")
         self.assertEqual(result[1], True)
 
     def test_water_hazard(self):
-        result = clean_name("Water_Hazard")
+        result = get_entity("Water_Hazard")
         self.assertEqual(result[0], "Water Hazard")
         self.assertEqual(result[1], True)
 
     def test_numbered_hazard(self):
-        result = clean_name("Hazard-003")
+        result = get_entity("Hazard-003")
         self.assertEqual(result[0], "Environmental Hazard")
         self.assertEqual(result[1], True)
 

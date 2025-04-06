@@ -2,7 +2,8 @@ import datetime
 import re
 
 from colorize import Color
-from functions import get_vehicle
+from functions import LocationType, get_vehicle
+from functions_color import color_location, color_player_default, color_vehicle
 from handlers.compatibility import V402AndBelow
 
 from .handler import Handler
@@ -65,6 +66,19 @@ class VehicleEnterLeave(V402AndBelow, Handler):
         super().__init__(state)
         self.prev: tuple[str | None, str, datetime.datetime, bool, bool] | None = None
 
+    def to_str(
+        self,
+        what: str,
+        action: tuple[str, bool],
+        in_hangar: bool,
+        whom: str | None,
+        where_a: str,
+        where: str,
+    ):
+        player_str = color_player_default(whom) + "'s" if whom else "a"
+        location_str = color_location(where, LocationType.LOCATION)
+        return f"""{what} {Color.CYAN(*action)} {'in ' if in_hangar else ''}{player_str} hangar at {where_a}{location_str}"""
+
     def format(self, data):
         is_enter = data[1] == "Enter"
 
@@ -74,19 +88,16 @@ class VehicleEnterLeave(V402AndBelow, Handler):
         # Ships and ship debris
         vehicle, vehicle_type, found = get_vehicle(data[3])
 
-        if found:
-            what = (
-                Color.GREEN(vehicle_type, True) if vehicle_type else ""
-            ) + Color.GREEN(vehicle)
-        else:
+        if not found:
             return None
 
+        what = color_vehicle(vehicle, vehicle_type)
         whom = data[4] if data[4] != "unknown" else None
         if whom == self.state.player_name:
             # Enter/exits for the client player don't bounce.
             action = ("entered/spawned in" if is_enter else "despawned in/left", True)
             self.set_header_text("ENTER" if is_enter else "LEAVE", Color.CYAN, True)
-            return f"""{what} {Color.CYAN(*action)} {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
+            return self.to_str(what, action, False, whom, where_a, where)
 
         # Assume spawn and despawn
         action = ("spawned" if is_enter else "despawned", True)
@@ -118,7 +129,7 @@ class VehicleEnterLeave(V402AndBelow, Handler):
             ):
                 # Overwrite the previous spawn/despawn line with the fixed enter/leave line
                 print("\x1b[1A\x1b[2K", end="")
-            return f"""{what} {Color.CYAN(*action)} {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
+            return self.to_str(what, action, False, whom, where_a, where)
         self.prev = this
 
-        return f"""{what} {Color.CYAN(*action)} in {Color.GREEN(whom) + "'s" if whom else 'a'} hangar at {where_a}{Color.YELLOW(where)}"""
+        return self.to_str(what, action, True, whom, where_a, where)
