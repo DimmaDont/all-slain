@@ -23,7 +23,6 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     "int_s4_dc_mite_s4ld13": "microTech Logistics Depot S4LD13",
     "int_s4_dc_sasu_goldenrod": "Sakura Sun Goldenrod Workcenter",
     "jumppoint_pyro_stanton": "Stanton Gateway, Pyro",
-    "orbtl_002_plat_001_util_a_orbital_001_occu_a_final": "Vivere OLP, Aberdeen, Hurston",
     "oc_a18_sp_int": "Riker Memorial Spaceport",
     "OOC_JumpPoint_stanton_magnus": "Magnus Gateway, Stanton",
     "OOC_JumpPoint_stanton_pyro": "Pyro Gateway, Stanton",
@@ -102,8 +101,12 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     "rs_int_p6leo_ruinstation": "Ruin Station, Terminus, Pyro",
     "rs_opendungeon_rund_002": "Contested Zone, Ruin Station",
     "rs_refinery_pyro": "Refinery",
+    "sand01_vlk_001_001_int": ("in a", "Cave"),
     "stanton2c": "Yela",
-    "util_a_orbital_001_occu_a_final-001": "Attritus OLP, Daymar, Crusader",
+    # OLPs
+    "orbtl_002_plat_001_util_a_orbital_001_occu_a_final": ("at an", "OLP"),
+    "util_a_orbital_001_occu_a_final-001": ("outside an", "OLP"),
+    "util_a_orbital_001_occu_a_final_int": ("inside an", "OLP"),
     #
     "Pyro1": "Pyro I",
     "Pyro1_L1": "PYR1 L1",
