@@ -87,6 +87,14 @@ It can be opened with Notepad, but an editor with syntax highlighting such as [N
 [^6]: Only available up to and including `4.0.1`
 [^7]: Only available up to and including `4.0.2`. No longer available in `4.1.0`.
 
+## Help Wanted
+
+### Location names and IDs
+
+Locations with missing names will display a red question mark before the ID.
+
+If you find one, please [let us know](https://github.com/Dimmadont/all-slain/issues/new?template=location.yml)!
+
 ## Running the script
 1. Install [Python](https://www.python.org/downloads/)
 2. [Download a copy](https://github.com/DimmaDont/all-slain/archive/refs/heads/master.zip) of the project, and unzip it.

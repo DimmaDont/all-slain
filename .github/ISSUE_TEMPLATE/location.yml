@@ -1,0 +1,32 @@
+name: Location Report
+description: Report a missing or incorrect location entry
+title: "[Location]: "
+labels: ["location"]
+body:
+  - type: input
+    id: location_id
+    attributes:
+      label: Location ID
+      description: What's the location id?
+      placeholder: rs_int_p2l4
+    validations:
+      required: true
+  - type: input
+    id: location_name
+    attributes:
+      label: Location Name
+      description: What's the name of the location? Which planet/system is it in?
+      placeholder: Checkmate Station, Pyro
+    validations:
+      required: true
+  - type: input
+    id: location_preposition
+    attributes:
+      label: Location Preposition
+      description: A preposition that describes something at the location. "at" is fine for most locations.
+      placeholder: at / in / on / inside / outside
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Anything else?
