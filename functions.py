@@ -162,6 +162,9 @@ def get_entity(name: str) -> tuple[str, bool]:
     if name == "GameRules":
         return ("GameRules", True)
 
+    if len(name) > 20:
+        return (name, True)
+
     return (name, False)
 
 
