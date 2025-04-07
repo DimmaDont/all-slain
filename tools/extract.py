@@ -72,7 +72,7 @@ def get_locations(labels: dict[str, str]) -> dict:
             ]
         ):
             continue
-        locations[k] = v.replace("\xa0", "").strip()
+        locations[k.rstrip(",P")] = v.replace("\xa0", "").strip()
     return locations
 
 

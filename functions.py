@@ -2,7 +2,15 @@ import re
 from enum import IntEnum
 from typing import NamedTuple
 
-from data import ACTORS, LOCATIONS, SHIPS, VEHICLE_TYPES, WEAPONS_FPS, WEAPONS_SHIP
+from data import (
+    ACTORS,
+    LOCATIONS,
+    LOCATIONS_RESPAWN,
+    SHIPS,
+    VEHICLE_TYPES,
+    WEAPONS_FPS,
+    WEAPONS_SHIP,
+)
 
 
 # TODO confirm
@@ -56,7 +64,7 @@ def get_location(name: str) -> Location:
     """
     try:
         # todo not all are "at"
-        location = LOCATIONS[name.replace("@", "", 1)]
+        location = LOCATIONS[name]
     except KeyError:
         pass
     else:
@@ -83,6 +91,13 @@ def get_location(name: str) -> Location:
             return location_data
 
     return Location("at", name, LocationType.UNKNOWN)
+
+
+def get_respawn_location(name: str) -> tuple[str, LocationType]:
+    try:
+        return (LOCATIONS_RESPAWN[name.replace("@", "", 1)], LocationType.LOCATION)
+    except KeyError:
+        return (name, LocationType.UNKNOWN)
 
 
 RE_DEBRIS = re.compile(r"SCItem_Debris_\d{12,}")
@@ -195,9 +210,10 @@ def get_vehicle(name: str) -> tuple[str, str | None, bool]:
     matches = RE_VEHICLE_NAME.findall(name)
     if not matches:
         # Is it a moving asteroid?...
-        asteroid = RE_ASTEROID.match(name)
-        if asteroid:
+        if RE_ASTEROID.match(name):
             return ("Asteroid", None, True)
+        if name == "ORIG_300i-003":
+            return ("Origin 300i", "Hijacked 890 Jump", True)
         return (name, None, False)
 
     if len(matches) == 2 and matches[0][0] == "SCItem_Debris":

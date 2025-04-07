@@ -1,7 +1,7 @@
 import re
 
 from colorize import Color
-from functions import get_location
+from functions import get_respawn_location
 from functions_color import color_location
 
 from .compatibility import SinceV402, V401AndBelow
@@ -17,7 +17,7 @@ class CorpseHospitalLocation(V401AndBelow, PlayerLookupHandler):
     def format(self, data) -> str:
         # datetime, player, location
         player_str = self.format_player(data[1], False)
-        _, where, location_type = get_location(data[2])
+        where, location_type = get_respawn_location(data[2])
         location_str = color_location(where, location_type)
         return f"{player_str} from {location_str}"
 

@@ -1,6 +1,14 @@
 import unittest
 
-from functions import RE_VEHICLE_NAME, get_entity, get_location, get_vehicle, strip_id
+from functions import (
+    RE_VEHICLE_NAME,
+    LocationType,
+    get_entity,
+    get_location,
+    get_respawn_location,
+    get_vehicle,
+    strip_id,
+)
 
 
 class TestCleanNameFunction(unittest.TestCase):
@@ -93,11 +101,6 @@ class TestGetVehicleNameFunction(unittest.TestCase):
 
 
 class TestGetLocationName(unittest.TestCase):
-    def test_remove_at(self):
-        result = get_location("@Stanton1_Transfer")
-        self.assertEqual(result[0], "at")
-        self.assertEqual(result[1], "Everus Harbor")
-
     def test_bunker(self):
         result = get_location("ObjectContainer-ugf_lta_a_0003")
         self.assertEqual(result[0], "in a")
@@ -107,6 +110,13 @@ class TestGetLocationName(unittest.TestCase):
         result = get_location("ObjectContainer-ugf_lta_a_0004_drugs")
         self.assertEqual(result[0], "in a")
         self.assertEqual(result[1], "Drug Bunker")
+
+
+class TestGetRespawnLocationName(unittest.TestCase):
+    def test_remove_at(self):
+        result = get_respawn_location("@Stanton1_Transfer")
+        self.assertEqual(result[0], "Everus Harbor")
+        self.assertEqual(result[1], LocationType.LOCATION)
 
 
 class TestGetHazardNames(unittest.TestCase):
