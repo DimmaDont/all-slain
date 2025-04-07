@@ -1,3 +1,4 @@
+import logging
 import re
 
 from colorize import Color
@@ -11,7 +12,9 @@ from .handler import Handler
 # TODO:
 # 890
 # Carrack
-# Terrapin Medic
+
+
+logger = logging.getLogger("allslain").getChild("medbed")
 
 
 MEDICAL_BED_NAMES = {
@@ -61,6 +64,9 @@ class MedBedHeal(CompatibleAll, Handler):
                 if vehicle
                 else f" in a {not_found(color_vehicle(vehicle_id, as_location=True))}"
             )
+
+        logger.debug(data[1])
+        logger.debug(data[2])
 
         # Event fires when a limb injury is treated or attempted to be treated.
         parts = {
