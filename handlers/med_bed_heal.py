@@ -2,7 +2,7 @@ import re
 
 from colorize import Color
 from functions import strip_id
-from functions_color import color_vehicle
+from functions_color import color_vehicle, not_found
 from handlers.compatibility import CompatibleAll
 
 from .handler import Handler
@@ -55,9 +55,11 @@ class MedBedHeal(CompatibleAll, Handler):
             vehicle_str = ""
         else:
             vehicle_id = strip_id(data[2]).lstrip("@vehicle_Name")
-            vehicle = SHIPS[vehicle_id]
+            vehicle = SHIPS.get(vehicle_id, None)
             vehicle_str = (
                 f" in {vehicle[0]} {color_vehicle(vehicle[1], as_location=True)}"
+                if vehicle
+                else f" in a {not_found(color_vehicle(vehicle_id, as_location=True))}"
             )
 
         # Event fires when a limb injury is treated or attempted to be treated.
