@@ -42,3 +42,5 @@ disable = [
     "missing-module-docstring",
     "too-few-public-methods",
 ]
+
+[tool.setuptools_scm]

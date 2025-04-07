@@ -1,7 +1,5 @@
 import argparse
-from importlib import import_module
-from platform import python_version
-from typing import TYPE_CHECKING
+from platform import python_implementation, python_version
 
 from semver import Version
 
@@ -20,10 +18,8 @@ def check_for_updates() -> str:
         return "Not available in development releases, sorry."
 
     # https://github.com/psf/requests/issues/6790
-    if TYPE_CHECKING:
-        import requests  # pylint: disable=import-outside-toplevel
-    else:
-        requests = import_module("requests")
+    import requests
+
     try:
         latest_release = requests.get(
             "https://api.github.com/repos/Dimmadont/all-slain/releases/latest",
@@ -47,7 +43,7 @@ def check_for_updates() -> str:
 
 
 def get_version_text() -> str:
-    return f"{Color.CYAN(__version__)} on Python {python_version()}"
+    return f"{Color.CYAN(__version__)} on {python_implementation()} {python_version()}"
 
 
 class UpdateCheckAction(argparse.Action):

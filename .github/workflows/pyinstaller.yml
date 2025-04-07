@@ -45,6 +45,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        if: ${{ !inputs.tag_name }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        if: ${{ inputs.tag_name }}
+        with:
+          fetch-depth: 0
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -53,11 +59,14 @@ jobs:
           cache: pip
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Install PyInstaller
+      - name: Install Build Dependencies
         run: pip install -r requirements-build.txt
       - name: Set version number
         if: ${{ inputs.release && !inputs.tag_name }}
         run: sed -i 's/VERSION_HERE/${{ github.ref_name }}/' version.py
+      - name: Set version number
+        if: ${{ inputs.release && inputs.tag_name }}
+        run: sed -i s/VERSION_HERE/$(python -m setuptools_scm | sed -r 's/\./-/3')/ version.py
       - name: Package Application
         run: pyinstaller --onefile ${{ inputs.file }} --icon ${{ inputs.icon }} --noupx --debug noarchive
       - name: Attest
