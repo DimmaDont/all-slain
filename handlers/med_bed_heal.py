@@ -28,6 +28,8 @@ MEDICAL_BED_NAMES = {
     # "Bed_Single_Medical_RSI_T2_Left-001",
     # "Bed_Single_Medical_RSI_T2_Left-002",
     # "Bed_Single_Medical_RSI_T2_Left-003",
+    # Terrapin Medic
+    # "Bed_Single_Medical_Terrapin",
 }
 
 
@@ -39,10 +41,12 @@ def get_bed_name(med_bed_name: str) -> str:
 
 
 SHIPS = {
-    "RSI_URSA_Medivac": ("an", "RSI Ursa Medivac"),  # ursa is uppercase here
-    "DRAK_Cutlass_Red": ("a", "Drake Cutlass Red"),
     "ANVL_C8R_Pisces_Rescue": ("a", "Anvil C8R Pisces Rescue"),
+    "ANVL_Terrapin_Medic": ("an", "Anvil Terrapin Medic"),
+    "DRAK_Cutlass_Red": ("a", "Drake Cutlass Red"),
     "RSI_Polaris": ("an", "RSI Polaris"),
+    # ursa is uppercase, unlike in ships.py
+    "RSI_URSA_Medivac": ("an", "RSI Ursa Medivac"),
 }
 
 
