@@ -162,6 +162,7 @@ def get_entity(name: str) -> tuple[str, bool]:
     if name == "GameRules":
         return ("GameRules", True)
 
+    # Player handles are max 20 characters
     if len(name) > 20:
         return (name, True)
 
@@ -239,8 +240,14 @@ def get_vehicle(name: str) -> tuple[str, str | None, bool]:
 
 
 def get_article(noun: str) -> str:
+    if noun[0].lower() == "r":
+        if len(noun) > 1 and noun[1].lower() in ["a", "e", "i", "o", "u", "y"]:
+            # r is a consonant here, probably
+            return "a"
+        # eg "RSI"
+        return "an"
     return (
         "an"
-        if any(noun.lower().startswith(v) for v in ["a", "e", "i", "o", "u", "r"])
+        if any(noun.lower().startswith(v) for v in ["a", "e", "i", "o", "u"])
         else "a"
     )

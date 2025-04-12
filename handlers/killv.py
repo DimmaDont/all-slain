@@ -17,9 +17,9 @@ class KillV(CompatibleAll, PlayerLookupHandler):
     def format(self, data) -> str:
         # Always a vehicle
         vehicle_name, vehicle_type, found = get_vehicle(data[1])
-        vehicle = color_vehicle(vehicle_name, vehicle_type)
+        vehicle_str = color_vehicle(vehicle_name, vehicle_type)
         if not found:
-            vehicle = not_found(vehicle)
+            vehicle_str = not_found(vehicle_str)
 
         lp, location, location_type = get_location(data[2])
 
@@ -43,15 +43,15 @@ class KillV(CompatibleAll, PlayerLookupHandler):
         else:
             killer_str = self.format_player(*get_entity(data[5]))
 
-        vehicle_article = get_article(vehicle)
+        vehicle_article = get_article(vehicle_name)
 
         if data[6] == "SelfDestruct":
             # SelfDestruct always destroys the vehicle
             if found2:
                 # destruction caused by ship
-                return f"{vehicle_article.title()} {vehicle} {Color.RED('self destructed')} {lp} {location_str}"
+                return f"{vehicle_article.title()} {vehicle_str} {Color.RED('self destructed')} {lp} {location_str}"
             # caused by player
-            return f"{killer_str} {Color.RED('self destructed')} a {vehicle} {lp} {location_str}"
+            return f"{killer_str} {Color.RED('self destructed')} a {vehicle_str} {lp} {location_str}"
 
         # Combat, SelfDestruct, Collision, BoundaryViolation, Ejection, Hazard, GameRules
         match data[6]:
@@ -64,4 +64,4 @@ class KillV(CompatibleAll, PlayerLookupHandler):
 
         dmgtype = Color.CYAN(data[6])
 
-        return f"{killer_str} {kill_type} {vehicle_article} {vehicle}{driver} {dmgtypep} {dmgtype} {lp} {location_str}"
+        return f"{killer_str} {kill_type} {vehicle_article} {vehicle_str}{driver} {dmgtypep} {dmgtype} {lp} {location_str}"
