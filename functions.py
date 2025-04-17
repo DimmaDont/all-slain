@@ -13,8 +13,9 @@ from data import (
 )
 
 
-# TODO confirm
-RE_ASTEROID = re.compile(r"(?:Rotation|Oscillation)Simple-\d{3}")
+# Things that rotate, like asteroids or station rings
+# or oscillate
+RE_SIMPLE = re.compile(r"(?:Rotation|Oscillation)Simple-\d{3}")
 
 
 PATTERN_ID = re.compile(r"([\w-]+)_\d{12,}")
@@ -133,8 +134,8 @@ def get_entity(name: str) -> tuple[str, bool]:
 
     # fun fact, kill messages aren't logged for maroks. birds aren't real
 
-    if RE_ASTEROID.match(name):
-        return ("Asteroid", True)
+    if RE_SIMPLE.match(name):
+        return (name, True)
 
     # or vehicles
     vehicle_name, vehicle_type, vehicle_found = get_vehicle(name)
@@ -178,7 +179,7 @@ def get_item(item_class: str, killer: str, killed: str, damage_type: str) -> str
         if killer == killed:
             return f"suicide by {damage_type}"
 
-        if RE_ASTEROID.match(killer):
+        if RE_SIMPLE.match(killer):
             return "skill check"
 
         return damage_type
@@ -213,9 +214,8 @@ def get_vehicle(name: str) -> tuple[str, str | None, bool]:
     """
     matches = RE_VEHICLE_NAME.findall(name)
     if not matches:
-        # Is it a moving asteroid?...
-        if RE_ASTEROID.match(name):
-            return ("Asteroid", None, True)
+        if RE_SIMPLE.match(name):
+            return (name, None, False)
         if name == "ORIG_300i-003":
             return ("Origin 300i", "Hijacked 890 Jump", True)
         return (name, None, False)
