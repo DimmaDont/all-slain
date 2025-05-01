@@ -274,6 +274,7 @@ SHIPS = {
     "ORIG_600i_Touring": "Origin 600i Touring",
     "ORIG_85X": "Origin 85X Limited",
     "ORIG_890Jump": "Origin 890 Jump",
+    "ORIG_890Jump_Hijacked": "Hijacked Origin 890 Jump",
     "ORIG_m50": "Origin M50 Interceptor",
     "ORIG_X1": "Origin X1",
     "ORIG_X1_Force": "Origin X1 Force",

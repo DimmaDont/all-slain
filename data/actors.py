@@ -913,4 +913,18 @@ ACTORS = {
     "PU_Human-Xenothreat-Grunt-Male-Medium_01_Soldier": "XenoThreat Grunt Medium 01 Soldier",
     "PU_Human-Xenothreat-Gunner-Male-Light": "XenoThreat Gunner Light",
     "PU_Human-Xenothreat-Pilot-Male-Light": "XenoThreat Pilot Light",
+    "Shipjacker_HUB_Medium_01": "Shipjacker Hub Medium 1",
+    "Shipjacker_HUB_Medium_03": "Shipjacker Hub Medium 3",
+    "Shipjacker_HUB_Medium_04": "Shipjacker Hub Medium 4",  # This one wears the Butcher Helmet
+    "Shipjacker_Hangar_Medium_02": "Shipjacker Hangar Medium 2",
+    "Shipjacker_Hangar_Medium_03": "Shipjacker Hangar Medium 3",
+    "Shipjacker_Hangar_Medium_04": "Shipjacker Hangar Medium 4",
+    "Shipjacker_Hangar_Medium_05": "Shipjacker Hangar Medium 5",
+    "Shipjacker_MeetingRoom_Medium_03": "Shipjacker MeetingRoom Medium 3",
+    "Shipjacker_MeetingRoom_Medium_05": "Shipjacker MeetingRoom Medium 5",
+    "Shipjacker_LifeSupport_Medium_01": "Shipjacker LifeSupport Medium 1",
+    "Shipjacker_LifeSupport_Medium_02": "Shipjacker LifeSupport Medium 2",
+    "Shipjacker_LifeSupport_Medium_03": "Shipjacker LifeSupport Medium 3",
+    "Shipjacker_LifeSupport_Medium_04": "Shipjacker LifeSupport Medium 4",
+    "Shipjacker_LifeSupport_Medium_05": "Shipjacker LifeSupport Medium 5",
 }

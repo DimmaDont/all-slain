@@ -212,6 +212,7 @@ WEAPONS_FPS = {
     "none_smg_energy_01": "Ripper SMG",
     "rrs_melee_01_fallout01": 'TBF-4 "Balefire" Combat Knife',
     "rrs_melee_01_orange01": 'TBF-4 "Sunspike" Combat Knife',
+    "sasu_pistol_toy_01_ea_elim": "WowBlast Desperado Toy Pistol Red",  # Arena Commander FPS
     "utfl_melee_01": "FSK-8 Combat Knife",
     "utfl_melee_01_brown01": 'FSK-8 "Mirage" Combat Knife',
     "utfl_melee_01_grey01": 'FSK-8 "Ghost" Combat Knife',

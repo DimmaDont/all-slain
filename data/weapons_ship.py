@@ -145,8 +145,9 @@ WEAPONS_SHIP = {
     "VNCL_PlasmaCannon_S2": "'WHIP' Cannon",
     "VNCL_PlasmaCannon_S3": "'WARLORD' Cannon",
     "VNCL_PlasmaCannon_S5": "'WRATH' Cannon",
-    # Bomb racks and not bombs, but that's what's logged.
+    # Bomb racks and not bombs, but that's what's logged. Sometimes?
     "BMBRCK_CRUS_STARL_Right": "Starlifter A2 Bomb",
     "BMBRCK_CRUS_STARL_Left": "Starlifter A2 Bomb",
     "BMBRCK_CRUS_Spirit_A1": "Spirit A1 Bomb",
+    "BOMB_S10_FSKI_Colossus": "Starlifter A2 Bomb",
 }

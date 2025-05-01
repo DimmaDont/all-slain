@@ -61,10 +61,17 @@ LOCATIONS_STARTSWITH: dict[str, Location] = {
 
 def get_location(name: str) -> Location:
     """
-    Returns: A `Location` tuple (preposition, location, type)
+    Retrieves a user-friendly representation of the location.
+    `name` is not unique, as locations may be reused.
+    Non-unique zones will return "a" or "an" as part of its preposition.
+
+    Args:
+        name: The name of the zone.
+
+    Returns:
+        A `Location` tuple (preposition, location, type)
     """
     try:
-        # todo not all are "at"
         location = LOCATIONS[name]
     except KeyError:
         pass

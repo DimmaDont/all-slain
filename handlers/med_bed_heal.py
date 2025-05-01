@@ -30,6 +30,8 @@ MEDICAL_BED_NAMES = {
     # "Bed_Single_Medical_RSI_T2_Left-003",
     # Terrapin Medic
     # "Bed_Single_Medical_Terrapin",
+    # 890
+    # "Bed_Single_Medical_890Jump-001"  # Hijacked 890
 }
 
 
@@ -44,6 +46,7 @@ SHIPS = {
     "ANVL_C8R_Pisces_Rescue": ("a", "Anvil C8R Pisces Rescue"),
     "ANVL_Terrapin_Medic": ("an", "Anvil Terrapin Medic"),
     "DRAK_Cutlass_Red": ("a", "Drake Cutlass Red"),
+    "ORIG_890Jump_Hijacked": ("a", "Hijacked Origin 890 Jump"),
     "RSI_Polaris": ("an", "RSI Polaris"),
     # ursa is uppercase, unlike in ships.py
     "RSI_URSA_Medivac": ("an", "RSI Ursa Medivac"),

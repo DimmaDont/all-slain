@@ -78,6 +78,7 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     "P6_L3": "Endgame",
     "P6_L4": "Dudley & Daughters",
     "P6_L5": "Megumi Refueling",
+    "planet": ("on a", "Planet"),  # Arena Commander?
     "pyro1": ("on", "Pyro I, Pyro"),
     "pyro2": ("on", "Monox, Pyro"),
     "pyro3": ("on", "Bloom, Pyro"),
@@ -93,6 +94,7 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     "rs_cargo_001": "Cargo Center",
     "rs_cz_rewards_001": "CZ Rewards Area, Checkmate",
     "rs_cz_rewards_003": "CZ Rewards Area, Orbituary",
+    "rs_entry_cru-leo1": ("inside", "Seraphim Station"),
     "rs_entry_pyro-stan_jp1": "Stanton Gateway, Pyro",
     "rs_ext_cru-leo1": ("outside", "Seraphim Station, Crusader"),
     "rs_int_p2l4": "Checkmate Station, Monox, Pyro",
@@ -122,4 +124,13 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     "orbtl_002_plat_001_util_a_orbital_001_occu_a_final": ("at an", "OLP"),
     "util_a_orbital_001_occu_a_final-001": ("outside an", "OLP"),
     "util_a_orbital_001_occu_a_final_int": ("inside an", "OLP"),
+    # Hathor facilities
+    "util_cmpd_wrhse_lge_001_rund_a_final_int": ("in a", "Large Warehouse A"),
+    "util_cmpd_wrhse_lge_001_rund_b_final_int": ("in a", "Large Warehouse B"),
+    "util_cmpd_wrhse_sml_001_rund_a_final_int-004": ("in a", "Small Warehouse A"),
+    "util_cmpd_wrhse_sml_001_rund_b_final_int-001": ("in a", "Small Warehouse B"),
+    "util_cmpd_wrhse_sml_001_rund_c_final_int-001": ("in a", "Small Warehouse C"),
+    "util_dish_001_rund_a_final_int": ("in a", "PAF 01 Main Building"),
+    "util_dish_001_rund_b_final_int": ("in a", "PAF 02 Main Building"),
+    "util_dish_001_rund_c_final_int": ("in a", "PAF 03 Main Building"),
 }
