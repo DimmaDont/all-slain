@@ -65,9 +65,12 @@ class Build(CompatibleAll, Handler):
         build = int(data[1])
         assert self.state.version
 
-        for handler in HANDLERS:
-            if handler.is_compatible(self.state.version, build):
-                self.state.handlers[handler.name()] = handler(self.state)
+        handlers = [h for h in HANDLERS if h.is_compatible(self.state.version, build)]
+
+        self.state.header_width = max(len(h.header[0]) for h in handlers) + 1
+
+        for handler in handlers:
+            self.state.handlers[handler.name()] = handler(self.state)
 
         if not self.state.args.player_lookup and not self.state.args.planespotting:
             del self.state.handlers[Character.name()]
