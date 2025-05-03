@@ -1,5 +1,7 @@
 import os
+import sys
 from argparse import Namespace
+from os.path import dirname
 from typing import Any, cast
 
 from tomlkit import (
@@ -18,7 +20,16 @@ from tomlkit.items import Item
 from .data_providers.starcitizen_api import Mode
 
 
-CONFIG_NAME = "allslain.conf.toml"
+if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+    # Bundled
+    application_path = dirname(sys.executable)
+else:
+    import __main__
+
+    application_path = dirname(__main__.__file__)
+
+
+CONFIG_NAME = f"{application_path}/allslain.conf.toml"
 
 
 # TODO drop python3.10 and use StrEnum
