@@ -2,7 +2,7 @@
 
 ### Pip
 ```bash
-pip install git+https://github.com/DimmaDont/all-slain
+pip install "allslain @ git+https://github.com/DimmaDont/all-slain"
 ```
 
 ### pyproject.toml
@@ -52,6 +52,8 @@ ship_weapon_name: str = WEAPONS_SHIP.get("KLWE_LaserRepeater_S2")
 ```
 
 ### Getting Latest Game Log File
+Install `allslain[launcher_store]`, e.g. `pip install "allslain[launcher_store] @ git+https://github.com/DimmaDont/all-slain"`
+
 ```python
 from allslain.launcher_store import get_log
 

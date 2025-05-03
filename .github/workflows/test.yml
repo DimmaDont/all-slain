@@ -16,7 +16,7 @@ jobs:
           cache: pip
       - name: Install dependencies
         shell: bash
-        run: pip install -e .
+        run: pip install -e .[app]
       - name: Run Tests
         shell: bash
         run: python -m unittest discover -s tests
