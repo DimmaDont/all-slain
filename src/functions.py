@@ -22,6 +22,15 @@ PATTERN_ID = re.compile(r"([\w-]+)_\d{12,}")
 
 
 def strip_id(name: str) -> str:
+    """
+    Returns the entity name without its 12 or 13-digit id.
+
+    Args:
+        name: The full entity id
+
+    Returns:
+        A string with the id removed
+    """
     if match := PATTERN_ID.match(name):
         return match.group(1)
     return name
@@ -31,6 +40,15 @@ PATTERN_ACTOR_VARIANT = re.compile(r"([\w-]+)_\d{2}")
 
 
 def strip_actor_variant(name: str) -> str:
+    """
+    Returns the actor name without it actor variant id.
+
+    Args:
+        name: The actor name
+
+    Returns:
+        A string with the variant id removed
+    """
     if match := PATTERN_ACTOR_VARIANT.match(name):
         return match.group(1)
     return name
@@ -102,6 +120,15 @@ def get_location(name: str) -> Location:
 
 
 def get_respawn_location(name: str) -> tuple[str, LocationType]:
+    """
+    Retrieves a user-friendly representation of the respawn location.
+
+    Args:
+        name: The id of the respawn destination.
+
+    Returns:
+        A string
+    """
     try:
         return (LOCATIONS_RESPAWN[name.replace("@", "", 1)], LocationType.LOCATION)
     except KeyError:

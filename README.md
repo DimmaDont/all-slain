@@ -17,6 +17,9 @@ This program monitors the Star Citizen `Game.log` file in real-time, reporting p
 ## Requirements
 * If the log file is not specified, RSI Launcher `2.2.0`+ is required to automatically find it.
 
+## Developers
+If you are using this project as part of another project, see [DEVELOPERS.md](DEVELOPERS.md).
+
 ## Usage
 1. Start the game, and wait until the EasyAntiCheat splash screen closes and the main game window has appeared.
 2. Run the program.
