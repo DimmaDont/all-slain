@@ -27,7 +27,7 @@ build_app = [
 extra = [
     "lxml",
 ]
-all = ["allslain[build_app]"]
+all = ["allslain[build_app,extra]"]
 
 [project.urls]
 homepage = "https://github.com/DimmaDont/all-slain"

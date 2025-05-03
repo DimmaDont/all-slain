@@ -1,4 +1,5 @@
 import re
+from importlib.util import find_spec
 
 import requests
 from bs4 import BeautifulSoup
@@ -17,7 +18,10 @@ class Provider(BaseProvider):
                 f"https://robertsspaceindustries.com/citizens/{handle}",
                 timeout=15,
             )
-            soup = BeautifulSoup(response.text, "html.parser")
+            soup = BeautifulSoup(
+                response.text,
+                "lxml" if find_spec("lxml") else "html.parser",
+            )
             for entry in soup.find_all("p", class_="entry"):
                 text = entry.get_text().strip().split("\n")
                 match text[0]:
