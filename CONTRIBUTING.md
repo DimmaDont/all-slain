@@ -21,9 +21,7 @@ git clone https://github.com/Dimmadont/all-slain
 cd all-slain
 python -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
-# And if building,
-pip install -r requirements-build.txt
+pip install -e .[all]
 ```
 
 For extracting data, see [the tools readme](tools/README.md).

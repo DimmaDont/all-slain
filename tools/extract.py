@@ -87,7 +87,7 @@ def dump_to_file(data: dict, filename: str):
 
 
 def main(directory: str):
-    with open(directory + R"v2\ships.json", "r", encoding="utf-8") as f:
+    with open(directory + "v2/ships.json", "r", encoding="utf-8") as f:
         data = json.loads(f.read())
         ships = get_ships(data)
 
@@ -156,11 +156,11 @@ def main(directory: str):
                 except KeyError:
                     print(f'Could not find item with name "{item["name"]}"')
 
-    dump_to_file(ships, "data\\ships.py")
-    dump_to_file(weapons_fps, "data\\weapons_fps.py")
-    dump_to_file(weapons_ship, "data\\weapons_ship.py")
-    dump_to_file(locations, "data\\locations.py")
+    dump_to_file(ships, "src/data/ships.py")
+    dump_to_file(weapons_fps, "src/data/weapons_fps.py")
+    dump_to_file(weapons_ship, "src/data/weapons_ship.py")
+    dump_to_file(locations, "src/data/locations.py")
 
 
 if __name__ == "__main__":
-    main(R"..\\LIVE_EXTRACT2\\")
+    main("../LIVE_EXTRACT2/")

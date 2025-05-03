@@ -1,1 +1,1 @@
-pyinstaller --clean --onefile allslain.py --icon icon/ded.ico --noupx --debug noarchive
+pyinstaller --clean --onefile main.py --name allslain --icon icon/ded.ico --noupx --debug noarchive

@@ -12,7 +12,8 @@ jobs:
       attestations: write
     uses: ./.github/workflows/pyinstaller.yml
     with:
-      file: allslain.py
+      file: main.py
+      name: allslain
       icon: icon/ded.ico
       output: dist/allslain.exe
       attest: false

@@ -1,6 +1,6 @@
 import unittest
 
-from colorize import Color
+from src.colorize import Color
 
 
 class TestColorFunctions(unittest.TestCase):

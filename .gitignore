@@ -3,6 +3,6 @@
 dist/
 build/
 allslain.spec
-tools/*.json
 venv/
 allslain.conf.toml
+allslain.egg-info/

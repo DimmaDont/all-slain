@@ -1,7 +1,7 @@
 import unittest
 
-from handlers.killv import KillV
-from state import State
+from src.handlers.killv import KillV
+from src.state import State
 
 
 class TestKillV(unittest.TestCase):

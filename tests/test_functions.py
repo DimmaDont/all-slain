@@ -1,6 +1,6 @@
 import unittest
 
-from functions import (
+from src.functions import (
     RE_VEHICLE_NAME,
     LocationType,
     get_entity,

@@ -1,7 +1,7 @@
 import unittest
 
-from allslain import AllSlain
-from launcher_store import LauncherStoreException, get_log
+from src.allslain import AllSlain
+from src.launcher_store import LauncherStoreException, get_log
 
 
 def check_launcher_store():

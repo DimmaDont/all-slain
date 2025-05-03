@@ -16,7 +16,7 @@ jobs:
           cache: pip
       - name: Install dependencies
         shell: bash
-        run: pip install -r requirements.txt
+        run: pip install -e .
       - name: Run Tests
         shell: bash
         run: python -m unittest discover -s tests

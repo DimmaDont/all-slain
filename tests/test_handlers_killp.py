@@ -1,7 +1,7 @@
 import unittest
 
-from handlers.killp import KillP
-from state import State
+from src.handlers.killp import KillP
+from src.state import State
 
 
 class TestKillP(unittest.TestCase):

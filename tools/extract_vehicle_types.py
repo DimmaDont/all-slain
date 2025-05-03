@@ -21,4 +21,4 @@ def main(game_xml: str, outfile):
 
 
 if __name__ == "__main__":
-    main(R"..\\LIVE_EXTRACT\\Data\\Game2.xml", "data\\vehicle_types.py")
+    main("../LIVE_EXTRACT/Data/Game2.xml", "src/data/vehicle_types.py")

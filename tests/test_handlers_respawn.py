@@ -1,7 +1,7 @@
 import unittest
 
-from handlers.corpse import CorpseHospitalLocation
-from state import State
+from src.handlers.corpse import CorpseHospitalLocation
+from src.state import State
 
 
 class TestRespawn(unittest.TestCase):

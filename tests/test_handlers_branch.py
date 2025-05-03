@@ -1,6 +1,6 @@
 import unittest
 
-from handlers.branch import RE_SC_VERSION
+from src.handlers.branch import RE_SC_VERSION
 
 
 class TestBranch(unittest.TestCase):

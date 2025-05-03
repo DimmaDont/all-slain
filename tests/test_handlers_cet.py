@@ -1,7 +1,7 @@
 import unittest
 
-from handlers.cet import Cet
-from state import State
+from src.handlers.cet import Cet
+from src.state import State
 
 
 class TestCet(unittest.TestCase):

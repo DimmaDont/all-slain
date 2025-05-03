@@ -33,11 +33,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+          architecture: x64
+          cache: pip
+      - name: Install Dependencies
+        run: pip install -e .
       - name: Lint
         uses: isort/isort-action@master
         with:
           configuration: ""
-          requirementsFiles: "requirements.txt"
       - name: Commit and push linting fixes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

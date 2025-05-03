@@ -1,7 +1,7 @@
 import unittest
 
-from handlers.incap import LOG_INCAP_CAUSE, Incap
-from state import State
+from src.handlers.incap import LOG_INCAP_CAUSE, Incap
+from src.state import State
 
 
 class TestLogIncapRegexSingleCause(unittest.TestCase):
