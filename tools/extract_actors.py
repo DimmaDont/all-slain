@@ -73,6 +73,7 @@ def main(game_xml: str, outfile):
                 .replace("Grunt Grunt", "Grunt")
                 .replace("distributioncentre ", "DC ")
                 .replace("vlk", "Valakkar")
+                .replace("Ninetails", "NineTails")
                 .strip()
             )
             actors[classname] = name
