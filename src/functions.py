@@ -6,6 +6,7 @@ from .data import (
     ACTORS,
     LOCATIONS,
     LOCATIONS_RESPAWN,
+    MISSILERACKS_SHIP,
     SHIPS,
     VEHICLE_TYPES,
     WEAPONS_FPS,
@@ -204,7 +205,9 @@ def get_entity(name: str) -> tuple[str, bool]:
     return (name, False)
 
 
-def get_item(item_class: str, killer: str, killed: str, damage_type: str) -> str:
+def get_item(
+    item_class: str, killer: str, killed: str, damage_type: str
+) -> str | tuple[str, str]:
     if item_class == "Player":
         return "suicide"
 
@@ -224,11 +227,14 @@ def get_item(item_class: str, killer: str, killed: str, damage_type: str) -> str
         pass
 
     try:
+        # When it's a bomb, it will log the bomb rack.
+        # TODO logs bomb when loose bomb is triggered?
         return WEAPONS_SHIP[item_class]
     except KeyError:
         pass
 
-    return item_class
+    mrck = MISSILERACKS_SHIP.get(item_class, item_class)
+    return mrck
 
 
 def get_vehicle_type(name: str) -> str:

@@ -1,4 +1,4 @@
-WEAPONS_SHIP = {
+WEAPONS_SHIP: dict[str, str | tuple[str, str]] = {
     "AMRS_AAgun_CC_S3": "PyroBurst Scattergun",
     "AMRS_LaserCannon_S1": "Omnisky III Cannon",
     "AMRS_LaserCannon_S2": "Omnisky VI Cannon",
@@ -60,6 +60,12 @@ WEAPONS_SHIP = {
     "Bengal_BallisticCannon_S8": "Tarantula GT-870 Mark 3 Cannon",
     "Bengal_BallisticGatling_S6": "Revenant Gatling",
     "Bengal_Turret_BallisticCannon_S8": "Slayer Cannon",
+    "BMBRCK_CRUS_STARL_Right": ("Colossus Bomb", "Crusader A2 Hercules Starlifter"),
+    "BMBRCK_CRUS_STARL_Left": ("Colossus Bomb", "Crusader A2 Hercules Starlifter"),
+    "BMBRCK_CRUS_Spirit_A1": ("Stormburst Bomb", "Crusader A1 Spirit"),
+    "BOMB_S03_FSKI_Thunderball": "Thunderball Bomb",
+    "BOMB_S05_FSKI": "Stormburst Bomb",
+    "BOMB_S10_FSKI_Colossus": "Colossus Bomb",
     "ESPR_BallisticCannon_S1": "Deadbolt I Cannon",
     "ESPR_BallisticCannon_S2": "Deadbolt II Cannon",
     "ESPR_BallisticCannon_S3": "Deadbolt III Cannon",
@@ -145,9 +151,4 @@ WEAPONS_SHIP = {
     "VNCL_PlasmaCannon_S2": "'WHIP' Cannon",
     "VNCL_PlasmaCannon_S3": "'WARLORD' Cannon",
     "VNCL_PlasmaCannon_S5": "'WRATH' Cannon",
-    # Bomb racks and not bombs, but that's what's logged. Sometimes?
-    "BMBRCK_CRUS_STARL_Right": "Starlifter A2 Bomb",
-    "BMBRCK_CRUS_STARL_Left": "Starlifter A2 Bomb",
-    "BMBRCK_CRUS_Spirit_A1": "Spirit A1 Bomb",
-    "BOMB_S10_FSKI_Colossus": "Starlifter A2 Bomb",
 }

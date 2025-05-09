@@ -2,7 +2,7 @@ import re
 
 from ..colorize import Color
 from ..functions import LocationType, get_article, get_entity, get_item, get_location
-from ..functions_color import color_cause, color_location
+from ..functions_color import color_cause, color_location, color_vehicle
 from .compatibility import CompatibleAll
 from .handler import PlayerLookupHandler
 
@@ -22,14 +22,31 @@ class KillP(CompatibleAll, PlayerLookupHandler):
         location_str = color_location(location, location_type)
         killer, is_killer_npc = get_entity(data[3])
         cause = get_item(data[5], data[3], data[1], data[6])
+
+        if isinstance(cause, tuple):
+            # missile/torpedo/bomb, vehicle
+            vehicle = cause[1]
+            cause = cause[0]
+        else:
+            vehicle = None
+
         cause_str = color_cause(cause)
         killer_str = self.format_player(killer, is_killer_npc)
+
+        # TODO can the player die from their own ship missile?
 
         if cause.startswith("suicide"):
             return f"{killer_str} committed {cause_str} {lp} {location_str}"
 
         cause_a = get_article(cause)
         killed_str = self.format_player(killed, is_killed_npc)
+
+        if vehicle:
+            vehicle_a = get_article(vehicle)
+            vehicle_str = color_vehicle(vehicle)
+            if location_type == LocationType.SHIP:
+                return f"{killer_str} killed {killed_str} {lp} {location_str} with {cause_a} {cause_str} from {vehicle_a} {vehicle_str}"
+            return f"{killer_str} killed {killed_str} with {cause_a} {cause_str} from {vehicle_a} {vehicle_str} {lp} {location_str}"
 
         if location_type == LocationType.SHIP:
             return f"{killer_str} killed {killed_str} {lp} {location_str} with {cause_a} {cause_str}"

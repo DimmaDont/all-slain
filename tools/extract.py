@@ -1,4 +1,9 @@
 import json
+from typing import Any
+
+
+def is_flight_ready(item: dict[str, str]) -> bool:
+    return "flightReady" in item["tags"].split()
 
 
 def get_item_name(labels: dict[str, str], item_name_ref: str):
@@ -92,7 +97,7 @@ def main(directory: str):
         ships = get_ships(data)
 
     with open(directory + "labels.json", "r", encoding="utf-8") as f:
-        labels = json.loads(f.read())
+        labels: dict[str, str] = json.loads(f.read())
         locations = get_locations(labels)
 
     weapons_fps = {}
@@ -155,11 +160,47 @@ def main(directory: str):
                     )
                 except KeyError:
                     print(f'Could not find item with name "{item["name"]}"')
+            elif item["type"] == "Bomb":
+                try:
+                    weapons_ship[item["className"]] = get_item_name_ship_weapon(
+                        labels, item["name"]
+                    )
+                except KeyError:
+                    print(f'Could not find item with name "{item["name"]}"')
+            elif item["type"] == "BombLauncher":
+                if "_TEMP_" in item["className"]:
+                    continue
+                try:
+                    weapons_ship[item["className"]] = get_item_name_ship_weapon(
+                        labels, item["name"]
+                    )
+                except KeyError:
+                    print(f'Could not find item with name "{item["name"]}"')
+
+    missileracks_ship = {}
+    with open(directory + "ship-items.json", "r", encoding="utf-8") as f:
+        items: dict[str, Any] = json.loads(f.read())
+        for item in items:
+            if item["classification"] != "Ship.MissileLauncher.MissileRack":
+                continue
+            if not is_flight_ready(item):
+                continue
+            if "_cap" in item["className"].lower():
+                continue
+            missileracks_ship[item["className"]] = labels.get(
+                item["name"][1:],
+                (
+                    str(item["stdItem"].get("MissileRack", {}).get("Size", "?"))
+                    + "x"
+                    + str(item["stdItem"].get("MissileRack", {}).get("Count", "?"))
+                ),
+            )
 
     dump_to_file(ships, "src/data/ships.py")
     dump_to_file(weapons_fps, "src/data/weapons_fps.py")
     dump_to_file(weapons_ship, "src/data/weapons_ship.py")
-    dump_to_file(locations, "src/data/locations.py")
+    dump_to_file(locations, "src/data/locations_respawn.py")
+    dump_to_file(missileracks_ship, "src/data/missileracks_ship.py")
 
 
 if __name__ == "__main__":
