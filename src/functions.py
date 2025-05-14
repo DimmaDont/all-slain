@@ -286,6 +286,9 @@ def get_article(noun: str) -> str:
             return "a"
         # eg "RSI"
         return "an"
+    if noun[0] == "U" and len(noun) > 1 and noun[1].isupper():
+        # "UEE"
+        return "a"
     return (
         "an"
         if any(noun.lower().startswith(v) for v in ["a", "e", "i", "o", "u"])

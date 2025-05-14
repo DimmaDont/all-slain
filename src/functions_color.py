@@ -41,8 +41,17 @@ def color_player_with_org(player: Player, main_org: str | Org) -> str:
 
 
 def color_vehicle(
-    name: str, vtype: str | None = None, as_location: bool = False
+    name: str,
+    vtype: str | None = None,
+    as_location: bool = False,
+    is_npc: bool = False,
 ) -> str:
     vehicle_type_str = Color.CYAN(vtype, True) + " " if vtype is not None else ""
-    vehicle_name_str = Color["YELLOW" if as_location else "GREEN"](name)
+    if as_location:
+        vehicle_color = ("YELLOW", False)
+    elif is_npc:
+        vehicle_color = ("BLACK", True)
+    else:
+        vehicle_color = ("GREEN", False)
+    vehicle_name_str = Color[vehicle_color[0]](name, vehicle_color[1])
     return vehicle_type_str + vehicle_name_str

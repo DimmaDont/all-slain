@@ -38,11 +38,11 @@ class KillV(CompatibleAll, PlayerLookupHandler):
         # ship, player, or unknown
         vehicle_name2, vehicle_type2, found2 = get_vehicle(data[5])
         if found2:
-            killer_str = color_vehicle(vehicle_name2, vehicle_type2)
+            killer_str = color_vehicle(vehicle_name2, vehicle_type2, is_npc=found2)
         else:
             killer_str = self.format_player(*get_entity(data[5]))
 
-        vehicle_article = get_article(vehicle_name)
+        vehicle_article = get_article(vehicle_type or vehicle_name)
 
         if data[6] == "SelfDestruct":
             # SelfDestruct always destroys the vehicle
