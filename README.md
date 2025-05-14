@@ -57,7 +57,7 @@ options:
 </details>
 
 ## Game Log Version Compatibility
-Compatible with `LIVE` (`4.1.0`).\
+Compatible with `LIVE` (`4.1.1`).\
 Originally developed for `4.0_PREVIEW`.\
 Mostly compatible with `3.24.X`.
 
@@ -88,7 +88,7 @@ It can be opened with Notepad, but an editor with syntax highlighting such as [N
 [^4]: Excludes local player
 [^5]: Available from `3.24` to `4.0.1`. Since `4.0.2`, only events involving the client player are logged.
 [^6]: Only available up to and including `4.0.1`
-[^7]: Only available up to and including `4.0.2`. No longer available in `4.1.0`.
+[^7]: Only available up to and including `4.0.2`. Unavailable since `4.1.0`.
 
 ## Help Wanted
 

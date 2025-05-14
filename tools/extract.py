@@ -183,8 +183,6 @@ def main(directory: str):
         for item in items:
             if item["classification"] != "Ship.MissileLauncher.MissileRack":
                 continue
-            if not is_flight_ready(item):
-                continue
             if "_cap" in item["className"].lower():
                 continue
             missileracks_ship[item["className"]] = labels.get(
