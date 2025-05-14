@@ -127,6 +127,7 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     # Hathor facilities
     "util_cmpd_wrhse_lge_001_rund_a_final_int": ("in a", "Large Warehouse A"),
     "util_cmpd_wrhse_lge_001_rund_b_final_int": ("in a", "Large Warehouse B"),
+    "util_cmpd_wrhse_sml_001_rund_a_final_int": ("in a", "Small Warehouse A"),
     "util_cmpd_wrhse_sml_001_rund_a_final_int-004": ("in a", "Small Warehouse A"),
     "util_cmpd_wrhse_sml_001_rund_b_final_int-001": ("in a", "Small Warehouse B"),
     "util_cmpd_wrhse_sml_001_rund_c_final_int-001": ("in a", "Small Warehouse C"),
