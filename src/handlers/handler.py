@@ -29,9 +29,12 @@ class Handler(ABC):
     def set_header_text(self, text: str, color: Color, bold: bool) -> None:
         self.header_text = color(text.rjust(self.state.header_width), bold=bold)
 
+    def output(self, text: str):
+        print(f"{self.state.curr_event_timestr}{self.header_text}: {text}")
+
     def __call__(self, data: Match[str]) -> None:
         if text := self.format(data):
-            print(f"{self.state.curr_event_timestr}{self.header_text}: {text}")
+            self.output(text)
         self.after(data)
 
     @classmethod
