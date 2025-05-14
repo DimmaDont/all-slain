@@ -90,6 +90,7 @@ SHIPS = {
     "ANVL_Centurion": "Anvil Centurion",
     "ANVL_Gladiator": "Anvil Gladiator",
     "ANVL_Hawk": "Anvil Hawk",
+    "ANVL_Hornet_F7A": "Anvil F7A",  # PU_AI_UEE,
     "ANVL_Hornet_F7A_Mk1": "Anvil F7A Hornet Mk I",
     "ANVL_Hornet_F7A_Mk2": "Anvil F7A Hornet Mk II",
     "ANVL_Hornet_F7A_Mk2_Exec_Military": "Anvil F7A Hornet Mk II Executive Military",
