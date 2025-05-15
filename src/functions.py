@@ -264,7 +264,10 @@ def get_vehicle(name: str) -> tuple[str, str | None, bool]:
         # Is it debris?
         vehicle_type = get_vehicle_type(matches[1][1]) if matches[1][1] else None
         try:
-            return (SHIPS[matches[1][0]] + " (Debris)", vehicle_type, True)
+            ship = SHIPS[matches[1][0]]
+            if isinstance(ship, tuple):
+                return (ship[0] + " (Debris)", ship[1], True)
+            return (ship + " (Debris)", vehicle_type, True)
         except KeyError:
             return (matches[1][0] + " (Debris)", vehicle_type, False)
 
@@ -272,7 +275,10 @@ def get_vehicle(name: str) -> tuple[str, str | None, bool]:
     vehicle_type = get_vehicle_type(matches[0][1]) if matches[0][1] else None
 
     try:
-        return (SHIPS[vehicle_name], vehicle_type, True)
+        ship = SHIPS[vehicle_name]
+        if isinstance(ship, tuple):
+            return (ship[0], ship[1], True)
+        return (ship, vehicle_type, True)
     except KeyError:
         pass
 

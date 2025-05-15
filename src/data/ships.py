@@ -1,4 +1,4 @@
-SHIPS = {
+SHIPS: dict[str, str | tuple[str, str]] = {
     "AEGS_Avenger_Stalker": "Aegis Avenger Stalker",
     "AEGS_Avenger_Titan": "Aegis Avenger Titan",
     "AEGS_Avenger_Titan_Renegade": "Aegis Avenger Titan Renegade",
@@ -289,6 +289,7 @@ SHIPS = {
     "ORIG_X1": "Origin X1",
     "ORIG_X1_Force": "Origin X1 Force",
     "ORIG_X1_Velocity": "Origin X1 Velocity",
+    "probe_comms_1_Ninetails": ("Comms Probe", "NineTails"),
     "RSI_Aurora_CL": "RSI Aurora CL",
     "RSI_Aurora_ES": "RSI Aurora ES",
     "RSI_Aurora_LN": "RSI Aurora LN",
