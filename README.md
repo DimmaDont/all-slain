@@ -68,10 +68,10 @@ Mostly compatible with `3.24.X`.
 * Game load progress[^1]
 * Quit to menu/desktop[^1]
 * Incapacitation events[^2]
-* Inter-system jumps[^1]
 * Medical bed limb healing[^1]
 
 ## Supported Events from Previous Patches
+* Inter-system jumps[^1][^8]
 * Quantum travel events with destination[^1][^3]
 * Quantum travel events[^4][^6]
 
@@ -89,6 +89,7 @@ It can be opened with Notepad, but an editor with syntax highlighting such as [N
 [^5]: Available from `3.24` to `4.0.1`. Since `4.0.2`, only events involving the client player are logged.
 [^6]: Only available up to and including `4.0.1`
 [^7]: Only available up to and including `4.0.2`. Unavailable since `4.1.0`.
+[^8]: Only available up to and including `4.1.0`. Unavailable since `4.1.1`.
 
 ## Help Wanted
 
