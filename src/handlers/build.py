@@ -1,4 +1,7 @@
 import re
+from typing import cast
+
+from semver import Version
 
 from ..colorize import Color
 from .cet import Cet
@@ -62,9 +65,12 @@ class Build(CompatibleAll, Handler):
 
     def after(self, data):
         build = int(data[1])
-        assert self.state.version
 
-        handlers = [h for h in HANDLERS if h.is_compatible(self.state.version, build)]
+        handlers = [
+            h
+            for h in HANDLERS
+            if h.is_compatible(cast(Version, self.state.version), build)
+        ]
 
         self.state.header_width = max(len(h.header[0]) for h in handlers) + 1
 

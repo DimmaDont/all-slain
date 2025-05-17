@@ -3,7 +3,7 @@ import importlib
 import re
 import time
 from io import TextIOWrapper
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from .args import Args
 from .handlers.branch import Branch
@@ -95,9 +95,8 @@ class LogParser:
             self.state.count[event_type] += 1
 
     def run(self):
-        assert self.state.args.file
         with open(
-            self.state.args.file,
+            cast(str, self.state.args.file),
             "r",
             encoding=self.LOG_ENCODING,
             newline=self.LOG_NEWLINE,
