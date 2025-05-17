@@ -8,11 +8,6 @@ from .compatibility import CompatibleAll
 from .handler import Handler
 
 
-# TODO:
-# 890
-# Carrack
-
-
 logger = logging.getLogger("allslain").getChild("medbed")
 
 
@@ -31,6 +26,8 @@ MEDICAL_BED_NAMES = {
     # "Bed_Single_Medical_Terrapin",
     # 890
     # "Bed_Single_Medical_890Jump-001"  # Hijacked 890
+    # Idris
+    # "Bed_Single_Large_Medical_Idris"
 }
 
 
@@ -42,9 +39,13 @@ def get_bed_name(med_bed_name: str) -> str:
 
 
 SHIPS = {
-    "ANVL_C8R_Pisces_Rescue": ("a", "Anvil C8R Pisces Rescue"),
+    "AEGS_Idris_M": ("an", "Aegis Idris-M"),
+    "AEGS_Idris_P": ("an", "Aegis Idris-P"),
+    "ANVL_C8R_Pisces_Rescue": ("an", "Anvil C8R Pisces Rescue"),
+    "ANVL_Carrack": ("an", "Anvil Carrack"),
     "ANVL_Terrapin_Medic": ("an", "Anvil Terrapin Medic"),
     "DRAK_Cutlass_Red": ("a", "Drake Cutlass Red"),
+    "ORIG_890Jump": ("an", "Origin 890 Jump"),
     "ORIG_890Jump_Hijacked": ("a", "Hijacked Origin 890 Jump"),
     "RSI_Polaris": ("an", "RSI Polaris"),
     # ursa is uppercase, unlike in ships.py
