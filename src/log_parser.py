@@ -44,7 +44,7 @@ class LogParser:
 
         if args.player_lookup and (dp := args.data_provider.provider):
             self.state.data_provider = importlib.import_module(
-                f"src.data_providers.{dp}"
+                f"allslain.data_providers.{dp}"
             ).Provider(self.state)
 
         self.prev: datetime.datetime | None = None
