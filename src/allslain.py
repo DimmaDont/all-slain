@@ -1,7 +1,5 @@
 import logging
-import time
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
-from io import TextIOWrapper
 from typing import cast
 
 from .args import Args
@@ -17,20 +15,6 @@ logger = logging.getLogger("allslain")
 
 
 class AllSlain:
-    LOG_ENCODING = "latin-1"
-    LOG_NEWLINE = "\r\n"
-
-    def follow(self, f: TextIOWrapper):
-        if self.args.quit_on_eof:
-            while line := f.readline():
-                yield line.rstrip(self.LOG_NEWLINE)
-        else:
-            while True:
-                if line := f.readline():
-                    yield line.rstrip(self.LOG_NEWLINE)
-                else:
-                    time.sleep(1)
-
     def __init__(self) -> None:
         parser = ArgumentParser(
             formatter_class=RawDescriptionHelpFormatter,
@@ -88,15 +72,8 @@ class AllSlain:
             print(f'Reading "{Color.CYAN(self.args.file)}"\n')
 
         try:
-            with open(
-                self.args.file,
-                "r",
-                encoding=self.LOG_ENCODING,
-                newline=self.LOG_NEWLINE,
-            ) as f:
-                with LogParser(self.args) as log_parser:
-                    for line in self.follow(f):
-                        log_parser.process(line)
+            with LogParser(self.args) as log_parser:
+                log_parser.run()
         except KeyboardInterrupt:
             pass
         except FileNotFoundError:

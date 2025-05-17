@@ -1,7 +1,7 @@
 import unittest
 
-from src.allslain import AllSlain
 from src.launcher_store import LauncherStoreException, get_log
+from src.log_parser import LogParser
 
 
 def check_launcher_store():
@@ -23,6 +23,9 @@ class TestLogReading(unittest.TestCase):
     def test_log_decode(self):
         assert self.log
         with open(
-            self.log, "r", encoding=AllSlain.LOG_ENCODING, newline=AllSlain.LOG_NEWLINE
+            self.log,
+            "r",
+            encoding=LogParser.LOG_ENCODING,
+            newline=LogParser.LOG_NEWLINE,
         ) as f:
             f.read()

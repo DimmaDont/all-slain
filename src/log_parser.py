@@ -2,6 +2,7 @@ import datetime
 import importlib
 import re
 import time
+from io import TextIOWrapper
 from typing import TYPE_CHECKING
 
 from .args import Args
@@ -24,6 +25,9 @@ RE_TIME = re.compile(r"<(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3})Z> (.*)")
 
 
 class LogParser:
+    LOG_ENCODING = "latin-1"
+    LOG_NEWLINE = "\r\n"
+
     def __init__(self, args: Args) -> None:
         self.state = State(args)
         # Initialize with just the Branch and Build handlers
@@ -44,6 +48,17 @@ class LogParser:
             ).Provider(self.state)
 
         self.prev: datetime.datetime | None = None
+
+    def follow(self, f: TextIOWrapper):
+        if self.state.args.quit_on_eof:
+            while line := f.readline():
+                yield line.rstrip(self.LOG_NEWLINE)
+        else:
+            while True:
+                if line := f.readline():
+                    yield line.rstrip(self.LOG_NEWLINE)
+                else:
+                    time.sleep(1)
 
     def find_match(self, line: str):
         for event_type, handler in self.state.handlers.items():
@@ -78,6 +93,17 @@ class LogParser:
 
         if self.state.args.debug:
             self.state.count[event_type] += 1
+
+    def run(self):
+        assert self.state.args.file
+        with open(
+            self.state.args.file,
+            "r",
+            encoding=self.LOG_ENCODING,
+            newline=self.LOG_NEWLINE,
+        ) as f:
+            for line in self.follow(f):
+                self.process(line)
 
     def __enter__(self):
         return self
