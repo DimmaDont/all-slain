@@ -62,14 +62,8 @@ jobs:
           cache: pip
       - name: Install Dependencies
         run: pip install -e .[build_app]
-      - name: Set version number
-        if: ${{ inputs.release && !inputs.tag_name }}
-        run: sed -i 's/VERSION_HERE/${{ github.ref_name }}/' src/version.py
-      - name: Set version number
-        if: ${{ inputs.release && inputs.tag_name }}
-        run: sed -i s/VERSION_HERE/$(python -m setuptools_scm | sed -r 's/\./-/3')/ src/version.py
       - name: Package Application
-        run: pyinstaller --onefile ${{ inputs.file }} --name ${{ inputs.name }} --icon ${{ inputs.icon }} --noupx --debug noarchive
+        run: pyinstaller --onefile ${{ inputs.file }} --name ${{ inputs.name }} --icon ${{ inputs.icon }} --noupx --debug noarchive --exclude-module pkg_resources
       - name: Attest
         id: attest
         uses: actions/attest-build-provenance@v2

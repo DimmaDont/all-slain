@@ -9,7 +9,7 @@ from .colorize import Color
 from .config import load_config
 from .launcher_store import LauncherStoreException, get_log
 from .log_parser import LogParser
-from .version import UpdateCheckAction, __version__, get_version_text
+from .version import UpdateCheckAction, get_version_text
 
 
 logging.basicConfig(format=logging.BASIC_FORMAT)

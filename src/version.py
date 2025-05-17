@@ -1,49 +1,74 @@
 import argparse
+from importlib.metadata import version
 from platform import python_implementation, python_version
+from typing import NamedTuple
 
-from semver import Version
+from packaging.version import Version
 
 from .colorize import Color
 
 
-__version__ = "VERSION_HERE"
+local_version = Version(version("allslain"))
 
 
-def check_for_updates() -> str:
-    try:
-        local_version = Version.parse(
-            __version__[1:] if __version__.startswith("v") else __version__
-        )
-    except ValueError:
-        return "Not available in development releases, sorry."
+class VersionCheckResult(NamedTuple):
+    error: str | None
+    version: Version | None = None
+    url: str | None = None
 
+
+class VersionCheckOk(VersionCheckResult):
+    error: None
+    version: Version
+    url: str
+
+
+class VersionCheckErr(VersionCheckResult):
+    error: str
+    version: None
+    url: None
+
+
+def get_latest_version(repo: str) -> VersionCheckResult:
     # https://github.com/psf/requests/issues/6790
     import requests
 
     try:
-        latest_release = requests.get(
-            "https://api.github.com/repos/Dimmadont/all-slain/releases/latest",
+        response = requests.get(
+            f"https://api.github.com/repos/Dimmadont/{repo}/releases/latest",
             headers={
                 "Accept": "application/vnd.github+json",
                 "X-GitHub-Api-Version": "2022-11-28",
             },
             timeout=15,
-        ).json()
-        if not latest_release:
-            return Color.RED("No releases found.")
+        )
+        if response.status_code == 200:
+            latest_release = response.json()
+            return VersionCheckOk(
+                None, Version(latest_release["tag_name"]), latest_release["html_url"]
+            )
+        else:
+            return VersionCheckErr("No releases available")
+    except (requests.RequestException, ValueError, KeyError) as e:
+        return VersionCheckErr(str(e))
 
-        remote_version = Version.parse(latest_release["tag_name"])
-        remote_version_text = f"Latest version: {Color.CYAN(str(remote_version))}"
 
-        if remote_version > local_version:
-            return f"{remote_version_text}\n{Color.GREEN(f'Update available: {local_version} -> {remote_version}')}\n{Color.BLUE(latest_release['html_url'], bold=True)}"
-        return f"{remote_version_text}\nall-slain is up to date ({get_version_text()})"
-    except (requests.RequestException, ValueError) as e:
-        return Color.RED(f"Update check failed: {str(e)}")
+def check_for_updates(repo="all-slain") -> str:
+    result = get_latest_version(repo)
+    if isinstance(result, VersionCheckOk):
+        remote_version_text = f"Latest version: {Color.CYAN(str(result.version))}"
+
+        if result.version > local_version:
+            return f"{remote_version_text}\n{Color.GREEN(f'Update available: {local_version} -> {result.version}')}\n{Color.BLUE(result.url, bold=True)}"
+        return f"{remote_version_text}\n{repo} is up to date ({get_version_text()})"
+    else:
+        return Color.RED(f"Update check failed: {result.error}")
 
 
 def get_version_text() -> str:
-    return f"{Color.CYAN(__version__)} on {python_implementation()} {python_version()}"
+    return (
+        f"{Color.CYAN(local_version)} on {python_implementation()} {python_version()}"
+    )
 
 
 class UpdateCheckAction(argparse.Action):
