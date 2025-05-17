@@ -20,16 +20,16 @@ from tomlkit.items import Item
 from .data_providers.starcitizen_api import Mode
 
 
-if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-    # Bundled
-    application_path = dirname(sys.executable)
-else:
+def executable_path():
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        # Bundled
+        return dirname(sys.executable)
     import __main__
 
-    application_path = dirname(__main__.__file__)
+    return dirname(__main__.__file__)
 
 
-CONFIG_NAME = f"{application_path}/allslain.conf.toml"
+CONFIG_NAME = f"{executable_path()}/allslain.conf.toml"
 
 
 # TODO drop python3.10 and use StrEnum
