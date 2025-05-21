@@ -50,7 +50,7 @@ class KillV(CompatibleAll, PlayerLookupHandler):
                 # destruction caused by ship
                 return f"{vehicle_article.title()} {vehicle_str} {Color.RED('self destructed')} {lp} {location_str}"
             # caused by player
-            return f"{killer_str} {Color.RED('self destructed')} a {vehicle_str} {lp} {location_str}"
+            return f"{killer_str} {Color.RED('self destructed')} {vehicle_article} {vehicle_str} {lp} {location_str}"
 
         # Combat, SelfDestruct, Collision, BoundaryViolation, Ejection, Hazard, GameRules
         match data[6]:
@@ -59,7 +59,7 @@ class KillV(CompatibleAll, PlayerLookupHandler):
             case "Ejection":
                 dmgtypep = "with an"
             case _:
-                dmgtypep = "with a"
+                dmgtypep = "with " + vehicle_article
 
         dmgtype = Color.CYAN(data[6])
 

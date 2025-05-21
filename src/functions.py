@@ -102,11 +102,8 @@ def get_location(name: str) -> Location:
     # Location can also be a ship id
     vehicle_name, vehicle_type, found = get_vehicle(name)
     if found:
-        return Location(
-            "in a",
-            (vehicle_type + " " if vehicle_type else "") + vehicle_name,
-            LocationType.SHIP,
-        )
+        vname = (vehicle_type + " " if vehicle_type else "") + vehicle_name
+        return Location("in " + get_article(vname), vname, LocationType.SHIP)
 
     # UGF is CIG-ese for what most folks call "Bunkers"
     if "-ugf_" in name.lower():
