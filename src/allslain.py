@@ -4,7 +4,7 @@ from typing import cast
 
 from .args import Args
 from .colorize import Color
-from .config import load_config
+from .config import load_config_runtime
 from .launcher_store import LauncherStoreException, get_log
 from .log_parser import LogParser
 from .version import UpdateCheckAction, get_version_text
@@ -45,7 +45,7 @@ class AllSlain:
         parser.add_argument("-v", "--verbose", action="count", default=0)
         parser.add_argument("--version", action="version", version=get_version_text())
 
-        self.args = cast(Args, parser.parse_args(namespace=load_config()))
+        self.args = cast(Args, parser.parse_args(namespace=load_config_runtime()))
 
         if self.args.debug:
             logger.setLevel(logging.DEBUG)

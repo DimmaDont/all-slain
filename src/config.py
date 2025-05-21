@@ -2,7 +2,7 @@ import os
 import sys
 from argparse import Namespace
 from os.path import dirname
-from typing import Any, cast
+from typing import Any, Literal, cast, overload
 
 from tomlkit import (
     TOMLDocument,
@@ -133,10 +133,13 @@ class TOMLFile:
         with open(self._path, encoding="utf-8") as f:
             return loads(f.read())
 
+    def write(self, config: str):
+        with open(self._path, "w", encoding="utf-8") as f:
+            f.write(config)
+
     def write_if_modified(self, data: TOMLDocument, compare: TOMLDocument) -> None:
         if (config := data.as_string()) != compare.as_string():
-            with open(self._path, "w", encoding="utf-8") as f:
-                f.write(config)
+            self.write(config)
 
 
 def mergeattr(src: dict[str, Any], dest: object) -> None:
@@ -150,7 +153,7 @@ def mergeattr(src: dict[str, Any], dest: object) -> None:
             setattr(dest, key, value)
 
 
-def load_config(namespace: Namespace | None = None) -> Config:
+def load_config() -> TOMLDocument:
     # Load defaults and config file
     config = create_default_config()
     if os.path.exists(CONFIG_NAME):
@@ -162,9 +165,18 @@ def load_config(namespace: Namespace | None = None) -> Config:
 
     TOMLFile(CONFIG_NAME).write_if_modified(config, _config)
 
+    return config
+
+
+def load_config_runtime(namespace: Namespace | None = None) -> Config:
+    config = load_config()
     if not namespace:
         namespace = Config()
     mergeattr(config.pop("main"), namespace)
     mergeattr(config, namespace)
 
     return cast(Config, namespace)
+
+
+def save_config(config: TOMLDocument) -> None:
+    TOMLFile(CONFIG_NAME).write(config.as_string())
