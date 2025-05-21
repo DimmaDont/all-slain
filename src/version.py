@@ -8,6 +8,14 @@ from packaging.version import Version
 from .colorize import Color
 
 
+class GameVersion(NamedTuple):
+    phase: str
+    version: Version
+
+
+GAME_VERSION = GameVersion("Alpha", Version("4.1.1"))
+
+
 local_version = Version(version("allslain"))
 
 
