@@ -68,7 +68,9 @@ def check_for_updates(repo="all-slain") -> str:
 
         if result.version > local_version:
             return f"{remote_version_text}\n{Color.GREEN(f'Update available: {local_version} -> {result.version}')}\n{Color.BLUE(result.url, bold=True)}"
-        return f"{remote_version_text}\n{repo} is up to date ({get_version_text()})"
+        return (
+            f"{remote_version_text}\n{repo} is up to date ({Color.CYAN(local_version)})"
+        )
     else:
         return Color.RED(f"Update check failed: {result.error}")
 
@@ -76,6 +78,7 @@ def check_for_updates(repo="all-slain") -> str:
 def get_version_text() -> str:
     return (
         f"{Color.CYAN(local_version)} on {python_implementation()} {python_version()}"
+        f"\nUpdated for Star Citizen {GAME_VERSION.phase} {Color.CYAN(GAME_VERSION.version)}"
     )
 
 
