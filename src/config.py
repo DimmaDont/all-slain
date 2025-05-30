@@ -2,7 +2,7 @@ import os
 import sys
 from argparse import Namespace
 from os.path import dirname
-from typing import Any, Literal, cast, overload
+from typing import Any, cast
 
 from tomlkit import (
     TOMLDocument,
