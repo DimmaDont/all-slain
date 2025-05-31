@@ -94,7 +94,7 @@ def create_default_config() -> TOMLDocument:
     data_provider.add(comment('Default: ""'))
     data_provider.add("provider", Config.data_provider.provider)
     data_provider.add(nl())
-    data_provider.add(comment("Whether to pull and display the org's Spectrum theme color when displaying an org."))
+    data_provider.add(comment("Whether to display the org's theme color from Spectrum."))
     data_provider.add(comment('Currently only available with the "rsi" data provider.'))
     data_provider.add(comment("Default: true"))
     data_provider.add("use_org_theme", Config.data_provider.use_org_theme)
