@@ -18,7 +18,7 @@ launcher_store = [
 ]
 app = [
     "allslain[launcher_store]",
-    "bs4",
+    "beautifulsoup4",
     "requests",
     "semver",
     "tomlkit",
