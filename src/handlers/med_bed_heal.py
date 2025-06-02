@@ -45,6 +45,7 @@ SHIPS = {
     "ANVL_Carrack": ("an", "Anvil Carrack"),
     "ANVL_Terrapin_Medic": ("an", "Anvil Terrapin Medic"),
     "DRAK_Cutlass_Red": ("a", "Drake Cutlass Red"),
+    "MISC_Starlancer_TAC": ("a", "MISC Starlancer TAC"),
     "ORIG_890Jump": ("an", "Origin 890 Jump"),
     "ORIG_890Jump_Hijacked": ("a", "Hijacked Origin 890 Jump"),
     "RSI_Polaris": ("an", "RSI Polaris"),
