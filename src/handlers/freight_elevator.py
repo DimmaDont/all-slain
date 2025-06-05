@@ -2,7 +2,7 @@ import re
 from typing import TYPE_CHECKING
 
 from ..colorize import Color
-from .compatibility import SinceV324
+from .compatibility import SinceV324, SinceV411
 from .handler import Handler
 
 
@@ -36,3 +36,9 @@ class FreightElevator(SinceV324, Handler):
         freight_elevator_str = Color.YELLOW(freight_elevator)
         state_str = Color.CYAN(state)
         return f"{freight_elevator_str} is now {state_str}"
+
+
+class FreightElevator411(SinceV411, FreightElevator):
+    pattern = re.compile(
+        r"\[Notice\] <CSCLoadingPlatformManager::St(?:art|op)EffectForAllTags> \[Loading Platform\] Loading Platform Manager \[(\w+)\] st(?:opp|art)ing effects in current platform state: (\w+) \[Team_CGP7\]\[Cargo\]"
+    )
