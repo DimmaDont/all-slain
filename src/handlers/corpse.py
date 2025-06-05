@@ -7,10 +7,13 @@ from .compatibility import SinceV402, V401AndBelow
 from .handler import PlayerLookupHandler
 
 
+# Alpha 4.1.1: Team_ActorTech -> Team_ActorFeatures
+
+
 class CorpseHospitalLocation(V401AndBelow, PlayerLookupHandler):
     header = ("RESPAWN", Color.CYAN, False)
     pattern = re.compile(
-        r"\[Notice\] <Corpse> Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_ActorTech\]\[Actor\]"
+        r"\[Notice\] <Corpse> Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital. \[Team_Actor(?:Tech|Features)\]\[Actor\]"
     )
 
     def format(self, data) -> str:
@@ -23,14 +26,14 @@ class CorpseHospitalLocation(V401AndBelow, PlayerLookupHandler):
 
 class Corpse402HospitalLocation(SinceV402, CorpseHospitalLocation):
     pattern = re.compile(
-        r"\[Notice\] <\[ActorState\] Corpse> \[ACTOR STATE\]\[SSCActorStateCVars::LogCorpse\] Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital\. \[Team_ActorTech\]\[Actor\]"
+        r"\[Notice\] <\[ActorState\] Corpse> \[ACTOR STATE\]\[SSCActorStateCVars::LogCorpse\] Player '([\w-]+)' <(?:remote|local) client>: DoesLocationContainHospital: Searching landing zone location \"(.*)\" for the closest hospital\. \[Team_Actor(?:Tech|Features)\]\[Actor\]"
     )
 
 
 class Corpse402Corpsify(SinceV402, PlayerLookupHandler):
     header = ("CORPSE", Color.RED, True)
     pattern = re.compile(
-        r"\[Notice\] <\[ActorState\] Corpse> \[ACTOR STATE\]\[SSCActorStateCVars::LogCorpse\] Player '([\w-]+)' <(?:remote|local) client>: Running corpsify for corpse\. \[Team_ActorTech\]\[Actor\]"
+        r"\[Notice\] <\[ActorState\] Corpse> \[ACTOR STATE\]\[SSCActorStateCVars::LogCorpse\] Player '([\w-]+)' <(?:remote|local) client>: Running corpsify for corpse\. \[Team_Actor(?:Tech|Features)\]\[Actor\]"
     )
 
     def format(self, data) -> str:
