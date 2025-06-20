@@ -7,6 +7,12 @@ class CompatibleAll:
         return True
 
 
+class SinceV420:
+    @classmethod
+    def is_compatible(cls, version: Version, build: int) -> bool:
+        return version >= Version(4, 2, 0)
+
+
 class SinceV411:
     @classmethod
     def is_compatible(cls, version: Version, build: int) -> bool:

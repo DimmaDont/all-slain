@@ -7,7 +7,7 @@ from ..colorize import Color
 from ..data.elevators import ELEVATORS
 from ..functions import get_location, strip_id
 from ..functions_color import color_location
-from .compatibility import SinceV410
+from .compatibility import SinceV410, SinceV420
 from .handler import Handler
 
 
@@ -67,3 +67,10 @@ class Elevator410(SinceV410, Elevator401):
         r"\[Notice\] <TransitCarriage(?:Start|Finish)Transit> \[TRANSITDEBUG\] \[TRANSIT CARRIAGE\] \[ECarriageGeneral\] : Carriage (\d+) \(Id: \d+\) for manager (\w+) (starting|finished) transit in zone (\w+) at position x: -?\d+\.\d+, y: -?\d+\.\d+, z: -?\d+\.\d+ \[Team_ArenaCommanderFeature\]\[TransitSystem\]"
     )
     # Now with coordinates
+
+
+class Elevator420(SinceV420, Elevator401):
+    pattern = re.compile(
+        r"\[Notice\] <TransitCarriage(?:Start|Finish)Transit> \[TRANSITDEBUG\] \[TRANSIT CARRIAGE\] \[ECarriageGeneral\] : Carriage (\d+) \(Id: \d+\) for manager (\w+) (starting|finished) transit in zone (\w+) at position x: -?\d+\.\d+, y: -?\d+\.\d+, z: -?\d+\.\d+ \[Team_CGP2\]\[TransitSystem\]"
+    )
+    # Team changed

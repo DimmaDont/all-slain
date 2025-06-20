@@ -285,4 +285,11 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     "ab_mine_stanton4_sml_004": "Mining Base #R7J-WJ7, microTech",
     "ab_mine_stanton4_sml_005": "Mining Base #0Z9-SVV, microTech",
     "ab_mine_stanton4_sml_006": "Mining Base #RCD-OB3, microTech",
+    # 4.2.0 Associated Science and Development
+    # Farro Datacenters
+    "asd_labdata_int_01a": "Farro Data Center",
+    # Lazarus
+    "asd_labresearch_int_01a": "ASD Lazarus Complex Research Lab",
+    "ht_station_001_occu_a_final_int": "ASD Lazarus Transport Hub Shuttle Station",
+    "ht_xs_001_occu_a_final_int": "ASD Lazarus Transport Hub Lab",  # sever [sic] room (server), data analysis, research rooms
 }
