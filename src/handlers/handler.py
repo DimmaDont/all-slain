@@ -29,12 +29,17 @@ class Handler(ABC):
     def set_header_text(self, text: str, color: Color, bold: bool) -> None:
         self.header_text = color(text.rjust(self.state.header_width), bold=bold)
 
-    def output(self, text: str):
-        print(f"{self.state.curr_event_timestr}{self.header_text}: {text}")
+    def output(self, data: str | tuple[int, str]):
+        if isinstance(data, tuple):
+            if data[0] == -1:
+                # Move cursor up one line and clear it
+                print("\x1b[1A\x1b[2K", end="")
+            data = data[1]
+        print(f"{self.state.curr_event_timestr}{self.header_text}: {data}")
 
     def __call__(self, data: Match[str]) -> None:
-        if text := self.format(data):
-            self.output(text)
+        if formatted := self.format(data):
+            self.output(formatted)
         self.after(data)
 
     @classmethod
@@ -42,7 +47,7 @@ class Handler(ABC):
         return cls.__name__.upper()
 
     @abstractmethod
-    def format(self, data: Match[str]) -> str | None: ...
+    def format(self, data: Match[str]) -> str | tuple[int, str] | None: ...
 
     @classmethod
     @abstractmethod

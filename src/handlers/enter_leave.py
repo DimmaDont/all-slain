@@ -78,7 +78,7 @@ class VehicleEnterLeave(V402AndBelow, Handler):
         location_str = color_location(where, LocationType.LOCATION)
         return f"""{what} {Color.CYAN(*action)} {'in ' if in_hangar else ''}{player_str} hangar at {where_a}{location_str}"""
 
-    def format(self, data):
+    def format(self, data) -> str | tuple[int, str] | None:
         is_enter = data[1] == "Enter"
 
         where = HANGAR_LOCATIONS.get(data[2], data[2].title())
@@ -121,14 +121,15 @@ class VehicleEnterLeave(V402AndBelow, Handler):
             self.set_header_text(
                 "ENTER" if self.prev[3] else "LEAVE", Color.CYAN, False
             )
+            lc = 0
             if (
                 not self.state.args.verbose
                 and self.state.prev_event
                 and self.state.prev_event[1] == self.name()
             ):
                 # Overwrite the previous spawn/despawn line with the fixed enter/leave line
-                print("\x1b[1A\x1b[2K", end="")
-            return self.to_str(what, action, False, whom, where_a, where)
+                lc = -1
+            return lc, self.to_str(what, action, False, whom, where_a, where)
         self.prev = this
 
         return self.to_str(what, action, True, whom, where_a, where)

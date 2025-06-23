@@ -13,7 +13,7 @@ class Cet(CompatibleAll, Handler):
         r'(?:\[SPAM \d+\])?\[(?:Notice|Error)\] <C?ContextEstablisherTask(Finished|LongWait|Failed)> establisher="\w+" message="[\w\s]+" taskname="([\w\.]+)" state=eCVS_(\w+)\((\d+)\) status="[\w\s\d\.]+" runningTime=(\d+\.\d+) numRuns=\d+ map="megamap" gamerules="(.*?)"'
     )
 
-    def format(self, data) -> str:
+    def format(self, data) -> tuple[int, str]:
         step_num = data[4]
         if data[1] == "Finished":
             which = (
@@ -43,6 +43,7 @@ class Cet(CompatibleAll, Handler):
             str(timedelta(seconds=running_time))
         )
 
+        lc = 0
         # Replace the previous line if it was a CET, verbose is disabled,
         # and previous CET took less than 5s
         if (
@@ -51,9 +52,11 @@ class Cet(CompatibleAll, Handler):
             and self.state.prev_event[1] == self.name()
             and float(self.state.prev_event[2][5]) < 5
         ):
-            # Move cursor up one line and clear it
-            print("\x1b[1A\x1b[2K", end="")
-        return f"{which[0]}: {step_num.rjust(2)}/{self.state.cet_steps} {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time_str}"
+            lc = -1
+        return (
+            lc,
+            f"{which[0]}: {step_num.rjust(2)}/{self.state.cet_steps} {Color.CYAN(step)}:{Color.CYAN(taskname)} {which[1]} {running_time_str}",
+        )
 
     def after(self, data):
         # Remove CET once game is loaded.

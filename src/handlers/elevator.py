@@ -33,12 +33,13 @@ class Elevator401(Handler):
         super().__init__(state)
         self.prev: tuple[str | None, str, str, str] | None = None
 
-    def format(self, data: re.Match[str]) -> str | None:
+    def format(self, data: re.Match[str]) -> tuple[int, str]:
         elevator_id = data[1]
         zone = data[4]
         action = data[3]
         manager = strip_id(data[2])
         this = (elevator_id, manager, action, zone)
+        lc = 0
         if (
             not self.state.args.verbose
             and self.prev
@@ -49,7 +50,7 @@ class Elevator401(Handler):
             and self.state.prev_event
             and self.state.prev_event[1] == self.name()
         ):
-            print("\x1b[1A\x1b[2K", end="")
+            lc = -1
         self.prev = this
 
         elevator_name = ELEVATORS.get(manager, manager)
@@ -59,7 +60,10 @@ class Elevator401(Handler):
         location_str = color_location(location_name, location_type)
         location_p = "to" if action == "finished" else "from"
 
-        return f"Elevator {elevator_str} {elevator_id} {action} moving {location_p} {location_str}"
+        return (
+            lc,
+            f"Elevator {elevator_str} {elevator_id} {action} moving {location_p} {location_str}",
+        )
 
 
 class Elevator410(SinceV410, Elevator401):

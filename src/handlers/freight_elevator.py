@@ -20,22 +20,23 @@ class FreightElevator(SinceV324, Handler):
         super().__init__(state)
         self.prev: str | None = None
 
-    def format(self, data: re.Match[str]) -> str:
+    def format(self, data: re.Match[str]) -> tuple[int, str]:
         freight_elevator = data[1]
         state = data[2]
 
+        lc = 0
         if (
             not self.state.args.verbose
             and self.state.prev_event
             and self.state.prev_event[1] == self.name()
             and self.prev not in ["ClosedIdle", "OpenIdle"]
         ):
-            print("\x1b[1A\x1b[2K", end="")
+            lc = -1
         self.prev = state
 
         freight_elevator_str = Color.YELLOW(freight_elevator)
         state_str = Color.CYAN(state)
-        return f"{freight_elevator_str} is now {state_str}"
+        return lc, f"{freight_elevator_str} is now {state_str}"
 
 
 class FreightElevator411(SinceV411, FreightElevator):
