@@ -2,7 +2,7 @@ import logging
 import re
 
 from ..colorize import Color
-from ..functions import strip_id
+from ..functions import get_article, strip_id
 from ..functions_color import color_vehicle, not_found
 from .compatibility import CompatibleAll
 from .handler import Handler
@@ -12,6 +12,8 @@ logger = logging.getLogger("allslain").getChild("medbed")
 
 
 MEDICAL_BED_NAMES = {
+    "Stormageddon": "ASD Medical Bed",
+    # "Bed_Single_Medical_Instance_Hospital_Stormageddon_noRespawn", -000, -001
     "bed_hospital": "Hospital Bed",
     "Bed_Single": "Medical Bed",
     # Cutlass Red
@@ -62,6 +64,7 @@ class MedBedHeal(CompatibleAll, Handler):
 
     def format(self, data):
         med_bed_name = get_bed_name(data[1])
+        a = get_article(med_bed_name)
         if data[2] == "none":
             vehicle_str = ""
         else:
@@ -96,5 +99,5 @@ class MedBedHeal(CompatibleAll, Handler):
             )
 
         return (
-            f"Healed {parts_healed_str}in a {Color.YELLOW(med_bed_name)}{vehicle_str}"
+            f"Healed {parts_healed_str}in {a} {Color.YELLOW(med_bed_name)}{vehicle_str}"
         )
