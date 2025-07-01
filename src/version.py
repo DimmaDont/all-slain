@@ -13,7 +13,7 @@ class GameVersion(NamedTuple):
     version: Version
 
 
-GAME_VERSION = GameVersion("Alpha", Version("4.1.1"))
+GAME_VERSION = GameVersion("Alpha", Version("4.2.0"))
 
 
 local_version = Version(version("allslain"))
