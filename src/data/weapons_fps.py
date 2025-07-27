@@ -280,6 +280,7 @@ WEAPONS_FPS = {
     "behr_ltp_01_primed_5m": "Mine",
     "behr_ltp_01_primed_sweeping": "Sweeping Mine",
     "canister_gas_1_a": "Explosive Canister",
+    "canister_gas_2_a": "Explosive Canister",
     "canister_gas_3_a": "Explosive Canister",
     "canister_gas_4_a": "Explosive Canister",
     "Carryable_TBO_FL_16SCU_Commodity_ProcessedGoods_GenericExplosive_Detatrine": "Detatrine (16 SCU)",
