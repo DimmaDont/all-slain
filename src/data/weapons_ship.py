@@ -124,6 +124,7 @@ WEAPONS_SHIP: dict[str, str | tuple[str, str]] = {
     "KLWE_MassDriver_S10": "Destroyer Mass Driver Cannon",
     "KLWE_MassDriver_S2": "Sledge II Mass Driver Cannon",
     "KLWE_MassDriver_S3": "Sledge III Mass Driver Cannon",
+    "Krig_BallisticGatling_Bespoke_S4": "Relentless L-21 Gatling",
     "KRIG_BallisticGatling_S2": "Tigerstrike T-19P",
     "KRIG_BallisticGatling_S3": "Tigerstrike T-21 Gatling",
     "KRIG_LaserCannon_S3": "Quarreler Cannon",

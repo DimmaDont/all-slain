@@ -292,4 +292,8 @@ LOCATIONS: dict[str, str | tuple[str, str]] = {
     "asd_labresearch_int_01a": "ASD Lazarus Complex Research Lab",
     "ht_station_001_occu_a_final_int": "ASD Lazarus Transport Hub Shuttle Station",
     "ht_xs_001_occu_a_final_int": "ASD Lazarus Transport Hub Lab",  # sever [sic] room (server), data analysis, research rooms
+    # 4.3.0 Onyx Facilities
+    "layout_int_transit_001": ("in an", "ASD Onyx Facility Lobby"),
+    "layout_int_power_001": ("in an", "ASD Onyx Facility Engineering Wing"),
+    "layout_int_lab_004": ("in an", "ASD Onyx Facility Research Wing"),
 }

@@ -11,7 +11,7 @@ VEHICLE_TYPES = {
     "PU_AI_BH_QIG": "Bounty Hunters",
     "PU_AI_BJS": "BlacJac Security",
     "PU_AI_CFP": "CFP",
-    "PU_AI_Cheesecake_BoardedCombat": "Cheesecake",
+    "PU_AI_Cheesecake_BoardedCombat": "Cheesecake",  # Removed 4.3.0
     "PU_AI_CIV": "Civilian",
     "PU_AI_CIV_FTL": "Civilian",
     "PU_AI_CIV_LORVILLE": "Civilian",
