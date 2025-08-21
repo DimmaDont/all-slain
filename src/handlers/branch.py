@@ -37,7 +37,10 @@ class Branch(CompatibleAll, Handler):
         build = cast(Build, self.state.handlers[Build.name()])
         build.branch = data[1]
 
-        if self.state.version >= Version(4, 0, 2):
+        if self.state.version >= Version(4, 2, 1):
+            # 4.2.1 added a WaitForAntiCheat step
+            self.state.cet_steps = 17
+        elif self.state.version >= Version(4, 0, 2):
             # 4.0.2 added a ReadyToReplicate step
             self.state.cet_steps = 16
         else:
