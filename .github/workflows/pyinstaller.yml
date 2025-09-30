@@ -26,14 +26,10 @@ on:
         required: false
         type: boolean
         default: false
-      release:
+      prerelease:
         required: false
         type: boolean
         default: false
-      tag_name:
-        required: false
-        type: string
-        default: ''
 jobs:
   build:
     name: PyInstaller
@@ -47,10 +43,6 @@ jobs:
       attestations: write
     steps:
       - name: Checkout
-        if: ${{ !inputs.tag_name }}
-        uses: actions/checkout@v5
-      - name: Checkout
-        if: ${{ inputs.tag_name }}
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
@@ -73,7 +65,6 @@ jobs:
       - name: Get file hash
         shell: pwsh
         id: hash
-        if: ${{ inputs.release && !inputs.tag_name }}
         run: |
           "file_hash=$((Get-FileHash ${{ inputs.output }}).Hash.ToLower())" >> $env:GITHUB_OUTPUT
       - name: Upload Artifact
@@ -83,31 +74,11 @@ jobs:
           path: ${{ inputs.output }}
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: ${{ inputs.release && !inputs.tag_name }}
         with:
           append_body: true
           body: |
             **Attestation**: [`${{ steps.attest.outputs.attestation-id }}`](${{ steps.attest.outputs.attestation-url }})
             **VirusTotal**: [`${{ steps.hash.outputs.file_hash }}`](https://www.virustotal.com/gui/file/${{ steps.hash.outputs.file_hash }})
           files: ${{ inputs.output }}
-
-      - name: Get commit hash
-        id: vars
-        if: ${{ inputs.release && inputs.tag_name }}
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: ${{ inputs.release && inputs.tag_name && inputs.attest }}
-        with:
-          body: This is the latest build of `${{ github.ref_name }}`, [built](${{ steps.attest.outputs.attestation-url }}) from commit ${{ steps.vars.outputs.sha_short }}.
-          files: ${{ inputs.output }}
-          tag_name: ${{ inputs.tag_name }}
-          prerelease: true
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: ${{ inputs.release && inputs.tag_name && !inputs.attest}}
-        with:
-          body: This is the latest build of `${{ github.ref_name }}`, built from commit ${{ steps.vars.outputs.sha_short }}.
-          files: ${{ inputs.output }}
-          tag_name: ${{ inputs.tag_name }}
-          prerelease: true
+          generate_release_notes: true
+          prerelease: ${{ inputs.prerelease }}

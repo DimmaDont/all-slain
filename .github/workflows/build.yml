@@ -17,5 +17,14 @@ jobs:
       icon: icon/ded.ico
       output: dist/allslain.exe
       attest: false
-      release: true
-      tag_name: latest
+      prerelease: true
+  build_gui:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: build
+          repository: DimmaDont/all-slain-gui
+          token: ${{ secrets.ASDF }}
