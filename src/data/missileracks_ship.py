@@ -14,6 +14,8 @@ MISSILERACKS_SHIP: dict[str, str | tuple[str, str]] = {
     "MRCK_S02_ORIG_125a_Quad_S02": ("S2 missile", "Origin 125a"),
     "MRCK_S02_ORIG_400i_Octo_S01": ("S1 missile", "Origin 400i"),
     "MRCK_S02_ORIG_400i_Octo_S01_L": ("S1 missile", "Origin 400i"),
+    "MRCK_S02_RSI_Apollo_Medivac": ("S2 missile", "RSI Apollo Medivac"),
+    "MRCK_S02_RSI_Apollo_Triage": ("S2 missile", "RSI Apollo"),
     "MRCK_S02_TMBL_Storm_AA_Custom": ("S2 missile", "Tumbril Storm AA"),
     "MRCK_S03_AEGS_Sabre_Firebird": ("S3 missile", "Aegis Sabre Firebird"),
     "MRCK_S03_BEHR_Dual_S02": "S2 missile",

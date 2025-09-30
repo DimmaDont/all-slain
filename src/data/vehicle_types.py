@@ -19,6 +19,8 @@ VEHICLE_TYPES = {
     "PU_AI_CRIM_QIG": "Criminal",
     "PU_AI_CRIM_ScatterGun": "Criminal",
     "PU_AI_Dropship": "Dropship",
+    "PU_AI_FF": "Frontier Fighters",
+    "PU_AI_FF_Boyd": "Frontier Fighters Amelia Boyd",
     "PU_AI_GenCrim_BoardedCombat": "Criminal",
     "PU_AI_HeadHunters": "Headhunters",
     "PU_AI_MTS": "MT Protection Services",
