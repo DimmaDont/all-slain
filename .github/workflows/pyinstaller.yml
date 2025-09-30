@@ -47,15 +47,15 @@ jobs:
       attestations: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
         if: ${{ !inputs.tag_name }}
+        uses: actions/checkout@v5
       - name: Checkout
-        uses: actions/checkout@v4
         if: ${{ inputs.tag_name }}
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ inputs.python-version }}
           architecture: x64
@@ -66,7 +66,7 @@ jobs:
         run: pyinstaller --onefile ${{ inputs.file }} --name ${{ inputs.name }} --icon ${{ inputs.icon }} --noupx --debug noarchive --exclude-module pkg_resources
       - name: Attest
         id: attest
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         if: ${{ inputs.attest }}
         with:
           subject-path: ${{ github.workspace }}/dist
