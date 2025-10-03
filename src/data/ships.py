@@ -300,7 +300,9 @@ SHIPS: dict[str, str | tuple[str, str]] = {
     "ORIG_X1": "Origin X1",
     "ORIG_X1_Force": "Origin X1 Force",
     "ORIG_X1_Velocity": "Origin X1 Velocity",
-    "probe_comms_1_Ninetails": ("Comms Probe", "NineTails"),  # Hunt the Polaris mission?
+    # Hunt the Polaris mission?
+    "probe_comms_1_Ninetails": ("Comms Probe", "NineTails"),
+    #
     "RSI_Apollo_Medivac": "RSI Apollo Medivac",
     "RSI_Apollo_Medivac_Tier_1": "RSI Apollo Medivac",
     "RSI_Apollo_Medivac_Tier_2": "RSI Apollo Medivac",
