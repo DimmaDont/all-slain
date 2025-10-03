@@ -15,10 +15,10 @@ def main():
         check=True,
     )
 
-    with open(Rf"{dest}\lib\src\store\store.js") as f:  # fmt: skip # pylint: disable=unspecified-encoding
+    with open(Rf"{dest}\lib\main.js") as f:  # fmt: skip # pylint: disable=unspecified-encoding
         contents = f.read()
-        i = contents.index("creating\\x20store")
-        key = contents[i + 20 : i + 64]
+        i = contents.index("encryptionKey")
+        key = contents[i + 15 : i + 59]
         print(key)
 
     rmtree(dest)
