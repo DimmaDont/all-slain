@@ -306,6 +306,7 @@ WEAPONS_FPS = {
     "canister_gas_2_a": "Explosive Canister",
     "canister_gas_3_a": "Explosive Canister",
     "canister_gas_4_a": "Explosive Canister",
+    "canister_plasma_1_b": "Plasma Canister",
     "Carryable_TBO_FL_16SCU_Commodity_ProcessedGoods_GenericExplosive_Detatrine": "Detatrine (16 SCU)",
     "Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_GenericExplosive": "Diluthermex",
     "Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_GenericExplosive_Detatrine": "Detatrine (1 SCU)",

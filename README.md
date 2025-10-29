@@ -66,7 +66,7 @@ options:
 </details>
 
 ## Game Log Version Compatibility
-Compatible with `LIVE` (`4.3.1`).\
+Compatible with `LIVE` (`4.3.2`).\
 Originally developed for `4.0_PREVIEW`.\
 Mostly compatible with `3.24.X`.
 
