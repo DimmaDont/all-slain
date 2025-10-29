@@ -41,7 +41,7 @@ class TestLogIncapRegexMultipleCause(unittest.TestCase):
 
     def setUp(self):
         self.match = self.incap.pattern.match(
-            "Logged an incap.! nickname: Player-123_Name, causes: [DepressurizationDamage (3.999999 damage), SuffocationDamage (1.999999 damage)]"
+            "Logged an incap.! nickname: Player-123_Name, causes: [DepressurizationDamage (3.999999 damage), SuffocationDamage (69.999999 damage)]"
         )
         self.assertIsNotNone(self.match)
         assert self.match
@@ -53,11 +53,11 @@ class TestLogIncapRegexMultipleCause(unittest.TestCase):
         self.assertEqual(self.match[1], "Player-123_Name")
         self.assertEqual(
             self.match[2],
-            "DepressurizationDamage (3.999999 damage), SuffocationDamage (1.999999 damage)",
+            "DepressurizationDamage (3.999999 damage), SuffocationDamage (69.999999 damage)",
         )
 
     def test_incap_cause(self):
         self.assertEqual(self.cause[0][0], "DepressurizationDamage")
         self.assertEqual(self.cause[0][1], "3.999999")
         self.assertEqual(self.cause[1][0], "SuffocationDamage")
-        self.assertEqual(self.cause[1][1], "1.999999")
+        self.assertEqual(self.cause[1][1], "69.999999")

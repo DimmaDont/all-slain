@@ -6,7 +6,7 @@ from .compatibility import CompatibleAll
 from .handler import Handler
 
 
-LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d.\d+) damage\)(?:, )?")
+LOG_INCAP_CAUSE = re.compile(r"([\w\d]+) \((\d+.\d+) damage\)(?:, )?")
 
 
 class Incap(CompatibleAll, Handler):
